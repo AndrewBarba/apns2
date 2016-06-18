@@ -1,0 +1,13 @@
+box: node:4.4.5
+
+build:
+  steps:
+    - npm-install
+
+    - script:
+      name: lint
+      code: ./node_modules/gulp/bin/gulp.js lint
+
+    - script:
+      name: test
+      code: npm test
