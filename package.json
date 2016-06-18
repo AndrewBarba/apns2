@@ -8,6 +8,7 @@
     "node": "4.4.5"
   },
   "dependencies": {
+    "bluebird": "3.4.1",
     "http2": "^3.3.4",
     "jsonwebtoken": "^7.0.1"
   },
