@@ -9,11 +9,6 @@ clean:
 updates:
 	npm outdated --depth 0
 
-post-install:
-	cd ./node_modules; \
-	ln -snf ../lib; \
-	ln -snf ../test;
-
 test-unit:
 	@NODE_ENV=test \
 	node_modules/.bin/mocha \

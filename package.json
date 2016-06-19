@@ -27,7 +27,6 @@
     "supertest": "1.2.0"
   },
   "scripts": {
-    "postinstall": "make post-install",
     "test": "make test-all"
   }
 }
