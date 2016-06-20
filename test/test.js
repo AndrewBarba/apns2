@@ -33,22 +33,18 @@ describe('apns', () => {
   describe('certs', () => {
 
     let apns = new APNS({
-      cert: fs.readFileSync(`${__dirname}/certs/cert.pem`),
-      key: fs.readFileSync(`${__dirname}/certs/key.pem`)
+      cert: fs.readFileSync(`${__dirname}/certs/cert.pem`, 'utf8'),
+      key: fs.readFileSync(`${__dirname}/certs/key.pem`, 'utf8')
     });
 
     it('should send a basic notification', () => {
       let basicNotification = new APNS.BasicNotification(deviceToken, 'Hello, World');
-      return apns.send(basicNotification).then(result => {
-        should.exist(result);
-      });
+      return apns.send(basicNotification);
     });
 
     it('should send a silent notification', () => {
       let silentNotification = new APNS.SilentNotification(deviceToken);
-      return apns.send(silentNotification).then(result => {
-        should.exist(result);
-      });
+      return apns.send(silentNotification);
     });
 
     it('should send both notifications', () => {
