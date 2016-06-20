@@ -6,16 +6,16 @@
   "main": "index.js",
   "license": "MIT",
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   },
   "repository": {
     "url": "https://github.com/AndrewBarba/apns2"
   },
   "dependencies": {
     "bluebird": "^3.4.1",
-    "http2": "^3.3.4",
     "jsonwebtoken": "^7.0.1",
-    "lodash": "^4.13.1"
+    "lodash": "^4.13.1",
+    "spdy": "^3.3.3"
   },
   "devDependencies": {
     "gulp": "3.9.1",

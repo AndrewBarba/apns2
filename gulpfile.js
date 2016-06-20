@@ -4,7 +4,7 @@ const gulp = require('gulp');
 const jshint = require('gulp-jshint');
 
 gulp.task('lint', () => {
-  return gulp.src(`**/*.js`)
+  return gulp.src(`./lib/**/*.js`)
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'))
     .pipe(jshint.reporter('fail'));
