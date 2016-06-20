@@ -119,17 +119,10 @@ Available options can be found at [APNS Payload Options](https://developer.apple
 
 All errors are defined in `./lib/errors.js` and come directly from [APNS Table 6-6](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/APNsProviderAPI.html#//apple_ref/doc/uid/TP40008194-CH101-SW5)
 
-You can easily listen for these errors by attaching error handler to the APNS client:
+You can easily listen for these errors by attaching an error handler to the APNS client:
 
 ```javascript
-const APNS = require('apns2');
 const errors = APNS.errors;
-
-// Create client
-let client = new APNS({
-  cert: fs.readFileSync(`${__dirname}/path/to/cert.pem`, 'utf8'),
-  key: fs.readFileSync(`${__dirname}/path/to/key.pem`, 'utf8')
-});
 
 // Listen for a specific error
 client.on(errors.badDeviceToken, err => {
