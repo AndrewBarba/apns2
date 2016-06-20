@@ -20,10 +20,11 @@
   "devDependencies": {
     "gulp": "3.9.1",
     "gulp-jshint": "2.0.1",
+    "jshint": "2.9.2",
     "jshint-stylish": "2.2.0",
     "mocha": "2.5.3",
     "require-directory": "2.1.1",
-    "should": "9.0.0",
+    "should": "9.0.2",
     "supertest": "1.2.0"
   },
   "scripts": {
