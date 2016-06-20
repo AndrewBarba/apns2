@@ -100,11 +100,15 @@ For complete control over the push notification packet use the base `Notificatio
 ```javascript
 const Notification = APNS.Notification;
 
-let notification = new Notification({
+let notification = new Notification(devideToken, {
   aps: { ... }
 });
 
-client.send(notification);
+client.send(notification).then(() => {
+  // sent successfully
+}).catch(err => {
+  console.log(err.reason);
+});
 ```
 
 Available options can be found at [APNS Payload Options](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/TheNotificationPayload.html#//apple_ref/doc/uid/TP40008194-CH107-SW1)
