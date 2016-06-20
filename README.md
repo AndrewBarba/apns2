@@ -7,43 +7,92 @@ Node client for connecting to Apple's Push Notification Service using the new HT
 
 #### Certificates
 
+Create an APNS client using signed certificates:
+
 ```javascript
 const APNS = require('apns2');
-const BasicNotification = APNS.BasicNotification;
-const SilentNotification = APNS.SilentNotification;
 
 // Create client
 let client = new APNS({
   cert: fs.readFileSync(`${__dirname}/path/to/cert.pem`, 'utf8'),
   key: fs.readFileSync(`${__dirname}/path/to/key.pem`, 'utf8')
 });
+```
 
-// Send a basic notification with message
+#### JSON Web Tokens
+
+Create an APNS client using a singing token:
+
+Coming soon. [https://developer.apple.com/videos/play/wwdc2016/724/](https://developer.apple.com/videos/play/wwdc2016/724/)
+
+## Sending Notifications
+
+#### Basic
+
+Send a basic notification with message:
+
+```javascript
+const BasicNotification = APNS.BasicNotification;
+
 let bn = new BasicNotification(deviceToken, 'Hello, World');
+
 client.send(bn).then(() => {
   // sent successfully
 }).catch(err => {
   console.log(err.reason);
 });
+```
 
-// Send a silent notification using `content-available` key
+Send a basic notification with message and options:
+
+```javascript
+const BasicNotification = APNS.BasicNotification;
+
+let bn = new BasicNotification(deviceToken, 'Hello, World', {
+  badge: 4,
+  data: {
+    userId: user.getUserId
+  }
+});
+
+client.send(bn).then(() => {
+  // sent successfully
+}).catch(err => {
+  console.log(err.reason);
+});
+```
+
+#### Silent
+
+Send a silent notification using `content-available` key:
+
+```javascript
+const SilentNotification = APNS.SilentNotification;
+
 let sn = new SilentNotification(deviceToken);
+
 client.send(sn).then(() => {
   // sent successfully
 }).catch(err => {
   console.log(err.reason);
 });
-
-// Send multiple notifications concurrently
-client.send([bn, sn]).then(() => {
-  // This will always be called
-  // Sending multiple notifications at once will never reject the promise
-});
 ```
 
-#### JSON Web Tokens
+Send a silent notification with options:
 
-Coming soon. [https://developer.apple.com/videos/play/wwdc2016/724/](https://developer.apple.com/videos/play/wwdc2016/724/)
+```javascript
+const SilentNotification = APNS.SilentNotification;
+
+let sn = new SilentNotification(deviceToken, {
+  badge: getUnreadNotificationCount()
+});
+
+client.send(sn).then(() => {
+  // sent successfully
+}).catch(err => {
+  console.log(err.reason);
+});
+```
 
 ## Error Handling
 
