@@ -12,7 +12,6 @@ Create an APNS client using signed certificates:
 ```javascript
 const APNS = require('apns2');
 
-// Create client
 let client = new APNS({
   cert: fs.readFileSync(`${__dirname}/path/to/cert.pem`, 'utf8'),
   key: fs.readFileSync(`${__dirname}/path/to/key.pem`, 'utf8')
@@ -93,6 +92,22 @@ client.send(sn).then(() => {
   console.log(err.reason);
 });
 ```
+
+#### Advanced
+
+For complete control over the push notification packet use the base `Notification` class:
+
+```javascript
+const Notification = APNS.Notification;
+
+let notification = new Notification({
+  aps: { ... }
+});
+
+client.send(notification);
+```
+
+Available options can be found at [APNS Payload Options](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/TheNotificationPayload.html#//apple_ref/doc/uid/TP40008194-CH107-SW1)
 
 ## Error Handling
 
