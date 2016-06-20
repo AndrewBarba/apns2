@@ -12,6 +12,7 @@ const APNS = require('apns2');
 const BasicNotification = APNS.BasicNotification;
 const SilentNotification = APNS.SilentNotification;
 
+// Create client
 let client = new APNS({
   cert: fs.readFileSync(`${__dirname}/path/to/cert.pem`, 'utf8'),
   key: fs.readFileSync(`${__dirname}/path/to/key.pem`, 'utf8')
@@ -54,16 +55,46 @@ You can easily listen for these errors by attaching error handler to the APNS cl
 const APNS = require('apns2');
 const errors = APNS.errors;
 
+// Create client
 let client = new APNS({
   cert: fs.readFileSync(`${__dirname}/path/to/cert.pem`, 'utf8'),
   key: fs.readFileSync(`${__dirname}/path/to/key.pem`, 'utf8')
 });
 
-// Listen for an error
+// Listen for a specific error
 client.on(errors.badDeviceToken, err => {
   // Handle accordingly...
   // Perhaps delete token from your database
   console.error(err.reason, err.statusCode, err.notification.deviceToken);
+});
+
+// Listen for any error
+client.on('error', err => {
+  console.error(err.reason, err.statusCode, err.notification.deviceToken);
+});
+```
+
+## Environments
+
+By default the APNS client connects to the production push notification server. This is identical to passing in the options:
+
+```javascript
+let client = new APNS({
+  host: 'api.push.apple.com',
+  port: 443,
+  cert: fs.readFileSync(`${__dirname}/path/to/cert.pem`, 'utf8'),
+  key: fs.readFileSync(`${__dirname}/path/to/key.pem`, 'utf8')
+});
+```
+
+To connect to the development push notification server, pass the options:
+
+```javascript
+let client = new APNS({
+  host: 'api.development.push.apple.com',
+  port: 443,
+  cert: fs.readFileSync(`${__dirname}/path/to/cert.pem`, 'utf8'),
+  key: fs.readFileSync(`${__dirname}/path/to/key.pem`, 'utf8')
 });
 ```
 
