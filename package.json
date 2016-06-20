@@ -6,7 +6,7 @@
   "main": "index.js",
   "license": "MIT",
   "engines": {
-    "node": ">=6"
+    "node": ">=4"
   },
   "repository": {
     "url": "https://github.com/AndrewBarba/apns2"
@@ -23,9 +23,7 @@
     "jshint": "2.9.2",
     "jshint-stylish": "2.2.0",
     "mocha": "2.5.3",
-    "require-directory": "2.1.1",
-    "should": "9.0.2",
-    "supertest": "1.2.0"
+    "should": "9.0.2"
   },
   "scripts": {
     "test": "make test-all"
