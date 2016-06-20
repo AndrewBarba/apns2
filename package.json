@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Node client for connecting to Apple's Push Notification Service using the new HTTP/2 protocol with JSON web tokens.",
   "author": "Andrew Barba <abarba.77@gmail.com>",
-  "main": "index.js",
+  "main": "lib/apns.js",
   "license": "MIT",
   "engines": {
     "node": ">=4"
