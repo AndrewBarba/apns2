@@ -34,8 +34,8 @@ describe('apns', () => {
   describe('certs', () => {
 
     let apns = new APNS({
-      cert: process.env.CERT_PEM ? new Buffer(process.env.CERT_PEM) : fs.readFileSync(`${__dirname}/certs/cert.pem`),
-      key: process.env.KEY_PEM ? new Buffer(process.env.KEY_PEM) : fs.readFileSync(`${__dirname}/certs/key.pem`)
+      cert: process.env.CERT_PEM || fs.readFileSync(`${__dirname}/certs/cert.pem`),
+      key: process.env.KEY_PEM || fs.readFileSync(`${__dirname}/certs/key.pem`)
     });
 
     it('should send a basic notification', () => {
