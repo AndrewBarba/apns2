@@ -9,7 +9,7 @@ Node client for connecting to Apple's Push Notification Service using the new HT
 
 #### JSON Web Tokens
 
-Create an APNS client using a singing token:
+Create an APNS client using a signing key:
 
 ```javascript
 const APNS = require('apns2');
