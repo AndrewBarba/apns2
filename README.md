@@ -7,6 +7,21 @@ Node client for connecting to Apple's Push Notification Service using the new HT
 
 ## Create Client
 
+#### JSON Web Tokens
+
+Create an APNS client using a singing token:
+
+```javascript
+const APNS = require('apns2');
+
+let client = new APNS({
+  team: `TFLP87PW54`,
+  signingKey: `ubChWXENWGhLDqbABTqvqQ7f`
+});
+```
+
+Coming soon. [https://developer.apple.com/videos/play/wwdc2016/724/](https://developer.apple.com/videos/play/wwdc2016/724/)
+
 #### Certificates
 
 Create an APNS client using signed certificates:
@@ -19,12 +34,6 @@ let client = new APNS({
   key: fs.readFileSync(`${__dirname}/path/to/key.pem`, 'utf8')
 });
 ```
-
-#### JSON Web Tokens
-
-Create an APNS client using a singing token:
-
-Coming soon. [https://developer.apple.com/videos/play/wwdc2016/724/](https://developer.apple.com/videos/play/wwdc2016/724/)
 
 ## Sending Notifications
 
@@ -163,4 +172,4 @@ let client = new APNS({
 
 ## Requirements
 
-`apns2` is written entirely in ES2015 and therefore requires Node.js v5 or later. I intend to get this working on Node v4 LTS which also supports the relevant ES2015 features, however, I am running into issues with the HTTP/2 requests on the LTS releases. 
+`apns2` is written entirely in ES2015 and therefore requires Node.js v5 or later. I intend to get this working on Node v4 LTS which also supports the relevant ES2015 features, however, I am running into issues with the HTTP/2 requests on the LTS releases.
