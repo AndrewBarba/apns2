@@ -174,7 +174,7 @@ let client = new APNS({
 
 After adding a certificate in the developer portal, download the `aps.cer` file, open it, and add it to your login keychain.
 
-Then find the newly added certificate in KeychainAccess, expand it, and right-click the private key to export it. Save it as `key.p12`.
+Then find the newly added certificate in Keychain Access, expand it, and right-click the private key to export it. Save it as `key.p12`.
 
 Move `aps.cer` and `key.p12` to the same directory, perhaps your desktop, and perform the following in that directory:
 
