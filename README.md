@@ -163,4 +163,4 @@ let client = new APNS({
 
 ## Requirements
 
-`apns2` is written entirely in ES2015 and therefore requires Node.js v5 or later. I intend to get this working on Node v4 LTS which also supports all ES2015 features, however, I am running into issues with the HTTP/2 requests on the LTS releases. 
+`apns2` is written entirely in ES2015 and therefore requires Node.js v5 or later. I intend to get this working on Node v4 LTS which also supports the relevant ES2015 features, however, I am running into issues with the HTTP/2 requests on the LTS releases. 
