@@ -1,10 +1,12 @@
 'use strict';
 
 const fs = require('fs');
-const APNS = require('../lib/apns');
+const should = require('should');
+
+// Package
+const APNS = require('../');
 const errors = APNS.errors;
 const HTTP2Client = require('../lib/http2-client');
-const should = require('should');
 
 describe('http2', () => {
 
