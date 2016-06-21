@@ -170,6 +170,21 @@ let client = new APNS({
 });
 ```
 
+## Setup Certificates
+
+After adding a certificate in the developer portal, download the `aps.cer` file, open it, and add it to your login keychain.
+
+Then find the newly added certificate in KeychainAccess, expand it, and right-click the private key to export it. Save it as `key.p12`.
+
+Move `aps.cer` and `key.p12` to the same directory, perhaps your desktop, and perform the following in that directory:
+
+```bash
+$ openssl x509 -in aps.cer -inform DER -outform PEM -out cert.pem
+$ openssl pkcs12 -in key.p12 -out key.pem -nodes
+```
+
+You can now move the generated `cert.pem` and `key.pem` into your application directory so you can pass in the file path to the `APNS` constructor.
+
 ## Requirements
 
 `apns2` is written entirely in ES2015 and therefore requires Node.js v5 or later. I intend to get this working on Node v4 LTS which also supports the relevant ES2015 features, however, I am running into issues with the HTTP/2 requests on the LTS releases.
