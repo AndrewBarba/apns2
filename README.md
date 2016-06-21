@@ -187,4 +187,4 @@ You can now move the generated `cert.pem` and `key.pem` into your application di
 
 ## Requirements
 
-`apns2` is written entirely in ES2015 and therefore requires Node.js v5 or later. I intend to get this working on Node v4 LTS which also supports the relevant ES2015 features, however, I am running into issues with the HTTP/2 requests on the LTS releases.
+`apns2` is written entirely in ES2015 and therefore requires Node.js v6 or later. I intended to get this working on Node v4 LTS which also supports the relevant ES2015 features, however, v4 does not support [ALPN](https://github.com/nodejs/node-v0.x-archive/issues/5945).

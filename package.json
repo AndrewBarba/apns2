@@ -6,7 +6,7 @@
   "main": "lib/apns.js",
   "license": "MIT",
   "engines": {
-    "node": ">=5"
+    "node": ">=6"
   },
   "repository": {
     "url": "https://github.com/AndrewBarba/apns2"
