@@ -1,7 +1,7 @@
 APNS2
 =====
 
-[![npm version](https://badge.fury.io/js/apns2.svg)](https://badge.fury.io/js/apns2) <!-- [![wercker status](https://app.wercker.com/status/0e705662e5c35d51a971764fe3e27814/s/master "wercker status")](https://app.wercker.com/project/bykey/0e705662e5c35d51a971764fe3e27814) -->
+[![npm version](https://badge.fury.io/js/apns2.svg)](https://badge.fury.io/js/apns2) <!--- [![wercker status](https://app.wercker.com/status/0e705662e5c35d51a971764fe3e27814/s/master "wercker status")](https://app.wercker.com/project/bykey/0e705662e5c35d51a971764fe3e27814) -->
 
 Node client for connecting to Apple's Push Notification Service using the new HTTP/2 protocol with JSON web tokens or signed certificates.
 
