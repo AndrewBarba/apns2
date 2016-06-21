@@ -111,7 +111,7 @@ For complete control over the push notification packet use the base `Notificatio
 ```javascript
 const Notification = APNS.Notification;
 
-let notification = new Notification(devideToken, {
+let notification = new Notification(deviceToken, {
   aps: { ... }
 });
 
