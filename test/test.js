@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const APNS = require('../lib/apns');
+const errors = APNS.errors;
 const HTTP2Client = require('../lib/http2-client');
 const should = require('should');
 
@@ -38,7 +39,7 @@ describe('apns', () => {
     });
 
     it('should send a basic notification', () => {
-      let basicNotification = new APNS.BasicNotification(deviceToken, 'Hello, World');
+      let basicNotification = new APNS.BasicNotification(deviceToken, `Hello, Basic`);
       return apns.send(basicNotification);
     });
 
@@ -48,11 +49,47 @@ describe('apns', () => {
     });
 
     it('should send both notifications', () => {
-      let basicNotification = new APNS.BasicNotification(deviceToken, 'Hello, World');
+      let basicNotification = new APNS.BasicNotification(deviceToken, `Hello, Multiple`);
       let silentNotification = new APNS.SilentNotification(deviceToken);
       return apns.send([basicNotification, silentNotification]).then(result => {
         should.exist(result);
         result.length.should.equal(2);
+      });
+    });
+
+    it('should fail to send a notification', () => {
+      let noti = new APNS.BasicNotification(`fakedevicetoken`, `Hello, bad token`);
+      return apns.send(noti).catch(err => {
+        should.exist(err);
+        err.reason.should.equal(errors.badDeviceToken);
+      });
+    });
+
+    it('should fail to send a notification and emit an error', done => {
+
+      apns.once(errors.error, err => {
+        should.exist(err);
+        err.reason.should.equal(errors.badDeviceToken);
+        done();
+      });
+
+      let noti = new APNS.BasicNotification(`fakedevicetoken`, `Hello, bad token`);
+      apns.send(noti).catch(err => {
+        should.exist(err);
+      });
+    });
+
+    it('should fail to send a notification and emit an error', done => {
+
+      apns.once(errors.badDeviceToken, err => {
+        should.exist(err);
+        err.reason.should.equal(errors.badDeviceToken);
+        done();
+      });
+
+      let noti = new APNS.BasicNotification(`fakedevicetoken`, `Hello, bad token`);
+      apns.send(noti).catch(err => {
+        should.exist(err);
       });
     });
   });
