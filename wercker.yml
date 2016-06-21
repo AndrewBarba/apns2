@@ -1,4 +1,4 @@
-box: node:4.4.5
+box: node:6.2.2
 
 build:
   steps:
