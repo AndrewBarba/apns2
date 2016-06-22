@@ -91,21 +91,7 @@ client.send(sn).then(() => {
 });
 ```
 
-Send a silent notification with options:
-
-```javascript
-const SilentNotification = APNS.SilentNotification;
-
-let sn = new SilentNotification(deviceToken, {
-  badge: getUnreadNotificationCount()
-});
-
-client.send(sn).then(() => {
-  // sent successfully
-}).catch(err => {
-  console.error(err.reason);
-});
-```
+Note: [Apple recommends](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/TheNotificationPayload.html#//apple_ref/doc/uid/TP40008194-CH107-SW1) that no options other than the `content-available` flag be sent in order for a notification to truly be silent and wake up your app in the background. Therefore this class does not accept any additional options in the constructor.
 
 #### Advanced
 

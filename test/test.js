@@ -45,9 +45,37 @@ describe('apns', () => {
       return apns.send(basicNotification);
     });
 
+    it('should send a basic notification with options', () => {
+      let basicNotification = new APNS.BasicNotification(deviceToken, `Hello, 1`, {
+        badge: 1
+      });
+      return apns.send(basicNotification);
+    });
+
+    it('should send a basic notification with additional data', () => {
+      let basicNotification = new APNS.BasicNotification(deviceToken, `Hello, ICON`, {
+        badge: 0,
+        data: {
+          url: `venue/icon`
+        }
+      });
+      return apns.send(basicNotification);
+    });
+
     it('should send a silent notification', () => {
       let silentNotification = new APNS.SilentNotification(deviceToken);
       return apns.send(silentNotification);
+    });
+
+    it('should send a notification', () => {
+      let notification = new APNS.Notification(deviceToken, {
+        aps: {
+          alert: {
+            body: `Hello, Tablelist`
+          }
+        }
+      });
+      return apns.send(notification);
     });
 
     it('should send both notifications', () => {
