@@ -29,6 +29,7 @@ Coming soon. [https://developer.apple.com/videos/play/wwdc2016/724/](https://dev
 Create an APNS client using signed certificates:
 
 ```javascript
+const fs = require('fs');
 const APNS = require('apns2');
 
 let client = new APNS({
@@ -51,7 +52,7 @@ let bn = new BasicNotification(deviceToken, 'Hello, World');
 client.send(bn).then(() => {
   // sent successfully
 }).catch(err => {
-  console.log(err.reason);
+  console.error(err.reason);
 });
 ```
 
@@ -70,7 +71,7 @@ let bn = new BasicNotification(deviceToken, 'Hello, World', {
 client.send(bn).then(() => {
   // sent successfully
 }).catch(err => {
-  console.log(err.reason);
+  console.error(err.reason);
 });
 ```
 
@@ -86,7 +87,7 @@ let sn = new SilentNotification(deviceToken);
 client.send(sn).then(() => {
   // sent successfully
 }).catch(err => {
-  console.log(err.reason);
+  console.error(err.reason);
 });
 ```
 
@@ -102,7 +103,7 @@ let sn = new SilentNotification(deviceToken, {
 client.send(sn).then(() => {
   // sent successfully
 }).catch(err => {
-  console.log(err.reason);
+  console.error(err.reason);
 });
 ```
 
@@ -120,7 +121,7 @@ let notification = new Notification(deviceToken, {
 client.send(notification).then(() => {
   // sent successfully
 }).catch(err => {
-  console.log(err.reason);
+  console.error(err.reason);
 });
 ```
 
