@@ -20,8 +20,8 @@
   "devDependencies": {
     "gulp": "3.9.1",
     "gulp-jshint": "2.0.1",
-    "jshint": "2.9.2",
-    "jshint-stylish": "2.2.0",
+    "jshint": "2.9.3",
+    "jshint-stylish": "2.2.1",
     "mocha": "2.5.3",
     "should": "9.0.2"
   },

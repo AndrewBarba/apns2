@@ -10,7 +10,11 @@ const HTTP2Client = require('../lib/http2-client');
 
 describe('http2', () => {
 
-  let client = new HTTP2Client('www.google.com', 443);
+  let client;
+
+  before(() => {
+    client = new HTTP2Client('www.google.com', 443);
+  });
 
   it('should make a get request', () => {
     return client.get({
@@ -35,9 +39,13 @@ describe('apns', () => {
 
   describe('certs', () => {
 
-    let apns = new APNS({
-      cert: process.env.CERT_PEM || fs.readFileSync(`${__dirname}/certs/cert.pem`),
-      key: process.env.KEY_PEM || fs.readFileSync(`${__dirname}/certs/key.pem`)
+    let apns;
+
+    before(() => {
+      apns = new APNS({
+        cert: process.env.CERT_PEM || fs.readFileSync(`${__dirname}/certs/cert.pem`),
+        key: process.env.KEY_PEM || fs.readFileSync(`${__dirname}/certs/key.pem`)
+      });
     });
 
     it('should send a basic notification', () => {
@@ -126,9 +134,13 @@ describe('apns', () => {
 
   describe('pkcs12', () => {
 
-    let apns = new APNS({
-      pfx: process.env.PFX || fs.readFileSync(`${__dirname}/certs/key.p12`),
-      passphrase: process.env.PASSPHRASE || ""
+    let apns;
+
+    before(() => {
+      apns = new APNS({
+        pfx: process.env.PFX || fs.readFileSync(`${__dirname}/certs/key.p12`),
+        passphrase: process.env.PASSPHRASE || ""
+      });
     });
 
     it('should send a basic notification', () => {
@@ -216,6 +228,6 @@ describe('apns', () => {
   });
 
   describe('signing token', () => {
-    // todo
+    //TODO - add tests for signing token
   });
 });

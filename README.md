@@ -18,11 +18,9 @@ const APNS = require('apns2');
 
 let client = new APNS({
   team: `TFLP87PW54`,
-  signingKey: `ubChWXENWGhLDqbABTqvqQ7f`
+  signingKey: fs.readFileSync(`${__dirname}/path/to/auth.p8`)
 });
 ```
-
-Coming soon. [https://developer.apple.com/videos/play/wwdc2016/724/](https://developer.apple.com/videos/play/wwdc2016/724/)
 
 #### Certificates
 
