@@ -17,7 +17,9 @@ Create an APNS client using a signing key:
 const APNS = require('apns2');
 
 let client = new APNS({
+  defaultTopic: `com.tablelist.Tablelist`,
   team: `TFLP87PW54`,
+  keyId: `123ABC456`,
   signingKey: fs.readFileSync(`${__dirname}/path/to/auth.p8`)
 });
 ```
