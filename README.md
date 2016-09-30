@@ -5,7 +5,7 @@ APNS2
 
 Node client for connecting to Apple's Push Notification Service using the new HTTP/2 protocol with JSON web tokens or signed certificates.
 
-> **Warning** This project is under heavy development. It uses the experimental `http2` package so I would not recommend using this in production until HTTP/2 is officially merged into Node.js core.
+> Node v6 or higher is required to use this library
 
 ## Create Client
 
