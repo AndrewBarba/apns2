@@ -237,7 +237,7 @@ describe('apns', () => {
         defaultTopic: `com.tablelist.Tablelist`,
         team: `TFLP87PW54`,
         keyId: `74QQRV9RW2`,
-        signingKey: fs.readFileSync(`${__dirname}/certs/token.p8`)
+        signingKey: process.env.SK || fs.readFileSync(`${__dirname}/certs/token.p8`)
       });
     });
 
