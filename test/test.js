@@ -43,6 +43,7 @@ describe('apns', () => {
 
     before(() => {
       apns = new APNS({
+        defaultTopic: `com.tablelist.Tablelist`,
         cert: process.env.CERT_PEM || fs.readFileSync(`${__dirname}/certs/cert.pem`),
         key: process.env.KEY_PEM || fs.readFileSync(`${__dirname}/certs/key.pem`)
       });
