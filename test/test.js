@@ -133,7 +133,7 @@ describe('apns', () => {
     });
   });
 
-  describe('pkcs12', () => {
+  describe.skip('pkcs12', () => {
 
     let apns;
 
