@@ -19,11 +19,11 @@
   },
   "devDependencies": {
     "gulp": "3.9.1",
-    "gulp-jshint": "2.0.1",
-    "jshint": "2.9.3",
+    "gulp-jshint": "2.0.4",
+    "jshint": "2.9.4",
     "jshint-stylish": "2.2.1",
-    "mocha": "2.5.3",
-    "should": "9.0.2"
+    "mocha": "3.2.0",
+    "should": "11.1.2"
   },
   "scripts": {
     "test": "make test-all"

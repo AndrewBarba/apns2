@@ -4,13 +4,9 @@ APNS2
 [![npm version](https://badge.fury.io/js/apns2.svg)](https://badge.fury.io/js/apns2)
 [![Twitter](https://img.shields.io/badge/twitter-@andrew_barba-blue.svg?style=flat)](http://twitter.com/andrew_barba)
 
-Node client for connecting to Apple's Push Notification Service using the new HTTP/2 protocol with JSON web tokens or signed certificates.
-
-> Node v6 or higher is required to use this library
+Node client for connecting to Apple's Push Notification Service using the new HTTP/2 protocol with JSON web tokens.
 
 ## Create Client
-
-#### JSON Web Tokens
 
 Create an APNS client using a signing key:
 
@@ -18,24 +14,10 @@ Create an APNS client using a signing key:
 const APNS = require('apns2');
 
 let client = new APNS({
-  defaultTopic: `com.tablelist.Tablelist`,
   team: `TFLP87PW54`,
   keyId: `123ABC456`,
-  signingKey: fs.readFileSync(`${__dirname}/path/to/auth.p8`)
-});
-```
-
-#### Certificates
-
-Create an APNS client using signed certificates:
-
-```javascript
-const fs = require('fs');
-const APNS = require('apns2');
-
-let client = new APNS({
-  cert: fs.readFileSync(`${__dirname}/path/to/cert.pem`),
-  key: fs.readFileSync(`${__dirname}/path/to/key.pem`)
+  signingKey: fs.readFileSync(`${__dirname}/path/to/auth.p8`),
+  defaultTopic: `com.tablelist.Tablelist`
 });
 ```
 
@@ -144,8 +126,7 @@ By default the APNS client connects to the production push notification server. 
 let client = new APNS({
   host: 'api.push.apple.com',
   port: 443,
-  cert: fs.readFileSync(`${__dirname}/path/to/cert.pem`),
-  key: fs.readFileSync(`${__dirname}/path/to/key.pem`)
+  ...
 });
 ```
 
@@ -155,8 +136,7 @@ To connect to the development push notification server, pass the options:
 let client = new APNS({
   host: 'api.development.push.apple.com',
   port: 443,
-  cert: fs.readFileSync(`${__dirname}/path/to/cert.pem`),
-  key: fs.readFileSync(`${__dirname}/path/to/key.pem`)
+  ...
 });
 ```
 

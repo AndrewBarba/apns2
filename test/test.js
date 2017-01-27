@@ -43,10 +43,10 @@ describe('apns', () => {
 
     before(() => {
       apns = new APNS({
-        defaultTopic: `com.tablelist.Tablelist`,
         team: `TFLP87PW54`,
-        keyId: `74QQRV9RW2`,
-        signingKey: process.env.SK || fs.readFileSync(`${__dirname}/certs/token.p8`)
+        keyId: `7U6GT5Q49J`,
+        signingKey: process.env.SK || fs.readFileSync(`${__dirname}/certs/token.p8`),
+        defaultTopic: `com.tablelist.Tablelist`
       });
     });
 
