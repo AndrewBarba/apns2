@@ -30,7 +30,7 @@ let client = new APNS({
 Send a basic notification with message:
 
 ```javascript
-const BasicNotification = APNS.BasicNotification;
+const { BasicNotification } = APNS;
 
 let bn = new BasicNotification(deviceToken, 'Hello, World');
 
@@ -44,7 +44,7 @@ client.send(bn).then(() => {
 Send a basic notification with message and options:
 
 ```javascript
-const BasicNotification = APNS.BasicNotification;
+const { BasicNotification } = APNS;
 
 let bn = new BasicNotification(deviceToken, 'Hello, World', {
   badge: 4,
@@ -65,7 +65,7 @@ client.send(bn).then(() => {
 Send a silent notification using `content-available` key:
 
 ```javascript
-const SilentNotification = APNS.SilentNotification;
+const { SilentNotification } = APNS;
 
 let sn = new SilentNotification(deviceToken);
 
@@ -83,7 +83,7 @@ Note: [Apple recommends](https://developer.apple.com/library/ios/documentation/N
 For complete control over the push notification packet use the base `Notification` class:
 
 ```javascript
-const Notification = APNS.Notification;
+const { Notification } = APNS;
 
 let notification = new Notification(deviceToken, {
   aps: { ... }
@@ -142,21 +142,6 @@ let client = new APNS({
 });
 ```
 
-## Setup Certificates
-
-After adding a certificate in the developer portal, download the `aps.cer` file, open it, and add it to your login keychain.
-
-Then find the newly added certificate in Keychain Access, expand it, and right-click the private key to export it. Save it as `key.p12`.
-
-Move `aps.cer` and `key.p12` to the same directory, perhaps your desktop, and perform the following in that directory:
-
-```bash
-$ openssl x509 -in aps.cer -inform DER -outform PEM -out cert.pem
-$ openssl pkcs12 -in key.p12 -out key.pem -nodes
-```
-
-You can now move the generated `cert.pem` and `key.pem` into your application directory so you can pass in the file path to the `APNS` constructor.
-
 ## Requirements
 
-`apns2` is written entirely in ES2015 and therefore requires Node.js v6 or later. I intended to get this working on Node v4 LTS which also supports the relevant ES2015 features, however, v4 does not support [ALPN](https://github.com/nodejs/node-v0.x-archive/issues/5945).
+`apns2` is written entirely in ES2015 and therefore requires Node.js v6 or later.
