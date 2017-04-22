@@ -144,4 +144,4 @@ let client = new APNS({
 
 ## Requirements
 
-`apns2` is written entirely in ES2015 and therefore requires Node.js v6 or later.
+Node.js v6 or later.
