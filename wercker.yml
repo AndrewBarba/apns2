@@ -1,8 +1,10 @@
-box: node:6.7.0
+box: node:6.10.3
 
 build:
   steps:
-    - npm-install
+    - script:
+      name: yarn
+      code: yarn install
 
     - script:
       name: lint

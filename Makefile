@@ -1,10 +1,5 @@
-
-default:
-	npm install
-
-clean:
-	rm -rf node_modules
-	npm cache clean
+lint:
+	./node_modules/eslint/bin/eslint.js ./
 
 test-all:
 	@NODE_ENV=test \
