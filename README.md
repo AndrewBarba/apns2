@@ -134,27 +134,11 @@ To connect to the development push notification server, pass the options:
 
 ```javascript
 let client = new APNS({
-  host: 'api.development.push.apple.com',
-  port: 443,
+  host: 'api.development.push.apple.com'
   ...
 });
 ```
 
-## Setup Certificates
-
-After adding a certificate in the developer portal, download the `aps.cer` file, open it, and add it to your login keychain.
-
-Then find the newly added certificate in Keychain Access, expand it, and right-click the private key to export it. Save it as `key.p12`.
-
-Move `aps.cer` and `key.p12` to the same directory, perhaps your desktop, and perform the following in that directory:
-
-```bash
-$ openssl x509 -in aps.cer -inform DER -outform PEM -out cert.pem
-$ openssl pkcs12 -in key.p12 -out key.pem -nodes
-```
-
-You can now move the generated `cert.pem` and `key.pem` into your application directory so you can pass in the file path to the `APNS` constructor.
-
 ## Requirements
 
-`apns2` is written entirely in ES2015 and therefore requires Node.js v6 or later. I intended to get this working on Node v4 LTS which also supports the relevant ES2015 features, however, v4 does not support [ALPN](https://github.com/nodejs/node-v0.x-archive/issues/5945).
+`apns2` requires Node.js v8 or later due to it's use of the built in `http2` library.
