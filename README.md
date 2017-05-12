@@ -6,6 +6,10 @@ APNS2
 
 Node client for connecting to Apple's Push Notification Service using the new HTTP/2 protocol with JSON web tokens.
 
+---
+
+3.0.0 betas can be tracked [here](https://github.com/AndrewBarba/apns2/pull/10). These versions are using the http2 library built into Node core
+
 ## Create Client
 
 Create an APNS client using a signing key:
@@ -28,7 +32,7 @@ let client = new APNS({
 Send a basic notification with message:
 
 ```javascript
-const BasicNotification = APNS.BasicNotification;
+const { BasicNotification } = APNS;
 
 let bn = new BasicNotification(deviceToken, 'Hello, World');
 
@@ -42,7 +46,7 @@ client.send(bn).then(() => {
 Send a basic notification with message and options:
 
 ```javascript
-const BasicNotification = APNS.BasicNotification;
+const { BasicNotification } = APNS;
 
 let bn = new BasicNotification(deviceToken, 'Hello, World', {
   badge: 4,
@@ -63,7 +67,7 @@ client.send(bn).then(() => {
 Send a silent notification using `content-available` key:
 
 ```javascript
-const SilentNotification = APNS.SilentNotification;
+const { SilentNotification } = APNS;
 
 let sn = new SilentNotification(deviceToken);
 
@@ -81,7 +85,7 @@ Note: [Apple recommends](https://developer.apple.com/library/ios/documentation/N
 For complete control over the push notification packet use the base `Notification` class:
 
 ```javascript
-const Notification = APNS.Notification;
+const { Notification } = APNS;
 
 let notification = new Notification(deviceToken, {
   aps: { ... }
@@ -94,11 +98,11 @@ client.send(notification).then(() => {
 });
 ```
 
-Available options can be found at [APNS Payload Options](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/TheNotificationPayload.html#//apple_ref/doc/uid/TP40008194-CH107-SW1)
+Available options can be found at [APNS Payload Options](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/PayloadKeyReference.html#//apple_ref/doc/uid/TP40008194-CH17-SW1)
 
 ## Error Handling
 
-All errors are defined in `./lib/errors.js` and come directly from [APNS Table 8-6](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/PayloadKeyReference.html#//apple_ref/doc/uid/TP40008194-CH17-SW1)
+All errors are defined in `./lib/errors.js` and come directly from [APNS Table 8-6](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingwithAPNs.html#//apple_ref/doc/uid/TP40008194-CH11-SW17)
 
 You can easily listen for these errors by attaching an error handler to the APNS client:
 
