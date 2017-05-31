@@ -6,7 +6,7 @@
   "main": "lib/apns.js",
   "license": "MIT",
   "engines": {
-    "node": ">=7"
+    "node": "^8.0.0"
   },
   "repository": {
     "url": "https://github.com/AndrewBarba/apns2"
@@ -18,8 +18,8 @@
   },
   "devDependencies": {
     "eslint": "^3.19.0",
-    "mocha": "3.3.0",
-    "should": "11.2.1"
+    "mocha": "^3.3.0",
+    "should": "^11.2.1"
   },
   "scripts": {
     "lint": "make lint",
