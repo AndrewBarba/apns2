@@ -8,25 +8,45 @@ const HTTP2Client = require('../lib/http2-client')
 
 describe('http2', () => {
 
-  let client
+  describe('success', () => {
+    let client
 
-  before(() => {
-    client = new HTTP2Client('www.google.com', 443)
-  })
+    before(() => {
+      client = new HTTP2Client('www.google.com', 443)
+    })
 
-  it('should make a get request', () => {
-    return client.get({
-      path: '/'
-    }).then(res => {
-      res.statusCode.should.equal(200)
+    it('should make a get request', () => {
+      return client.get({
+        path: '/'
+      }).then(res => {
+        res.statusCode.should.equal(200)
+      })
+    })
+
+    it('should make a post request', () => {
+      return client.post({
+        path: '/'
+      }).then(res => {
+        res.statusCode.should.equal(405)
+      })
     })
   })
 
-  it('should make a post request', () => {
-    return client.post({
-      path: '/'
-    }).then(res => {
-      res.statusCode.should.equal(405)
+  describe('error', () => {
+    let client
+
+    before(() => {
+      client = new HTTP2Client('bogus.google.com', 443, { timeout: 500 })
+    })
+
+    it('should not make a get request', () => {
+      return client.get({
+        path: '/'
+      }).then(() => {
+        throw new Error('Failed')
+      }).catch(() => {
+        // good
+      })
     })
   })
 })
