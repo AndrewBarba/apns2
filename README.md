@@ -147,4 +147,8 @@ let client = new APNS({
 
 ## Requirements
 
-`apns2` requires Node.js v8 or later due to it's use of the built in `http2` library.
+`apns2` requires Node.js v6
+
+#### Native http2
+
+To use the new built in `http2` library in Node.js v8.4.0 you must start your node process with `node --expose-http2`. apns2 will automatically pick up the native module and use it instead of `node-spdy`.
