@@ -4,7 +4,13 @@ const should = require('should')
 // Package
 const APNS = require('../')
 const errors = APNS.errors
-const HTTP2Client = require('../lib/http2-client')
+const HTTP2Client = (() => {
+  try {
+    return require('../lib/http2-client')
+  } catch(err) {
+    return require('../lib/spdy-client')
+  }
+})()
 
 describe('http2', () => {
 
