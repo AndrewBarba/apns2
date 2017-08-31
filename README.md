@@ -6,9 +6,9 @@ APNS2
 
 Node client for connecting to Apple's Push Notification Service using the new HTTP/2 protocol with JSON web tokens.
 
----
+> Now uses the native `http2` module on Node.js v8.4.0 or later. Falls back to node `node-spdy` on earlier versions of Node.js
 
-3.0.0 betas can be tracked [here](https://github.com/AndrewBarba/apns2/pull/10). These versions are using the http2 library built into Node core
+---
 
 ## Create Client
 
