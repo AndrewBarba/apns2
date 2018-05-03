@@ -5,6 +5,10 @@ Change Log
 
 ---
 
+## [4.0.1](https://github.com/AndrewBarba/apns2/releases/tag/4.0.1)
+
+1. Updated Typescript definitions for v4.0
+
 ## [4.0.0](https://github.com/AndrewBarba/apns2/releases/tag/4.0.0)
 
 1. Remove support for Node versions less than v8.10
