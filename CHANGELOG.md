@@ -5,6 +5,10 @@ Change Log
 
 ---
 
+## [4.0.3](https://github.com/AndrewBarba/apns2/releases/tag/4.0.3)
+
+1. Listen for `error` event when connecting an http2 session
+
 ## [4.0.2](https://github.com/AndrewBarba/apns2/releases/tag/4.0.2)
 
 1. Reset signing token every 59 minutes to prevent `TooManyProviderTokenUpdates` error
