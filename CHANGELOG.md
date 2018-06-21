@@ -5,6 +5,10 @@ Change Log
 
 ---
 
+## [4.0.2](https://github.com/AndrewBarba/apns2/releases/tag/4.0.2)
+
+1. Reset signing token every 59 minutes to prevent `TooManyProviderTokenUpdates` error
+
 ## [4.0.1](https://github.com/AndrewBarba/apns2/releases/tag/4.0.1)
 
 1. Updated Typescript definitions for v4.0
