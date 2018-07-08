@@ -5,6 +5,10 @@ Change Log
 
 ---
 
+## [4.0.4](https://github.com/AndrewBarba/apns2/releases/tag/4.0.4)
+
+1. Fix connection pool not releasing resources
+
 ## [4.0.3](https://github.com/AndrewBarba/apns2/releases/tag/4.0.3)
 
 1. Listen for `error` event when connecting an http2 session
