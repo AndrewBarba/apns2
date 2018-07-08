@@ -119,6 +119,35 @@ describe('apns', () => {
       })
     })
 
+    it('should send a lot of notifications', () => {
+      let notifications = [
+        new BasicNotification(deviceToken, 'Hello 1'),
+        new BasicNotification(deviceToken, 'Hello 2'),
+        new BasicNotification(deviceToken, 'Hello 3'),
+        new BasicNotification(deviceToken, 'Hello 4'),
+        new BasicNotification(deviceToken, 'Hello 5'),
+        new BasicNotification(deviceToken, 'Hello 6'),
+        new BasicNotification(deviceToken, 'Hello 7'),
+        new BasicNotification(deviceToken, 'Hello 8'),
+        new BasicNotification(deviceToken, 'Hello 9'),
+        new BasicNotification(deviceToken, 'Hello 10'),
+        new BasicNotification(deviceToken, 'Hello 11'),
+        new BasicNotification(deviceToken, 'Hello 12'),
+        new BasicNotification(deviceToken, 'Hello 13'),
+        new BasicNotification(deviceToken, 'Hello 14'),
+        new BasicNotification(deviceToken, 'Hello 15'),
+        new BasicNotification(deviceToken, 'Hello 16'),
+        new BasicNotification(deviceToken, 'Hello 17'),
+        new BasicNotification(deviceToken, 'Hello 18'),
+        new BasicNotification(deviceToken, 'Hello 19'),
+        new BasicNotification(deviceToken, 'Hello 20')
+      ]
+      return apns.send(notifications).then(result => {
+        should.exist(result)
+        result.length.should.equal(notifications.length)
+      })
+    })
+
     it('should fail to send a notification', () => {
       let noti = new BasicNotification(`fakedevicetoken`, `Hello, bad token`)
       return apns.send(noti).catch(err => {
