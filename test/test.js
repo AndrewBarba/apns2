@@ -59,13 +59,12 @@ describe('apns', () => {
     let apns
 
     before(() => {
-      console.log(process.env.APNS_SIGNING_KEY) // eslint-disable-line
       apns = new APNS({
         team: `TFLP87PW54`,
         keyId: `7U6GT5Q49J`,
         signingKey:
           process.env.APNS_SIGNING_KEY ?
-          Buffer.from(process.env.APNS_SIGNING_KEY) :
+          process.env.APNS_SIGNING_KEY.replace(/\\n/gi, '\n') :
           fs.readFileSync(`${__dirname}/certs/token.p8`, 'utf8'),
         defaultTopic: `com.tablelist.Tablelist`
       })
@@ -119,7 +118,7 @@ describe('apns', () => {
 
     it('should send a lot of notifications', async () => {
       let notifications = []
-      for (let i = 0; i < 1000; i++) {
+      for (let i = 0; i < 500; i++) {
         notifications.push(new BasicNotification(deviceToken, `Hello #${i}`))
       }
       let results = await apns.sendMany(notifications)
