@@ -37,11 +37,30 @@ const { BasicNotification } = require('apns2')
 
 let bn = new BasicNotification(deviceToken, 'Hello, World')
 
-client.send(bn).then(() => {
-  // sent successfully
-}).catch(err => {
+try {
+  await client.send(bn)
+} catch(err) {
   console.error(err.reason)
-})
+}
+```
+
+#### Many
+
+Send multiple notifications concurrently:
+
+```javascript
+const { BasicNotification } = require('apns2')
+
+let notifications = [
+  new BasicNotification(deviceToken1, 'Hello, World'),
+  new BasicNotification(deviceToken2, 'Hello, World')
+]
+
+try {
+  await client.sendMany(notifications)
+} catch(err) {
+  console.error(err.reason)
+}
 ```
 
 Send a basic notification with message and options:
@@ -56,11 +75,11 @@ let bn = new BasicNotification(deviceToken, 'Hello, World', {
   }
 })
 
-client.send(bn).then(() => {
-  // sent successfully
-}).catch(err => {
+try {
+  await client.send(bn)
+} catch(err) {
   console.error(err.reason)
-})
+}
 ```
 
 #### Silent
@@ -72,11 +91,11 @@ const { SilentNotification } = require('apns2')
 
 let sn = new SilentNotification(deviceToken)
 
-client.send(sn).then(() => {
-  // sent successfully
-}).catch(err => {
+try {
+  await client.send(sn)
+} catch(err) {
   console.error(err.reason)
-})
+}
 ```
 
 Note: [Apple recommends](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CreatingtheNotificationPayload.html#//apple_ref/doc/uid/TP40008194-CH10-SW8) that no options other than the `content-available` flag be sent in order for a notification to truly be silent and wake up your app in the background. Therefore this class does not accept any additional options in the constructor.
@@ -92,11 +111,11 @@ let notification = new Notification(deviceToken, {
   aps: { ... }
 })
 
-client.send(notification).then(() => {
-  // sent successfully
-}).catch(err => {
+try {
+  await client.send(notification)
+} catch(err) {
   console.error(err.reason)
-})
+}
 ```
 
 Available options can be found at [APNS Payload Options](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/PayloadKeyReference.html#//apple_ref/doc/uid/TP40008194-CH17-SW1)
