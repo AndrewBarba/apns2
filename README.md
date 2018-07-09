@@ -44,25 +44,6 @@ try {
 }
 ```
 
-#### Many
-
-Send multiple notifications concurrently:
-
-```javascript
-const { BasicNotification } = require('apns2')
-
-let notifications = [
-  new BasicNotification(deviceToken1, 'Hello, World'),
-  new BasicNotification(deviceToken2, 'Hello, World')
-]
-
-try {
-  await client.sendMany(notifications)
-} catch(err) {
-  console.error(err.reason)
-}
-```
-
 Send a basic notification with message and options:
 
 ```javascript
@@ -99,6 +80,25 @@ try {
 ```
 
 Note: [Apple recommends](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CreatingtheNotificationPayload.html#//apple_ref/doc/uid/TP40008194-CH10-SW8) that no options other than the `content-available` flag be sent in order for a notification to truly be silent and wake up your app in the background. Therefore this class does not accept any additional options in the constructor.
+
+#### Many
+
+Send multiple notifications concurrently:
+
+```javascript
+const { BasicNotification } = require('apns2')
+
+let notifications = [
+  new BasicNotification(deviceToken1, 'Hello, World'),
+  new BasicNotification(deviceToken2, 'Hello, World')
+]
+
+try {
+  await client.sendMany(notifications)
+} catch(err) {
+  console.error(err.reason)
+}
+```
 
 #### Advanced
 

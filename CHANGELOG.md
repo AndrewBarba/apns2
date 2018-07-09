@@ -5,6 +5,10 @@ Change Log
 
 ---
 
+## [5.0.0](https://github.com/AndrewBarba/apns2/releases/tag/5.0.0)
+
+1. Update code to use async/await
+
 ## [4.0.4](https://github.com/AndrewBarba/apns2/releases/tag/4.0.4)
 
 1. Fix connection pool not releasing resources
