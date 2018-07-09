@@ -3,7 +3,7 @@ import { EventEmitter } from "events"
 export class APNS extends EventEmitter {
   constructor(options: APNSOptions)
   send(notification: Notification): Promise<Notification>
-  send(notifications: Notification[]): Promise<Notification[]>
+  sendMany(notifications: Notification[]): Promise<Notification[]>
 }
 
 export class Notification {
