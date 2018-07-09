@@ -59,10 +59,14 @@ describe('apns', () => {
     let apns
 
     before(() => {
+      console.log(process.env.APNS_SIGNING_KEY) // eslint-disable-line
       apns = new APNS({
         team: `TFLP87PW54`,
         keyId: `7U6GT5Q49J`,
-        signingKey: process.env.APNS_SIGNING_KEY || fs.readFileSync(`${__dirname}/certs/token.p8`, 'utf8'),
+        signingKey:
+          process.env.APNS_SIGNING_KEY ?
+          Buffer.from(process.env.APNS_SIGNING_KEY) :
+          fs.readFileSync(`${__dirname}/certs/token.p8`, 'utf8'),
         defaultTopic: `com.tablelist.Tablelist`
       })
     })
