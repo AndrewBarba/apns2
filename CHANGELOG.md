@@ -5,6 +5,12 @@ Change Log
 
 ---
 
+## [6.0.0](https://github.com/AndrewBarba/apns2/releases/tag/6.0.0)
+
+1. Remove Bluebird
+2. Remove concurrency option, instead relies on the connection pool and max connections
+3. Accept a `Date` for the apns expiration
+
 ## [5.0.0](https://github.com/AndrewBarba/apns2/releases/tag/5.0.0)
 
 1. Update code to use async/await
