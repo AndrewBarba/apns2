@@ -63,6 +63,7 @@ declare interface APNSOptions {
   defaultTopic?: string
   host?: string
   port?: number
+  connections?: number
 }
 
 declare interface NotificationPriority {
