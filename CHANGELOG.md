@@ -5,6 +5,10 @@ Change Log
 
 ---
 
+## [6.1.0](https://github.com/AndrewBarba/apns2/releases/tag/6.1.0)
+
+1. Support [thread-id](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/PayloadKeyReference.html)
+
 ## [6.0.0](https://github.com/AndrewBarba/apns2/releases/tag/6.0.0)
 
 1. Remove Bluebird
