@@ -108,6 +108,18 @@ describe('apns', () => {
       return apns.send(notification)
     })
 
+    it('should send a notification with a thread-id', async () => {
+      let notification = new Notification(deviceToken, {
+        aps: {
+          alert: {
+            body: `Hello, Tablelist`
+          }
+        },
+        threadId: `hello`
+      })
+      return apns.send(notification)
+    })
+
     it('should send both notifications', async () => {
       let basicNotification = new BasicNotification(deviceToken, `Hello, Multiple`)
       let silentNotification = new SilentNotification(deviceToken)
