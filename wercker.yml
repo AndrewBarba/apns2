@@ -1,4 +1,4 @@
-box: node:8
+box: node:10.13
 
 build:
   steps:
@@ -8,8 +8,8 @@ build:
 
     - script:
       name: lint
-      code: npm run lint
+      code: yarn lint
 
     - script:
       name: test
-      code: npm test
+      code: yarn test
