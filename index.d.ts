@@ -9,7 +9,9 @@ export class APNS extends EventEmitter {
 export class Notification {
   constructor(deviceToken: string, options?: NotificationOptions)
   static readonly priority: NotificationPriority
+  static readonly pushType: PushType
   readonly deviceToken: string
+  readonly pushType: string
   readonly priority: number
   readonly expiration: number
   readonly topic: string
@@ -69,4 +71,9 @@ declare interface APNSOptions {
 declare interface NotificationPriority {
   immediate: number
   throttled: number
+}
+
+declare interface PushType {
+  alert: string
+  background: string
 }

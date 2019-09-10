@@ -5,6 +5,10 @@ Change Log
 
 ---
 
+## [7.0.0](https://github.com/AndrewBarba/apns2/releases/tag/7.0.0)
+
+1. Support [apns-push-type](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/sending_notification_requests_to_apns) and iOS 13
+
 ## [6.1.0](https://github.com/AndrewBarba/apns2/releases/tag/6.1.0)
 
 1. Support [thread-id](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/PayloadKeyReference.html)
