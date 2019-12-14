@@ -5,6 +5,10 @@ Change Log
 
 ---
 
+## [8.0.0](https://github.com/AndrewBarba/apns2/releases/tag/7.0.0)
+
+1. Require Node.js v10 or higher
+
 ## [7.0.0](https://github.com/AndrewBarba/apns2/releases/tag/7.0.0)
 
 1. Support [apns-push-type](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/sending_notification_requests_to_apns) and iOS 13
