@@ -5,6 +5,10 @@ Change Log
 
 ---
 
+## [8.2.0](https://github.com/AndrewBarba/apns2/releases/tag/8.2.0)
+
+1. Add correct TypeScript definitions for `NotificationOptions`
+
 ## [8.1.0](https://github.com/AndrewBarba/apns2/releases/tag/8.1.0)
 
 1. Add missing TypeScript interface for `NotificationOptions`

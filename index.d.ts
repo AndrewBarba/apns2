@@ -69,21 +69,19 @@ declare interface APNSOptions {
 }
 
 declare interface NotificationOptions {
+  alert?: string | any;
   aps?: any;
-  actions?: NotificationAction[];
-  badge?: string;
-  body?: string;
+  badge?: number;
+  category?: string;
+  collapseId?: string;
+  contentAvailable?: boolean;
   data?: any;
-  dir?: NotificationDirection;
-  icon?: string;
-  image?: string;
-  lang?: string;
-  renotify?: boolean;
-  requireInteraction?: boolean;
-  silent?: boolean;
-  tag?: string;
-  timestamp?: number;
-  vibrate?: VibratePattern;
+  expiration?: number;
+  priority?: string;
+  pushType?: string;
+  sound?: string;
+  threadId?: string;
+  topic?: string;
 }
 
 declare interface NotificationPriority {
