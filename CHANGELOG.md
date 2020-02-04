@@ -5,7 +5,12 @@ Change Log
 
 ---
 
-## [8.0.0](https://github.com/AndrewBarba/apns2/releases/tag/7.0.0)
+## [8.1.0](https://github.com/AndrewBarba/apns2/releases/tag/8.1.0)
+
+1. Add missing TypeScript interface for `NotificationOptions`
+2. Remove lodash dependency
+
+## [8.0.0](https://github.com/AndrewBarba/apns2/releases/tag/8.0.0)
 
 1. Require Node.js v10 or higher
 
