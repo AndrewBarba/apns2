@@ -92,4 +92,5 @@ declare interface NotificationPriority {
 declare interface PushType {
   alert: string
   background: string
+  voip: string
 }

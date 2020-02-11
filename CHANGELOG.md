@@ -5,6 +5,10 @@ Change Log
 
 ---
 
+## [8.3.0](https://github.com/AndrewBarba/apns2/releases/tag/8.3.0)
+
+1. Add voip support
+
 ## [8.2.0](https://github.com/AndrewBarba/apns2/releases/tag/8.2.0)
 
 1. Add correct TypeScript definitions for `NotificationOptions`
