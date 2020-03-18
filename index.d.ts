@@ -27,35 +27,38 @@ export class SilentNotification extends Notification {
 }
 
 export const Errors: {
-  badCertificate: string
-  badCertificateEnvironment: string
-  badCollapseId: string
-  badDeviceToken: string
-  badExpirationDate: string
-  badMessageId: string
-  badPath: string
-  badPriority: string
-  badTopic: string
-  deviceTokenNotForTopic: string
-  duplicateHeaders: string
-  error: string
-  expiredProviderToken: string
-  forbidden: string
-  idleTimeout: string
-  internalServerError: string
-  invalidProviderToken: string
-  invalidSigningKey: string
-  methodNotAllowed: string
-  missingDeviceToken: string
-  missingTopic: string
-  payloadEmpty: string
-  payloadTooLarge: string
-  serviceUnavailable: string
-  shutdown: string
-  tooManyRequests: string
-  topicDisallowed: string
-  unknownError: string
-  unregistered: string
+  badCertificate: string;
+  badCertificateEnvironment: string;
+  badCollapseId: string;
+  badDeviceToken: string;
+  badExpirationDate: string;
+  badMessageId: string;
+  badPath: string;
+  badPriority: string;
+  badTopic: string;
+  deviceTokenNotForTopic: string;
+  duplicateHeaders: string;
+  error: string;
+  expiredProviderToken: string;
+  forbidden: string;
+  idleTimeout: string;
+  internalServerError: string;
+  invalidProviderToken: string;
+  invalidPushType: string;
+  invalidSigningKey: string;
+  methodNotAllowed: string;
+  missingDeviceToken: string;
+  missingProviderToken: string;
+  missingTopic: string;
+  payloadEmpty: string;
+  payloadTooLarge: string;
+  serviceUnavailable: string;
+  shutdown: string;
+  tooManyProviderTokenUpdates: string;
+  tooManyRequests: string;
+  topicDisallowed: string;
+  unknownError: string;
+  unregistered: string;
 }
 
 declare interface APNSOptions {
