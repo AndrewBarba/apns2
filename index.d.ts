@@ -90,7 +90,10 @@ declare interface NotificationPriority {
 }
 
 declare interface PushType {
-  alert: string
-  background: string
-  voip: string
+  alert: string;
+  background: string;
+  voip: string;
+  complication: string;
+  fileprovider: string;
+  mdm: string;
 }
