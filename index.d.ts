@@ -92,7 +92,7 @@ declare interface NotificationOptions {
   contentAvailable?: boolean;
   data?: any;
   expiration?: number;
-  priority?: string;
+  priority?: number;
   pushType?: string;
   sound?: string;
   threadId?: string;
