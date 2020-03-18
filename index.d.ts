@@ -72,7 +72,19 @@ declare interface APNSOptions {
 }
 
 declare interface NotificationOptions {
-  alert?: string | any;
+  alert?: string | {
+    title?: string;
+    subtitle?: string;
+    body: string;
+    'title-loc-key'?: string;
+    'title-loc-args'?: string[];
+    'subtitle-loc-key'?: string;
+    'subtitle-loc-args'?: string[];
+    'loc-key'?: string;
+    'loc-args'?: string[];
+    'action-loc-key'?: string;
+    'launch-image'?: string;
+  };
   aps?: any;
   badge?: number;
   category?: string;
