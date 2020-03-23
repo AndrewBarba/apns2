@@ -93,7 +93,7 @@ declare interface NotificationOptions {
   data?: any;
   expiration?: number;
   priority?: number;
-  pushType?: string;
+  pushType?: keyof PushType;
   sound?: string;
   threadId?: string;
   topic?: string;
