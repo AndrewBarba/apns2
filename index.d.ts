@@ -90,7 +90,7 @@ declare interface NotificationOptions {
   category?: string;
   collapseId?: string;
   contentAvailable?: boolean;
-  data?: any;
+  data?: { [key: string]: any; };
   expiration?: number;
   priority?: number;
   pushType?: keyof PushType;
@@ -100,8 +100,8 @@ declare interface NotificationOptions {
 }
 
 declare interface NotificationPriority {
-  immediate: number
-  throttled: number
+  immediate: number;
+  throttled: number;
 }
 
 declare interface PushType {
