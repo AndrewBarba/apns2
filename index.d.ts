@@ -1,9 +1,17 @@
 import { EventEmitter } from "events"
 
+type ResponseError = {
+  error: {
+    reason: string;
+    statusCode: number;
+    notification: Notification;
+  };
+};
+
 export class APNS extends EventEmitter {
   constructor(options: APNSOptions)
-  send(notification: Notification): Promise<Notification>
-  sendMany(notifications: Notification[]): Promise<Notification[]>
+  send(notification: Notification): Promise<Notification | ResponseError>
+  sendMany(notifications: Notification[]): Promise<(Notification | ResponseError)[]>
 }
 
 export class Notification {
