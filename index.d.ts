@@ -2,8 +2,8 @@ import { EventEmitter } from "events"
 
 export class APNS extends EventEmitter {
   constructor(options: APNSOptions)
-  send(notification: Notification): Promise<Notification>
-  sendMany(notifications: Notification[]): Promise<Notification[]>
+  send(notification: Notification): Promise<Notification | ResponseError>
+  sendMany(notifications: Notification[]): Promise<(Notification | ResponseError)[]>
   destroy(): Promise<void>
 }
 
@@ -27,6 +27,14 @@ export class SilentNotification extends Notification {
   constructor(deviceToken: string, options?: NotificationOptions)
 }
 
+type ResponseError = {
+  error: {
+    reason: string;
+    statusCode: number;
+    notification: Notification;
+  };
+}
+
 export const Errors: {
   badCertificate: string
   badCertificateEnvironment: string
@@ -45,14 +53,17 @@ export const Errors: {
   idleTimeout: string
   internalServerError: string
   invalidProviderToken: string
+  invalidPushType: string
   invalidSigningKey: string
   methodNotAllowed: string
   missingDeviceToken: string
+  missingProviderToken: string
   missingTopic: string
   payloadEmpty: string
   payloadTooLarge: string
   serviceUnavailable: string
   shutdown: string
+  tooManyProviderTokenUpdates: string
   tooManyRequests: string
   topicDisallowed: string
   unknownError: string
@@ -70,16 +81,28 @@ declare interface APNSOptions {
 }
 
 declare interface NotificationOptions {
-  alert?: string | any;
+  alert?: string | {
+    title?: string;
+    subtitle?: string;
+    body: string;
+    'title-loc-key'?: string;
+    'title-loc-args'?: string[];
+    'subtitle-loc-key'?: string;
+    'subtitle-loc-args'?: string[];
+    'loc-key'?: string;
+    'loc-args'?: string[];
+    'action-loc-key'?: string;
+    'launch-image'?: string;
+  };
   aps?: any;
   badge?: number;
   category?: string;
   collapseId?: string;
   contentAvailable?: boolean;
-  data?: any;
+  data?: { [key: string]: any; };
   expiration?: number;
-  priority?: string;
-  pushType?: string;
+  priority?: number;
+  pushType?: keyof PushType;
   sound?: string;
   threadId?: string;
   topic?: string;
@@ -94,4 +117,7 @@ declare interface PushType {
   alert: string
   background: string
   voip: string
+  complication: string
+  fileprovider: string
+  mdm: string
 }
