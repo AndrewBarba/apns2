@@ -1,7 +1,6 @@
-APNS2
-=====
+# APNS2
 
-[![wercker status](https://app.wercker.com/status/0e705662e5c35d51a971764fe3e27814/s/master "wercker status")](https://app.wercker.com/project/byKey/0e705662e5c35d51a971764fe3e27814)
+[![wercker status](https://app.wercker.com/status/0e705662e5c35d51a971764fe3e27814/s/master 'wercker status')](https://app.wercker.com/project/byKey/0e705662e5c35d51a971764fe3e27814)
 [![npm version](https://badge.fury.io/js/apns2.svg)](https://badge.fury.io/js/apns2)
 [![Twitter](https://img.shields.io/badge/twitter-@andrew_barba-blue.svg?style=flat)](http://twitter.com/andrew_barba)
 
@@ -39,7 +38,7 @@ let bn = new BasicNotification(deviceToken, 'Hello, World')
 
 try {
   await client.send(bn)
-} catch(err) {
+} catch (err) {
   console.error(err.reason)
 }
 ```
@@ -58,7 +57,7 @@ let bn = new BasicNotification(deviceToken, 'Hello, World', {
 
 try {
   await client.send(bn)
-} catch(err) {
+} catch (err) {
   console.error(err.reason)
 }
 ```
@@ -74,7 +73,7 @@ let sn = new SilentNotification(deviceToken)
 
 try {
   await client.send(sn)
-} catch(err) {
+} catch (err) {
   console.error(err.reason)
 }
 ```
@@ -95,7 +94,7 @@ let notifications = [
 
 try {
   await client.sendMany(notifications)
-} catch(err) {
+} catch (err) {
   console.error(err.reason)
 }
 ```
@@ -130,17 +129,27 @@ You can easily listen for these errors by attaching an error handler to the APNS
 const { Errors } = require('apns2')
 
 // Listen for a specific error
-client.on(Errors.badDeviceToken, err => {
+client.on(Errors.badDeviceToken, (err) => {
   // Handle accordingly...
   // Perhaps delete token from your database
   console.error(err.reason, err.statusCode, err.notification.deviceToken)
 })
 
 // Listen for any error
-client.on(Errors.error, err => {
+client.on(Errors.error, (err) => {
   console.error(err.reason, err.statusCode, err.notification.deviceToken)
 })
 ```
+
+## Destroy
+
+If you need to close connections to Apple's APNS servers in order to allow the Node process to exit, you can tear down the APNS client:
+
+```javascript
+await client.destroy()
+```
+
+Once a client is destroyed you will not be able to use it again. Instead you should instantiate a new client with `new APNS()`.
 
 ## Environments
 
