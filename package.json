@@ -1,6 +1,6 @@
 {
   "name": "apns2",
-  "version": "8.3.0",
+  "version": "8.4.0",
   "description": "Node client for connecting to Apple's Push Notification Service using the new HTTP/2 protocol with JSON web tokens.",
   "author": "Andrew Barba <abarba.77@gmail.com>",
   "main": "lib/apns.js",
@@ -13,8 +13,8 @@
     "url": "https://github.com/AndrewBarba/apns2"
   },
   "dependencies": {
-    "jsonwebtoken": "^8.4.0",
-    "tarn": "^2.0.0"
+    "jsonwebtoken": "^8.5.1",
+    "tarn": "^3.0.0"
   },
   "devDependencies": {
     "eslint": "^6.8.0",

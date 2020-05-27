@@ -5,6 +5,15 @@ Change Log
 
 ---
 
+## [8.4.1](https://github.com/AndrewBarba/apns2/releases/tag/8.4.1)
+
+1. Fix TypeScript typings
+
+## [8.4.0](https://github.com/AndrewBarba/apns2/releases/tag/8.4.0)
+
+1. Add `client.destroy()` to kill all outstanding connections to apns servers.
+2. Upgrade tarn to v3
+
 ## [8.3.0](https://github.com/AndrewBarba/apns2/releases/tag/8.3.0)
 
 1. Add voip support
