@@ -5,9 +5,10 @@ Change Log
 
 ---
 
-## [8.4.1](https://github.com/AndrewBarba/apns2/releases/tag/8.4.1)
+## [8.5.0](https://github.com/AndrewBarba/apns2/releases/tag/8.5.0)
 
 1. Fix TypeScript typings
+2. New push types and error constants
 
 ## [8.4.0](https://github.com/AndrewBarba/apns2/releases/tag/8.4.0)
 
