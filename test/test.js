@@ -3,16 +3,9 @@ const should = require('should')
 
 // Package
 const HTTP2Client = require('../lib/http2-client')
-const {
-  APNS,
-  Notification,
-  BasicNotification,
-  SilentNotification,
-  Errors
-} = require('../')
+const { APNS, Notification, BasicNotification, SilentNotification, Errors } = require('../')
 
 describe('http2', () => {
-
   describe('success', () => {
     let client
 
@@ -43,7 +36,7 @@ describe('http2', () => {
       try {
         await client.connect()
         throw new Error('Should not have worked')
-      } catch(err) {
+      } catch (err) {
         should.exist(err)
       }
     })
@@ -51,21 +44,18 @@ describe('http2', () => {
 })
 
 describe('apns', () => {
-
   let deviceToken = `5ab4be4b2e511acfc64405be02a9544295f29b6157b75e3fbc5b2f5300eeda45`
 
   describe('signing token', () => {
-
     let apns
 
     before(() => {
       apns = new APNS({
         team: `TFLP87PW54`,
         keyId: `7U6GT5Q49J`,
-        signingKey:
-          process.env.APNS_SIGNING_KEY ?
-          process.env.APNS_SIGNING_KEY.replace(/\\n/gi, '\n') :
-          fs.readFileSync(`${__dirname}/certs/token.p8`, 'utf8'),
+        signingKey: process.env.APNS_SIGNING_KEY
+          ? process.env.APNS_SIGNING_KEY.replace(/\\n/gi, '\n')
+          : fs.readFileSync(`${__dirname}/certs/token.p8`, 'utf8'),
         defaultTopic: `com.tablelist.Tablelist`
       })
     })
@@ -143,14 +133,14 @@ describe('apns', () => {
       try {
         await apns.send(noti)
         throw new Error('Should not have sent notification')
-      } catch(err) {
+      } catch (err) {
         should.exist(err)
         err.reason.should.equal(Errors.badDeviceToken)
       }
     })
 
-    it('should fail to send a notification and emit an error', done => {
-      apns.once(Errors.error, err => {
+    it('should fail to send a notification and emit an error', (done) => {
+      apns.once(Errors.error, (err) => {
         should.exist(err)
         err.reason.should.equal(Errors.badDeviceToken)
         done()
@@ -160,8 +150,8 @@ describe('apns', () => {
       apns.send(noti).catch(should.exist)
     })
 
-    it('should fail to send a notification and emit an error', done => {
-      apns.once(Errors.badDeviceToken, err => {
+    it('should fail to send a notification and emit an error', (done) => {
+      apns.once(Errors.badDeviceToken, (err) => {
         should.exist(err)
         err.reason.should.equal(Errors.badDeviceToken)
         done()

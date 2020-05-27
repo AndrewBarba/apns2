@@ -1,5 +1,4 @@
-Change Log
-==========
+# Change Log
 
 `apns2` follows [Semantic Versioning](http://semver.org/)
 
@@ -9,6 +8,7 @@ Change Log
 
 1. Fix TypeScript typings
 2. New push types and error constants
+3. Add prettier
 
 ## [8.4.0](https://github.com/AndrewBarba/apns2/releases/tag/8.4.0)
 
