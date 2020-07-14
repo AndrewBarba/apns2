@@ -13,8 +13,7 @@
     "url": "https://github.com/AndrewBarba/apns2"
   },
   "dependencies": {
-    "jsonwebtoken": "^8.5.1",
-    "tarn": "^3.0.0"
+    "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
     "eslint": "^7.1.0",
