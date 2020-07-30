@@ -45,6 +45,7 @@ describe('http2', () => {
 
 describe('apns', () => {
   let deviceToken = `5ab4be4b2e511acfc64405be02a9544295f29b6157b75e3fbc5b2f5300eeda45`
+  let deviceVoipToken = `5ab4be4b2e511acfc64405be02a9544295f29b6157b75e3fbc5b2f5300eeda45`
 
   describe('signing token', () => {
     let apns
@@ -80,6 +81,20 @@ describe('apns', () => {
         }
       })
       return apns.send(basicNotification)
+    })
+
+    it('should send a voip notification', async () => {
+      let voipNotification = new VoipNotification(deviceVoipToken)
+      return apns.send(voipNotification)
+    })
+
+    it('should send a voip notification with data', async () => {
+      let voipNotification = new VoipNotification(deviceVoipToken)
+      return apns.send(voipNotification, {
+        data: {
+          body: `hello world`
+        }
+      })
     })
 
     it('should send a silent notification', async () => {

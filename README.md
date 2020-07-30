@@ -80,6 +80,24 @@ try {
 
 Note: [Apple recommends](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/pushing_background_updates_to_your_app#2980040) that no options other than the `content-available` flag be sent in order for a notification to truly be silent and wake up your app in the background. Therefore this class does not accept any additional options in the constructor.
 
+#### VoIP
+
+Note: PushKit is required to handle/respond to VoIP Notifications.
+
+[Apple's guide can be found here.](https://developer.apple.com/documentation/pushkit/responding_to_voip_notifications_from_pushkit)
+
+```javascript
+const { VoipNotification } = require('apns2')
+
+let vn = new VoipNotification(deviceVoipToken)
+
+try {
+  await client.send(vn)
+} catch (err) {
+  console.error(err.reason)
+}
+```
+
 #### Many
 
 Send multiple notifications concurrently:
