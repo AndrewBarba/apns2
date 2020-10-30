@@ -16,6 +16,7 @@
     "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
+    "dotenv": "^8.2.0",
     "eslint": "^7.12.1",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.1.4",
@@ -31,6 +32,6 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "test": "mocha --exit --bail --slow 1000 --timeout 5000 ./test/test.js"
+    "test": "dotenv mocha --exit --bail --slow 1000 --timeout 5000 ./test/test.js"
   }
 }

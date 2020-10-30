@@ -27,4 +27,5 @@ jobs:
 
       - run: yarn test
         env:
+          APNS_PUSH_TOKEN: ${{ secrets.APNS_PUSH_TOKEN }}
           APNS_SIGNING_KEY: ${{ secrets.APNS_SIGNING_KEY }}

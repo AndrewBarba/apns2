@@ -23,7 +23,7 @@ describe('http2', () => {
 })
 
 describe('apns', () => {
-  let deviceToken = `5ab4be4b2e511acfc64405be02a9544295f29b6157b75e3fbc5b2f5300eeda45`
+  const deviceToken = process.env.APNS_PUSH_TOKEN
 
   describe('signing token', () => {
     let apns
