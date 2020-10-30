@@ -171,4 +171,4 @@ const client = new APNS({
 
 ## Requirements
 
-`apns2` requires Node.js v10.16 or later
+`apns2` requires Node.js v12.14 or later
