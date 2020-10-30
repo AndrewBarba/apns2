@@ -140,15 +140,15 @@ client.on(Errors.error, (err) => {
 })
 ```
 
-## Destroy
+## Close Connections
 
 If you need to close connections to Apple's APNS servers in order to allow the Node process to exit, you can tear down the APNS client:
 
 ```javascript
-await client.destroy()
+await client.close()
 ```
 
-Once a client is destroyed you will not be able to use it again. Instead you should instantiate a new client with `new APNS()`.
+Once a client is closed you will not be able to use it again. Instead you should instantiate a new client with `new APNS()`.
 
 ## Environments
 
