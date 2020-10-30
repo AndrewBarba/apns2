@@ -4,6 +4,12 @@
 
 ---
 
+## [9.0.0](https://github.com/AndrewBarba/apns2/releases/tag/9.0.0)
+
+1. Full code cleanup
+2. Removes tarn
+3. Requires Node v12 or newer
+
 ## [8.5.0](https://github.com/AndrewBarba/apns2/releases/tag/8.5.0)
 
 1. Fix TypeScript typings

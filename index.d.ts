@@ -4,7 +4,7 @@ export class APNS extends EventEmitter {
   constructor(options: APNSOptions)
   send(notification: Notification): Promise<Notification | ResponseError>
   sendMany(notifications: Notification[]): Promise<(Notification | ResponseError)[]>
-  destroy(): Promise<void>
+  close(): Promise<void>
 }
 
 export class Notification {
