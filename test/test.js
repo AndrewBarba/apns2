@@ -1,7 +1,4 @@
-const fs = require('fs')
 const should = require('should')
-
-// Package
 const HTTP2Client = require('../lib/http2-client')
 const { APNS, Notification, BasicNotification, SilentNotification, Errors } = require('../')
 
@@ -35,9 +32,7 @@ describe('apns', () => {
       apns = new APNS({
         team: `TFLP87PW54`,
         keyId: `7U6GT5Q49J`,
-        signingKey: process.env.APNS_SIGNING_KEY
-          ? process.env.APNS_SIGNING_KEY.replace(/\\n/gi, '\n')
-          : fs.readFileSync(`${__dirname}/certs/token.p8`, 'utf8'),
+        signingKey: process.env.APNS_SIGNING_KEY,
         defaultTopic: `com.tablelist.Tablelist`
       })
     })
