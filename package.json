@@ -32,6 +32,6 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "test": "dotenv mocha --exit --bail --slow 1000 --timeout 5000 ./test/test.js"
+    "test": "mocha --exit --bail --slow 1000 --timeout 5000 ./test/test.js"
   }
 }
