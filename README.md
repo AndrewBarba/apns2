@@ -5,8 +5,6 @@
 
 Node client for connecting to Apple's Push Notification Service using the new HTTP/2 protocol with JSON web tokens.
 
-> Now uses the native `http2` module in Node.js v10.16 or later
-
 ---
 
 ## Create Client
