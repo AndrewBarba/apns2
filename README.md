@@ -1,6 +1,5 @@
 # APNS2
 
-[![wercker status](https://app.wercker.com/status/0e705662e5c35d51a971764fe3e27814/s/master 'wercker status')](https://app.wercker.com/project/byKey/0e705662e5c35d51a971764fe3e27814)
 [![npm version](https://badge.fury.io/js/apns2.svg)](https://badge.fury.io/js/apns2)
 [![Twitter](https://img.shields.io/badge/twitter-@andrew_barba-blue.svg?style=flat)](http://twitter.com/andrew_barba)
 
