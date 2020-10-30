@@ -16,7 +16,7 @@ Create an APNS client using a signing key:
 ```javascript
 const { APNS } = require('apns2')
 
-let client = new APNS({
+const client = new APNS({
   team: `TFLP87PW54`,
   keyId: `123ABC456`,
   signingKey: fs.readFileSync(`${__dirname}/path/to/auth.p8`),
@@ -33,7 +33,7 @@ Send a basic notification with message:
 ```javascript
 const { BasicNotification } = require('apns2')
 
-let bn = new BasicNotification(deviceToken, 'Hello, World')
+const bn = new BasicNotification(deviceToken, 'Hello, World')
 
 try {
   await client.send(bn)
@@ -47,7 +47,7 @@ Send a basic notification with message and options:
 ```javascript
 const { BasicNotification } = require('apns2')
 
-let bn = new BasicNotification(deviceToken, 'Hello, World', {
+const bn = new BasicNotification(deviceToken, 'Hello, World', {
   badge: 4,
   data: {
     userId: user.getUserId
@@ -68,7 +68,7 @@ Send a silent notification using `content-available` key:
 ```javascript
 const { SilentNotification } = require('apns2')
 
-let sn = new SilentNotification(deviceToken)
+const sn = new SilentNotification(deviceToken)
 
 try {
   await client.send(sn)
@@ -86,7 +86,7 @@ Send multiple notifications concurrently:
 ```javascript
 const { BasicNotification } = require('apns2')
 
-let notifications = [
+const notifications = [
   new BasicNotification(deviceToken1, 'Hello, World'),
   new BasicNotification(deviceToken2, 'Hello, World')
 ]
@@ -105,7 +105,7 @@ For complete control over the push notification packet use the base `Notificatio
 ```javascript
 const { Notification } = require('apns2')
 
-let notification = new Notification(deviceToken, {
+const notification = new Notification(deviceToken, {
   aps: { ... }
 })
 
@@ -155,7 +155,7 @@ Once a client is closed you will not be able to use it again. Instead you should
 By default the APNS client connects to the production push notification server. This is identical to passing in the options:
 
 ```javascript
-let client = new APNS({
+const client = new APNS({
   host: 'api.push.apple.com',
   port: 443,
   ...
@@ -165,7 +165,7 @@ let client = new APNS({
 To connect to the development push notification server, pass the options:
 
 ```javascript
-let client = new APNS({
+const client = new APNS({
   host: 'api.development.push.apple.com'
   ...
 })
