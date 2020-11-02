@@ -1,4 +1,4 @@
-import { EventEmitter } from "events"
+import { EventEmitter } from 'events'
 
 export class APNS extends EventEmitter {
   constructor(options: APNSOptions)
@@ -29,10 +29,10 @@ export class SilentNotification extends Notification {
 
 type ResponseError = {
   error: {
-    reason: string;
-    statusCode: number;
-    notification: Notification;
-  };
+    reason: string
+    statusCode: number
+    notification: Notification
+  }
 }
 
 export const Errors: {
@@ -77,35 +77,38 @@ declare interface APNSOptions {
   defaultTopic?: string
   host?: string
   port?: number
-  connections?: number
+  requestTimeout?: number
+  pingIntervalMs?: number
 }
 
 declare interface NotificationOptions {
-  alert?: string | {
-    title?: string;
-    subtitle?: string;
-    body: string;
-    'title-loc-key'?: string;
-    'title-loc-args'?: string[];
-    'subtitle-loc-key'?: string;
-    'subtitle-loc-args'?: string[];
-    'loc-key'?: string;
-    'loc-args'?: string[];
-    'action-loc-key'?: string;
-    'launch-image'?: string;
-  };
-  aps?: any;
-  badge?: number;
-  category?: string;
-  collapseId?: string;
-  contentAvailable?: boolean;
-  data?: { [key: string]: any; };
-  expiration?: number;
-  priority?: number;
-  pushType?: keyof PushType;
-  sound?: string;
-  threadId?: string;
-  topic?: string;
+  alert?:
+    | string
+    | {
+        title?: string
+        subtitle?: string
+        body: string
+        'title-loc-key'?: string
+        'title-loc-args'?: string[]
+        'subtitle-loc-key'?: string
+        'subtitle-loc-args'?: string[]
+        'loc-key'?: string
+        'loc-args'?: string[]
+        'action-loc-key'?: string
+        'launch-image'?: string
+      }
+  aps?: any
+  badge?: number
+  category?: string
+  collapseId?: string
+  contentAvailable?: boolean
+  data?: { [key: string]: any }
+  expiration?: number
+  priority?: number
+  pushType?: keyof PushType
+  sound?: string
+  threadId?: string
+  topic?: string
 }
 
 declare interface NotificationPriority {
