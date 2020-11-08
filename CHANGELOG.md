@@ -4,6 +4,12 @@
 
 ---
 
+## [9.1.0](https://github.com/AndrewBarba/apns2/releases/tag/9.1.0)
+
+1. Correctly handle socket error events
+2. Lazily connect on first request
+3. Keeps socket alive with ping request every 60s
+
 ## [9.0.0](https://github.com/AndrewBarba/apns2/releases/tag/9.0.0)
 
 1. Full code cleanup
