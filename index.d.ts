@@ -78,7 +78,7 @@ declare interface APNSOptions {
   host?: string
   port?: number
   requestTimeout?: number
-  pingIntervalMs?: number
+  pingInterval?: number
 }
 
 declare interface NotificationOptions {
