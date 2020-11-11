@@ -4,6 +4,11 @@
 
 ---
 
+## [9.2.0](https://github.com/AndrewBarba/apns2/releases/tag/9.2.0)
+
+1. Allow disabling pingInterval
+2. Fix issue with missing ping callback
+
 ## [9.1.0](https://github.com/AndrewBarba/apns2/releases/tag/9.1.0)
 
 1. Correctly handle socket error events
