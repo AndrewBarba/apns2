@@ -164,7 +164,7 @@ To connect to the development push notification server, pass the options:
 
 ```javascript
 const client = new APNS({
-  host: 'api.development.push.apple.com'
+  host: 'api.sandbox.push.apple.com'
   ...
 })
 ```
