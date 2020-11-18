@@ -4,6 +4,10 @@
 
 ---
 
+## [9.3.0](https://github.com/AndrewBarba/apns2/releases/tag/9.3.0)
+
+1. Update token refresh logic to avoid `TooManyProviderTokenUpdates`
+
 ## [9.2.0](https://github.com/AndrewBarba/apns2/releases/tag/9.2.0)
 
 1. Allow disabling pingInterval
