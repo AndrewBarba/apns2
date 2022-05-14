@@ -11,10 +11,10 @@ Node client for connecting to Apple's Push Notification Service using the new HT
 
 Create an APNS client using a signing key:
 
-```javascript
-const { APNS } = require('apns2')
+```typescript
+import { ApnsClient } from 'apns2'
 
-const client = new APNS({
+const client = new ApnsClient({
   team: `TFLP87PW54`,
   keyId: `123ABC456`,
   signingKey: fs.readFileSync(`${__dirname}/path/to/auth.p8`),
@@ -28,10 +28,10 @@ const client = new APNS({
 
 Send a basic notification with message:
 
-```javascript
-const { BasicNotification } = require('apns2')
+```typescript
+import { Notification } from 'apns2'
 
-const bn = new BasicNotification(deviceToken, 'Hello, World')
+const bn = new Notification(deviceToken, { alert: 'Hello, World' })
 
 try {
   await client.send(bn)
@@ -42,10 +42,11 @@ try {
 
 Send a basic notification with message and options:
 
-```javascript
-const { BasicNotification } = require('apns2')
+```typescript
+import { Notification } from 'apns2'
 
-const bn = new BasicNotification(deviceToken, 'Hello, World', {
+const bn = new BasicNotification(deviceToken, {
+  alert: 'Hello, World',
   badge: 4,
   data: {
     userId: user.getUserId
@@ -63,8 +64,8 @@ try {
 
 Send a silent notification using `content-available` key:
 
-```javascript
-const { SilentNotification } = require('apns2')
+```typescript
+import { SilentNotification } from 'apns2'
 
 const sn = new SilentNotification(deviceToken)
 
@@ -81,12 +82,12 @@ Note: [Apple recommends](https://developer.apple.com/documentation/usernotificat
 
 Send multiple notifications concurrently:
 
-```javascript
-const { BasicNotification } = require('apns2')
+```typescript
+import { Notification } from 'apns2'
 
 const notifications = [
-  new BasicNotification(deviceToken1, 'Hello, World'),
-  new BasicNotification(deviceToken2, 'Hello, World')
+  new Notification(deviceToken1, { alert: 'Hello, World' }),
+  new Notification(deviceToken2, { alert: 'Hello, World' })
 ]
 
 try {
@@ -100,8 +101,8 @@ try {
 
 For complete control over the push notification packet use the base `Notification` class:
 
-```javascript
-const { Notification } = require('apns2')
+```typescript
+import { Notification } from 'apns2'
 
 const notification = new Notification(deviceToken, {
   aps: { ... }
@@ -122,8 +123,8 @@ All errors are defined in `./lib/errors.js` and come directly from [APNS Table 4
 
 You can easily listen for these errors by attaching an error handler to the APNS client:
 
-```javascript
-const { Errors } = require('apns2')
+```typescript
+import { Errors } from 'apns2'
 
 // Listen for a specific error
 client.on(Errors.badDeviceToken, (err) => {
@@ -142,18 +143,18 @@ client.on(Errors.error, (err) => {
 
 If you need to close connections to Apple's APNS servers in order to allow the Node process to exit, you can tear down the APNS client:
 
-```javascript
+```typescript
 await client.close()
 ```
 
-Once a client is closed you will not be able to use it again. Instead you should instantiate a new client with `new APNS()`.
+Once a client is closed you will not be able to use it again. Instead you should instantiate a new client with `new ApnsClient()`.
 
 ## Environments
 
 By default the APNS client connects to the production push notification server. This is identical to passing in the options:
 
-```javascript
-const client = new APNS({
+```typescript
+const client = new ApnsClient({
   host: 'api.push.apple.com',
   port: 443,
   ...
@@ -162,8 +163,8 @@ const client = new APNS({
 
 To connect to the development push notification server, pass the options:
 
-```javascript
-const client = new APNS({
+```typescript
+const client = new ApnsClient({
   host: 'api.sandbox.push.apple.com'
   ...
 })
@@ -171,4 +172,4 @@ const client = new APNS({
 
 ## Requirements
 
-`apns2` requires Node.js v12.14 or later
+`apns2` requires Node.js v16.14 or later
