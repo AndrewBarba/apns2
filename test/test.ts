@@ -1,6 +1,6 @@
 import * as should from 'should'
 import { Http2Client } from '../src/http2-client'
-import { APNS, Notification, SilentNotification, Errors } from '../index'
+import { ApnsClient, Notification, SilentNotification, Errors } from '../index'
 
 describe('http2', () => {
   describe('client', () => {
@@ -26,10 +26,10 @@ describe('apns', () => {
   const deviceToken = process.env.APNS_PUSH_TOKEN ?? ''
 
   describe('signing token', () => {
-    let apns: APNS
+    let apns: ApnsClient
 
     before(() => {
-      apns = new APNS({
+      apns = new ApnsClient({
         team: `TFLP87PW54`,
         keyId: `7U6GT5Q49J`,
         signingKey: process.env.APNS_SIGNING_KEY ?? '',

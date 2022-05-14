@@ -46,7 +46,7 @@ export interface ApnsOptions {
   connections?: number
 }
 
-export class APNS extends EventEmitter {
+export class ApnsClient extends EventEmitter {
   readonly team: string
   readonly keyId: string
   readonly signingKey: string
