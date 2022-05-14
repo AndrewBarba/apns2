@@ -1,4 +1,4 @@
-import { sign } from 'jsonwebtoken'
+import { sign, Secret } from 'jsonwebtoken'
 import { EventEmitter } from 'events'
 import { Http2Client, Http2ClientRequestOptions, Http2ClientResponse } from './http2-client'
 import { Errors } from './errors'
@@ -36,7 +36,7 @@ const RESET_TOKEN_INTERVAL_MS = 55 * 60 * 1000
 
 export interface ApnsOptions {
   team: string
-  signingKey: string
+  signingKey: Secret
   keyId: string
   defaultTopic?: string
   host?: string
@@ -49,7 +49,7 @@ export interface ApnsOptions {
 export class ApnsClient extends EventEmitter {
   readonly team: string
   readonly keyId: string
-  readonly signingKey: string
+  readonly signingKey: Secret
   readonly client: Http2Client
   readonly defaultTopic?: string
 
@@ -159,12 +159,10 @@ export class ApnsClient extends EventEmitter {
       iat: Math.floor(Date.now() / 1000)
     }
 
-    const key = this.signingKey
-
     let token: string | null
 
     try {
-      token = sign(claims, key, {
+      token = sign(claims, this.signingKey, {
         algorithm: SIGNING_ALGORITHM,
         header: {
           alg: SIGNING_ALGORITHM,
