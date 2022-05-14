@@ -1,57 +1,61 @@
-const should = require('should')
-const HTTP2Client = require('../lib/http2-client')
-const { APNS, Notification, BasicNotification, SilentNotification, Errors } = require('../')
+import * as should from 'should'
+import { Http2Client } from '../src/http2-client'
+import { APNS, Notification, SilentNotification, Errors } from '../'
 
 describe('http2', () => {
   describe('client', () => {
-    let client
+    let client: Http2Client
 
     before(() => {
-      client = new HTTP2Client('www.google.com', 443)
+      client = new Http2Client('www.google.com')
     })
 
     it('should make a get request', async () => {
-      const res = await client.request({ method: 'GET', path: '/' })
+      const res = await client.request({ method: 'GET', path: '/', headers: {} })
       res.statusCode.should.equal(200)
     })
 
     it('should make a post request', async () => {
-      const res = await client.request({ method: 'POST', path: '/' })
+      const res = await client.request({ method: 'POST', path: '/', headers: {} })
       res.statusCode.should.equal(405)
     })
   })
 })
 
 describe('apns', () => {
-  const deviceToken = process.env.APNS_PUSH_TOKEN
+  const deviceToken = process.env.APNS_PUSH_TOKEN ?? ''
 
   describe('signing token', () => {
-    let apns
+    let apns: APNS
 
     before(() => {
       apns = new APNS({
         team: `TFLP87PW54`,
         keyId: `7U6GT5Q49J`,
-        signingKey: process.env.APNS_SIGNING_KEY,
+        signingKey: process.env.APNS_SIGNING_KEY ?? '',
         defaultTopic: `com.tablelist.Tablelist`,
         pingInterval: 100
       })
     })
 
     it('should send a basic notification', async () => {
-      const basicNotification = new BasicNotification(deviceToken, `Hello, Basic`)
+      const basicNotification = new Notification(deviceToken, {
+        alert: 'Hello'
+      })
       return apns.send(basicNotification)
     })
 
     it('should send a basic notification with options', async () => {
-      const basicNotification = new BasicNotification(deviceToken, `Hello, 1`, {
+      const basicNotification = new Notification(deviceToken, {
+        alert: 'Hello',
         badge: 1
       })
       return apns.send(basicNotification)
     })
 
     it('should send a basic notification with additional data', async () => {
-      const basicNotification = new BasicNotification(deviceToken, `Hello, ICON`, {
+      const basicNotification = new Notification(deviceToken, {
+        alert: 'Hello',
         badge: 0,
         data: {
           url: `venue/icon`
@@ -89,7 +93,9 @@ describe('apns', () => {
     })
 
     it('should send both notifications', async () => {
-      const basicNotification = new BasicNotification(deviceToken, `Hello, Multiple`)
+      const basicNotification = new Notification(deviceToken, {
+        alert: 'Hello'
+      })
       const silentNotification = new SilentNotification(deviceToken)
       const results = await apns.sendMany([basicNotification, silentNotification])
       should.exist(results)
@@ -99,7 +105,7 @@ describe('apns', () => {
     it('should send a lot of notifications', async () => {
       const notifications = []
       for (let i = 0; i < 500; i++) {
-        notifications.push(new BasicNotification(deviceToken, `Hello #${i}`))
+        notifications.push(new Notification(deviceToken, { alert: 'Hello' }))
       }
       const results = await apns.sendMany(notifications)
       should.exist(results)
@@ -107,11 +113,11 @@ describe('apns', () => {
     })
 
     it('should fail to send a notification', async () => {
-      const noti = new BasicNotification(`fakedevicetoken`, `Hello, bad token`)
+      const noti = new Notification(`fakedevicetoken`, { alert: 'Hello' })
       try {
         await apns.send(noti)
         throw new Error('Should not have sent notification')
-      } catch (err) {
+      } catch (err: any) {
         should.exist(err)
         err.reason.should.equal(Errors.badDeviceToken)
       }
@@ -124,7 +130,7 @@ describe('apns', () => {
         done()
       })
 
-      const noti = new BasicNotification(`fakedevicetoken`, `Hello, bad token`)
+      const noti = new Notification(`fakedevicetoken`, { alert: 'Hello' })
       apns.send(noti).catch(should.exist)
     })
 
@@ -135,7 +141,7 @@ describe('apns', () => {
         done()
       })
 
-      const noti = new BasicNotification(`fakedevicetoken`, `Hello, bad token`)
+      const noti = new Notification(`fakedevicetoken`, { alert: 'Hello' })
       apns.send(noti).catch(should.exist)
     })
   })

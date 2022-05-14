@@ -11,21 +11,26 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x]
+        node-version: [16, 18]
 
     steps:
       - uses: actions/checkout@v2
 
+      - uses: pnpm/action-setup@v2.2.1
+        with:
+          version: 7
+
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+          cache: pnpm
 
-      - run: yarn install --frozen-lockfile
+      - run: pnpm install --frozen-lockfile
 
-      - run: yarn lint
+      - run: pnpm lint
 
-      - run: yarn test
+      - run: pnpm test
         env:
           APNS_PUSH_TOKEN: ${{ secrets.APNS_PUSH_TOKEN }}
           APNS_SIGNING_KEY: ${{ secrets.APNS_SIGNING_KEY }}

@@ -1,0 +1,11 @@
+{
+  "extends": "@tsconfig/node16",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "declaration": true,
+    "incremental": true,
+    "outDir": "dist",
+    "sourceMap": true
+  },
+  "include": ["src", "test"]
+}

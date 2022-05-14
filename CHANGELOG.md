@@ -4,6 +4,10 @@
 
 ---
 
+## [10.0.0](https://github.com/AndrewBarba/apns2/releases/tag/10.0.0)
+
+1. Re-written in TypeScript
+
 ## [9.3.0](https://github.com/AndrewBarba/apns2/releases/tag/9.3.0)
 
 1. Update token refresh logic to avoid `TooManyProviderTokenUpdates`
