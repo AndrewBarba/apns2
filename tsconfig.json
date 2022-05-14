@@ -3,9 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "declaration": true,
-    "incremental": true,
-    "outDir": "dist",
-    "sourceMap": true
+    "outDir": "dist"
   },
-  "include": ["src", "test"]
+  "include": ["src", "test", "index.ts"],
+  "exclude": ["dist"]
 }

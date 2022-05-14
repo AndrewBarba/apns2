@@ -1,6 +1,6 @@
 import * as should from 'should'
 import { Http2Client } from '../src/http2-client'
-import { APNS, Notification, SilentNotification, Errors } from '../'
+import { APNS, Notification, SilentNotification, Errors } from '../index'
 
 describe('http2', () => {
   describe('client', () => {
