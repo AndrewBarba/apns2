@@ -1,13 +1,13 @@
 import { build, BuildOptions } from 'esbuild'
 
 const options: BuildOptions = {
-  entryPoints: ['./src/apns.ts'],
+  entryPoints: ['./index.ts'],
   platform: 'node',
   target: 'node16',
   external: ['jsonwebtoken'],
   minify: true,
   bundle: true,
-  outfile: './dist/apns.js'
+  outfile: './dist/index.js'
 }
 
 build(options).catch((err) => {
