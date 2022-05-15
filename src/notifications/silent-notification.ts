@@ -1,7 +1,7 @@
 import { Notification, NotificationOptions, PushType, Priority } from './notification'
 
 export class SilentNotification extends Notification {
-  constructor(deviceToken: string, options: NotificationOptions = {}) {
+  constructor(deviceToken: string, options: Pick<NotificationOptions, 'data'> = {}) {
     super(deviceToken, {
       contentAvailable: true,
       type: PushType.background,
