@@ -4,6 +4,12 @@
 
 ---
 
+## [10.0.1](https://github.com/AndrewBarba/apns2/releases/tag/10.0.1)
+
+1. Re-written in TypeScript
+2. Adjust distribution files
+3. Only allow data options in `SilentNotification` constructor
+
 ## [10.0.0](https://github.com/AndrewBarba/apns2/releases/tag/10.0.0)
 
 1. Re-written in TypeScript
