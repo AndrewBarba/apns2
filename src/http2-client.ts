@@ -35,7 +35,7 @@ export class Http2Client {
   private pingIntervalHandle: any | null
 
   constructor(host: string, options: Http2ClientOptions = {}) {
-    this.url = `https://${host}:${options.port}`
+    this.url = `https://${host}:${options.port ?? 443}`
     this.requestTimeout = options.requestTimeout ?? 5000
     this.pingInterval = options.pingInterval ?? 60000
     this.pingIntervalHandle = null

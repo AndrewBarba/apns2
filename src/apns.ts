@@ -18,12 +18,6 @@ const HOST = `api.push.apple.com`
 
 /**
  * @const
- * @desc Default port to send request
- */
-const PORT = 443
-
-/**
- * @const
  * @desc Signing algorithm for JSON web token
  */
 const SIGNING_ALGORITHM = `ES256`
