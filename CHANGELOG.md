@@ -4,6 +4,10 @@
 
 ---
 
+## [10.1.0](https://github.com/AndrewBarba/apns2/releases/tag/10.1.0)
+
+1. Add support for alert subtitle
+
 ## [10.0.1](https://github.com/AndrewBarba/apns2/releases/tag/10.0.1)
 
 1. Re-written in TypeScript

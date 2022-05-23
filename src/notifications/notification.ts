@@ -5,7 +5,7 @@ export { PushType, Priority }
 
 export interface NotificationOptions {
   type?: PushType
-  alert?: string | { title: string; body: string }
+  alert?: string | { title: string; subtitle?: string; body: string }
   badge?: number
   expiration?: number | Date
   sound?: string

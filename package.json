@@ -1,6 +1,6 @@
 {
   "name": "apns2",
-  "version": "10.0.2",
+  "version": "10.1.0",
   "description": "Node client for connecting to Apple's Push Notification Service using the new HTTP/2 protocol with JSON web tokens.",
   "author": "Andrew Barba <barba@hey.com>",
   "main": "dist/index.js",
