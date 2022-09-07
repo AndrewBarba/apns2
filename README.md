@@ -45,7 +45,7 @@ Send a basic notification with message and options:
 ```typescript
 import { Notification } from 'apns2'
 
-const bn = new BasicNotification(deviceToken, {
+const bn = new Notification(deviceToken, {
   alert: 'Hello, World',
   badge: 4,
   data: {
