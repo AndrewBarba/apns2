@@ -34,7 +34,6 @@ export interface ApnsOptions {
   keyId: string
   defaultTopic?: string
   host?: string
-  port?: number
   requestTimeout?: number
   pingInterval?: number
   connections?: number
@@ -82,7 +81,8 @@ export class ApnsClient extends EventEmitter {
         'apns-priority': notification.priority.toString(),
         'apns-topic': notification.options.topic ?? this.defaultTopic
       },
-      body: JSON.stringify(notification.buildApnsOptions())
+      body: JSON.stringify(notification.buildApnsOptions()),
+      keepAlive: 5000
     }
 
     if (notification.options.expiration) {

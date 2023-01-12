@@ -139,14 +139,6 @@ client.on(Errors.error, (err) => {
 })
 ```
 
-## Close Connections
-
-If you need to close connections to Apple's APNS servers in order to allow the Node process to exit, you can tear down the APNS client:
-
-```typescript
-await client.close()
-```
-
 Once a client is closed you will not be able to use it again. Instead you should instantiate a new client with `new ApnsClient()`.
 
 ## Environments
@@ -155,8 +147,7 @@ By default the APNS client connects to the production push notification server. 
 
 ```typescript
 const client = new ApnsClient({
-  host: 'api.push.apple.com',
-  port: 443,
+  host: 'api.push.apple.com'
   ...
 })
 ```
@@ -172,4 +163,4 @@ const client = new ApnsClient({
 
 ## Requirements
 
-`apns2` requires Node.js v16.14 or later
+`apns2` requires Node.js v18 or later
