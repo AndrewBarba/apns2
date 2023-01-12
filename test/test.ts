@@ -1,26 +1,5 @@
 import * as should from 'should'
-import { Http2Client } from '../src/http2-client'
-import { ApnsClient, Notification, SilentNotification, Errors } from '../index'
-
-describe('http2', () => {
-  describe('client', () => {
-    let client: Http2Client
-
-    before(() => {
-      client = new Http2Client('www.google.com')
-    })
-
-    it('should make a get request', async () => {
-      const res = await client.request({ method: 'GET', path: '/', headers: {} })
-      res.statusCode.should.equal(200)
-    })
-
-    it('should make a post request', async () => {
-      const res = await client.request({ method: 'POST', path: '/', headers: {} })
-      res.statusCode.should.equal(405)
-    })
-  })
-})
+import { ApnsClient, Notification, SilentNotification, Errors } from '../src'
 
 describe('apns', () => {
   const deviceToken = process.env.APNS_PUSH_TOKEN ?? ''
@@ -124,7 +103,7 @@ describe('apns', () => {
     })
 
     it('should fail to send a notification and emit an error', (done) => {
-      apns.once(Errors.error, (err) => {
+      apns.once(Errors.error, (err: any) => {
         should.exist(err)
         err.reason.should.equal(Errors.badDeviceToken)
         done()
@@ -135,7 +114,7 @@ describe('apns', () => {
     })
 
     it('should fail to send a notification and emit an error', (done) => {
-      apns.once(Errors.badDeviceToken, (err) => {
+      apns.once(Errors.badDeviceToken, (err: any) => {
         should.exist(err)
         err.reason.should.equal(Errors.badDeviceToken)
         done()

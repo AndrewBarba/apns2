@@ -1,6 +1,6 @@
 import { sign, Secret } from 'jsonwebtoken'
 import { EventEmitter } from 'events'
-import { Http2Client, Http2ClientRequestOptions, Http2ClientResponse } from './http2-client'
+import { fetch, RequestInit, Response } from 'fetch-http2'
 import { Errors } from './errors'
 import { Notification } from './notifications/notification'
 
@@ -43,8 +43,8 @@ export interface ApnsOptions {
 export class ApnsClient extends EventEmitter {
   readonly team: string
   readonly keyId: string
+  readonly host: string
   readonly signingKey: Secret
-  readonly client: Http2Client
   readonly defaultTopic?: string
 
   private _token: { value: string | null; timestamp: number } | null
@@ -55,11 +55,7 @@ export class ApnsClient extends EventEmitter {
     this.keyId = options.keyId
     this.signingKey = options.signingKey
     this.defaultTopic = options.defaultTopic
-    this.client = new Http2Client(options.host ?? HOST, {
-      port: options.port,
-      requestTimeout: options.requestTimeout,
-      pingInterval: options.pingInterval
-    })
+    this.host = options.host ?? HOST
     this._token = null
     this.on(Errors.expiredProviderToken, () => this._resetSigningToken())
   }
@@ -75,39 +71,34 @@ export class ApnsClient extends EventEmitter {
     return Promise.all(promises)
   }
 
-  close() {
-    return this.client.close()
-  }
-
-  private _send(notification: Notification) {
-    const options: Http2ClientRequestOptions = {
+  private async _send(notification: Notification) {
+    const token = encodeURIComponent(notification.deviceToken)
+    const url = `https://${this.host}/${API_VERSION}/device/${token}`
+    const options: RequestInit = {
       method: 'POST',
-      path: `/${API_VERSION}/device/${encodeURIComponent(notification.deviceToken)}`,
       headers: {
         authorization: `bearer ${this._getSigningToken()}`,
         'apns-push-type': notification.pushType,
         'apns-priority': notification.priority.toString(),
         'apns-topic': notification.options.topic ?? this.defaultTopic
-      }
+      },
+      body: JSON.stringify(notification.buildApnsOptions())
     }
 
     if (notification.options.expiration) {
-      options.headers['apns-expiration'] =
+      options.headers!['apns-expiration'] =
         typeof notification.options.expiration === 'number'
           ? notification.options.expiration.toFixed(0)
           : (notification.options.expiration.getTime() / 1000).toFixed(0)
     }
 
     if (notification.options.collapseId) {
-      options.headers['apns-collapse-id'] = notification.options.collapseId
+      options.headers!['apns-collapse-id'] = notification.options.collapseId
     }
 
-    return this.client
-      .request({
-        ...options,
-        body: JSON.stringify(notification.buildApnsOptions())
-      })
-      .then((res) => this._handleServerResponse(res, notification))
+    const res = await fetch(url, options)
+
+    return this._handleServerResponse(res, notification)
   }
 
   /**
@@ -116,20 +107,20 @@ export class ApnsClient extends EventEmitter {
    * @param {ServerResponse} res
    * @return {Promise}
    */
-  _handleServerResponse(res: Http2ClientResponse, notification: Notification) {
-    if (res.statusCode === 200) {
+  async _handleServerResponse(res: Response, notification: Notification) {
+    if (res.status === 200) {
       return notification
     }
 
     let json
 
     try {
-      json = JSON.parse(res.body)
+      json = await res.json()
     } catch (err) {
       json = { reason: Errors.unknownError }
     }
 
-    json.statusCode = res.statusCode
+    json.statusCode = res.status
     json.notification = notification
 
     this.emit(json.reason, json)

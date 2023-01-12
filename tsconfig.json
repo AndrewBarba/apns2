@@ -1,10 +1,10 @@
 {
-  "extends": "@tsconfig/node16",
+  "extends": "@tsconfig/node18",
   "compilerOptions": {
     "baseUrl": ".",
     "declaration": true,
     "outDir": "dist"
   },
-  "include": ["src", "test", "index.ts"],
+  "include": ["src"],
   "exclude": ["dist"]
 }

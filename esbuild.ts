@@ -1,9 +1,9 @@
 import { build, BuildOptions } from 'esbuild'
 
 const options: BuildOptions = {
-  entryPoints: ['./index.ts'],
+  entryPoints: ['./src/index.ts'],
   platform: 'node',
-  target: 'node16',
+  target: 'node18',
   external: ['jsonwebtoken'],
   minify: true,
   bundle: true,

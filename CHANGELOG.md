@@ -4,6 +4,11 @@
 
 ---
 
+## [11.0.0](https://github.com/AndrewBarba/apns2/releases/tag/11.0.0)
+
+1. Built for Node.js 18
+2. Drops support for all versions of Node <18
+
 ## [10.1.0](https://github.com/AndrewBarba/apns2/releases/tag/10.1.0)
 
 1. Add support for alert subtitle
