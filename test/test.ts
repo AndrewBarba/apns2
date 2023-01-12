@@ -1,5 +1,5 @@
 import * as should from 'should'
-import { ApnsClient, Notification, SilentNotification, Errors } from '../index'
+import { ApnsClient, Notification, SilentNotification, Errors } from '../src'
 
 describe('apns', () => {
   const deviceToken = process.env.APNS_PUSH_TOKEN ?? ''
@@ -103,7 +103,7 @@ describe('apns', () => {
     })
 
     it('should fail to send a notification and emit an error', (done) => {
-      apns.once(Errors.error, (err) => {
+      apns.once(Errors.error, (err: any) => {
         should.exist(err)
         err.reason.should.equal(Errors.badDeviceToken)
         done()
@@ -114,7 +114,7 @@ describe('apns', () => {
     })
 
     it('should fail to send a notification and emit an error', (done) => {
-      apns.once(Errors.badDeviceToken, (err) => {
+      apns.once(Errors.badDeviceToken, (err: any) => {
         should.exist(err)
         err.reason.should.equal(Errors.badDeviceToken)
         done()

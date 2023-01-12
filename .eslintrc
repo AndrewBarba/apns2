@@ -4,9 +4,18 @@
     "node": true,
     "mocha": true
   },
-  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "parserOptions": {
-    "ecmaVersion": 2019,
+    "ecmaVersion": 2022,
     "sourceType": "module"
+  },
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-non-null-assertion": "off"
   }
 }
