@@ -13,7 +13,7 @@ specifiers:
   eslint: ^8.31.0
   eslint-config-prettier: ^8.6.0
   eslint-plugin-prettier: ^4.2.1
-  fetch-http2: ^1.0.2
+  fetch-http2: ^1.0.3
   jsonwebtoken: ^9.0.0
   mocha: ^10.2.0
   prettier: ^2.8.2
@@ -22,7 +22,7 @@ specifiers:
   typescript: ^4.9.4
 
 dependencies:
-  fetch-http2: 1.0.2
+  fetch-http2: 1.0.3
   jsonwebtoken: 9.0.0
 
 devDependencies:
@@ -969,8 +969,8 @@ packages:
       reusify: 1.0.4
     dev: true
 
-  /fetch-http2/1.0.2:
-    resolution: {integrity: sha512-E6vGS/SKwYaJRAmE4N3Y0rPtTv6L6yr3Fl1fci4/B/AkFd4SqzAEJ3Imrjhzx9vGUgtNgt9TdtFlyWKsa939jw==}
+  /fetch-http2/1.0.3:
+    resolution: {integrity: sha512-a8Pm/QN+WJBlMa5NGangclk71eLuxUGF/Rli2ltxSdVx3G4RiiPcgalUbk+3ihhTR7iCS9ElT3xaaDprQyPSmQ==}
     engines: {node: '>=18'}
     dev: false
 

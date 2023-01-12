@@ -13,7 +13,7 @@
     "url": "https://github.com/AndrewBarba/apns2"
   },
   "dependencies": {
-    "fetch-http2": "^1.0.2",
+    "fetch-http2": "^1.0.3",
     "jsonwebtoken": "^9.0.0"
   },
   "devDependencies": {
