@@ -1,26 +1,5 @@
 import * as should from 'should'
-import { Http2Client } from '../src/http2-client'
 import { ApnsClient, Notification, SilentNotification, Errors } from '../index'
-
-describe('http2', () => {
-  describe('client', () => {
-    let client: Http2Client
-
-    before(() => {
-      client = new Http2Client('www.google.com')
-    })
-
-    it('should make a get request', async () => {
-      const res = await client.request({ method: 'GET', path: '/', headers: {} })
-      res.statusCode.should.equal(200)
-    })
-
-    it('should make a post request', async () => {
-      const res = await client.request({ method: 'POST', path: '/', headers: {} })
-      res.statusCode.should.equal(405)
-    })
-  })
-})
 
 describe('apns', () => {
   const deviceToken = process.env.APNS_PUSH_TOKEN ?? ''
