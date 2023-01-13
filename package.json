@@ -7,17 +7,17 @@
   "types": "dist/index.d.ts",
   "license": "MIT",
   "engines": {
-    "node": ">=18"
+    "node": ">=16"
   },
   "repository": {
     "url": "https://github.com/AndrewBarba/apns2"
   },
   "dependencies": {
-    "fetch-http2": "^1.0.3",
+    "fetch-http2": "^1.0.5",
     "jsonwebtoken": "^9.0.0"
   },
   "devDependencies": {
-    "@tsconfig/node18": "^1.0.1",
+    "@tsconfig/node16": "^1.0.3",
     "@types/jsonwebtoken": "^9.0.1",
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.11.18",
