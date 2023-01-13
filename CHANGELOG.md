@@ -4,6 +4,10 @@
 
 ---
 
+## [11.0.1](https://github.com/AndrewBarba/apns2/releases/tag/11.0.1)
+
+1. Add back support for Node.js 16.x
+
 ## [11.0.0](https://github.com/AndrewBarba/apns2/releases/tag/11.0.0)
 
 1. Built for Node.js 18

@@ -1,5 +1,5 @@
 {
-  "extends": "@tsconfig/node18",
+  "extends": "@tsconfig/node16",
   "compilerOptions": {
     "baseUrl": ".",
     "declaration": true,

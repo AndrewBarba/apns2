@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@tsconfig/node18': ^1.0.1
+  '@tsconfig/node16': ^1.0.3
   '@types/jsonwebtoken': ^9.0.1
   '@types/mocha': ^10.0.1
   '@types/node': ^18.11.18
@@ -13,7 +13,7 @@ specifiers:
   eslint: ^8.31.0
   eslint-config-prettier: ^8.6.0
   eslint-plugin-prettier: ^4.2.1
-  fetch-http2: ^1.0.3
+  fetch-http2: ^1.0.5
   jsonwebtoken: ^9.0.0
   mocha: ^10.2.0
   prettier: ^2.8.2
@@ -22,11 +22,11 @@ specifiers:
   typescript: ^4.9.4
 
 dependencies:
-  fetch-http2: 1.0.3
+  fetch-http2: 1.0.5
   jsonwebtoken: 9.0.0
 
 devDependencies:
-  '@tsconfig/node18': 1.0.1
+  '@tsconfig/node16': 1.0.3
   '@types/jsonwebtoken': 9.0.1
   '@types/mocha': 10.0.1
   '@types/node': 18.11.18
@@ -339,10 +339,6 @@ packages:
 
   /@tsconfig/node16/1.0.3:
     resolution: {integrity: sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==}
-    dev: true
-
-  /@tsconfig/node18/1.0.1:
-    resolution: {integrity: sha512-sNFeK6X2ATlhlvzyH4kKYQlfHXE2f2/wxtB9ClvYXevWpmwkUT7VaSrjIN9E76Qebz8qP5JOJJ9jD3QoD/Z9TA==}
     dev: true
 
   /@types/json-schema/7.0.11:
@@ -969,9 +965,9 @@ packages:
       reusify: 1.0.4
     dev: true
 
-  /fetch-http2/1.0.3:
-    resolution: {integrity: sha512-a8Pm/QN+WJBlMa5NGangclk71eLuxUGF/Rli2ltxSdVx3G4RiiPcgalUbk+3ihhTR7iCS9ElT3xaaDprQyPSmQ==}
-    engines: {node: '>=18'}
+  /fetch-http2/1.0.5:
+    resolution: {integrity: sha512-3EdspqroXQ9AWOnzI9tXB5col6A8X5oBp6RJSQoJqsGi0FsApyqfaO3V5/LLBdc0wgUku4zs5Vs1pd/gfVT8Kg==}
+    engines: {node: '>=16'}
     dev: false
 
   /file-entry-cache/6.0.1:
