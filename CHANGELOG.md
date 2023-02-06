@@ -4,6 +4,10 @@
 
 ---
 
+## [11.1.0](https://github.com/AndrewBarba/apns2/releases/tag/11.1.0)
+
+1. Accept all options when sending a silent notification
+
 ## [11.0.1](https://github.com/AndrewBarba/apns2/releases/tag/11.0.1)
 
 1. Add back support for Node.js 16.x
