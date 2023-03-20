@@ -4,5 +4,6 @@ export enum PushType {
   voip = 'voip',
   complication = 'complication',
   fileprovider = 'fileprovider',
-  mdm = 'mdm'
+  mdm = 'mdm',
+  liveactivity = 'liveactivity'
 }
