@@ -3,38 +3,32 @@ import { EventEmitter } from 'events'
 import { fetch, RequestInit, Response } from 'fetch-http2'
 import { Errors } from './errors'
 import { Notification } from './notifications/notification'
-import { HostType } from './notifications/constants/host'
 
-/**
- * @const
- * @desc APNS version
- */
+// APNS version
 const API_VERSION = 3
 
-/**
- * @const
- * @desc Default host to send request
- */
-const HOST = HostType.production;
+// Signing algorithm for JSON web token
+const SIGNING_ALGORITHM = 'ES256'
 
-/**
- * @const
- * @desc Signing algorithm for JSON web token
- */
-const SIGNING_ALGORITHM = `ES256`
-
-/**
- * @const
- * @desc Reset our signing token every 55 minutes as reccomended by Apple
- */
+// Reset our signing token every 55 minutes as reccomended by Apple
 const RESET_TOKEN_INTERVAL_MS = 55 * 60 * 1000
+
+export enum Host {
+  production = 'api.push.apple.com',
+  development = 'api.sandbox.push.apple.com'
+}
+
+export interface SigningToken {
+  value: string
+  timestamp: number
+}
 
 export interface ApnsOptions {
   team: string
   signingKey: Secret
   keyId: string
   defaultTopic?: string
-  host?: string
+  host?: Host | string
   requestTimeout?: number
   pingInterval?: number
   connections?: number
@@ -43,11 +37,11 @@ export interface ApnsOptions {
 export class ApnsClient extends EventEmitter {
   readonly team: string
   readonly keyId: string
-  readonly host: string
+  readonly host: Host | string
   readonly signingKey: Secret
   readonly defaultTopic?: string
 
-  private _token: { value: string | null; timestamp: number } | null
+  private _token: SigningToken | null
 
   constructor(options: ApnsOptions) {
     super()
@@ -55,7 +49,7 @@ export class ApnsClient extends EventEmitter {
     this.keyId = options.keyId
     this.signingKey = options.signingKey
     this.defaultTopic = options.defaultTopic
-    this.host = options.host ?? HOST
+    this.host = options.host ?? Host.production
     this._token = null
     this.on(Errors.expiredProviderToken, () => this._resetSigningToken())
   }
@@ -102,13 +96,7 @@ export class ApnsClient extends EventEmitter {
     return this._handleServerResponse(res, notification)
   }
 
-  /**
-   * @private
-   * @method _handleServerResponse
-   * @param {ServerResponse} res
-   * @return {Promise}
-   */
-  async _handleServerResponse(res: Response, notification: Notification) {
+  private async _handleServerResponse(res: Response, notification: Notification) {
     if (res.status === 200) {
       return notification
     }
@@ -130,12 +118,7 @@ export class ApnsClient extends EventEmitter {
     throw json
   }
 
-  /**
-   * @private
-   * @method _getSigningToken
-   * @return {String}
-   */
-  _getSigningToken() {
+  private _getSigningToken(): string {
     if (this._token && Date.now() - this._token.timestamp < RESET_TOKEN_INTERVAL_MS) {
       return this._token.value
     }
@@ -145,20 +128,13 @@ export class ApnsClient extends EventEmitter {
       iat: Math.floor(Date.now() / 1000)
     }
 
-    let token: string | null
-
-    try {
-      token = sign(claims, this.signingKey, {
-        algorithm: SIGNING_ALGORITHM,
-        header: {
-          alg: SIGNING_ALGORITHM,
-          kid: this.keyId
-        }
-      })
-    } catch (err) {
-      token = null
-      this.emit(Errors.invalidSigningKey)
-    }
+    const token = sign(claims, this.signingKey, {
+      algorithm: SIGNING_ALGORITHM,
+      header: {
+        alg: SIGNING_ALGORITHM,
+        kid: this.keyId
+      }
+    })
 
     this._token = {
       value: token,
@@ -168,7 +144,7 @@ export class ApnsClient extends EventEmitter {
     return token
   }
 
-  _resetSigningToken() {
+  private _resetSigningToken() {
     this._token = null
   }
 }
