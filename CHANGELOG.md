@@ -4,6 +4,13 @@
 
 ---
 
+## [11.2.0](https://github.com/AndrewBarba/apns2/releases/tag/11.2.0)
+
+1. Define new `Host` enum for specifying APNS host
+2. Add `liveactivity` push type
+
+Thank you [278204](https://github.com/278204) and [icodebuster](https://github.com/icodebuster)
+
 ## [11.1.0](https://github.com/AndrewBarba/apns2/releases/tag/11.1.0)
 
 1. Accept all options when sending a silent notification
