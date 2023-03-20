@@ -3,6 +3,7 @@ import { EventEmitter } from 'events'
 import { fetch, RequestInit, Response } from 'fetch-http2'
 import { Errors } from './errors'
 import { Notification } from './notifications/notification'
+import { HostType } from './notifications/constants/host'
 
 /**
  * @const
@@ -14,7 +15,7 @@ const API_VERSION = 3
  * @const
  * @desc Default host to send request
  */
-const HOST = `api.push.apple.com`
+const HOST = HostType.production;
 
 /**
  * @const
