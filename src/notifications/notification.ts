@@ -8,7 +8,7 @@ export interface NotificationOptions {
   alert?: string | { title: string; subtitle?: string; body: string }
   badge?: number
   expiration?: number | Date
-  sound?: string
+  sound?: string | CriticalAlertSoundPayload
   category?: string
   data?: Record<string, unknown>
   contentAvailable?: boolean
@@ -22,6 +22,12 @@ export interface NotificationOptions {
 export interface ApnsPayload {
   aps: Record<string, unknown>
   [key: string]: unknown
+}
+
+export interface CriticalAlertSoundPayload {
+  critical: 0 | 1
+  name?: string
+  volume?: number
 }
 
 export class Notification {
@@ -57,7 +63,7 @@ export class Notification {
     }
 
     // Check for sound
-    if (typeof this.options.sound === 'string') {
+    if (typeof this.options.sound === 'string' || typeof this.options.sound === 'object') {
       result.aps.sound = this.options.sound
     }
 
