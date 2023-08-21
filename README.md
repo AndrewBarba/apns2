@@ -138,9 +138,6 @@ client.on(Errors.error, (err) => {
   console.error(err.reason, err.statusCode, err.notification.deviceToken)
 })
 ```
-
-Once a client is closed you will not be able to use it again. Instead you should instantiate a new client with `new ApnsClient()`.
-
 ## Environments
 
 By default the APNS client connects to the production push notification server. This is identical to passing in the options:
