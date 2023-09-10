@@ -31,7 +31,6 @@ export interface ApnsOptions {
   host?: Host | string
   requestTimeout?: number
   pingInterval?: number
-  connections?: number
 }
 
 export class ApnsClient extends EventEmitter {
