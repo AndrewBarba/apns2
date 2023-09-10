@@ -19,6 +19,7 @@ const client = new ApnsClient({
   keyId: `123ABC456`,
   signingKey: fs.readFileSync(`${__dirname}/path/to/auth.p8`),
   defaultTopic: `com.tablelist.Tablelist`,
+  requestTimeout: 0, // optional, Default: 0 (without timeout)
   pingInterval: 5000, // optional, Default: 5000
 })
 ```
