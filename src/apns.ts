@@ -2,7 +2,7 @@ import { sign, Secret } from 'jsonwebtoken'
 import { EventEmitter } from 'events'
 import { fetch, RequestInit, Response } from 'fetch-http2'
 import { Errors } from './errors'
-import { Notification } from './notifications/notification'
+import { Notification, Priority } from './notifications/notification'
 
 // APNS version
 const API_VERSION = 3
@@ -73,11 +73,14 @@ export class ApnsClient extends EventEmitter {
       headers: {
         authorization: `bearer ${this._getSigningToken()}`,
         'apns-push-type': notification.pushType,
-        'apns-priority': notification.priority.toString(),
         'apns-topic': notification.options.topic ?? this.defaultTopic
       },
       body: JSON.stringify(notification.buildApnsOptions()),
       keepAlive: 5000
+    }
+
+    if (notification.priority !== Priority.immediate) {
+      options.headers!['apns-priority'] = notification.priority.toString();
     }
 
     if (notification.options.expiration) {
