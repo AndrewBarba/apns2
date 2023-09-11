@@ -80,7 +80,7 @@ export class ApnsClient extends EventEmitter {
     }
 
     if (notification.priority !== Priority.immediate) {
-      options.headers!['apns-priority'] = notification.priority.toString();
+      options.headers!['apns-priority'] = notification.priority.toString()
     }
 
     if (notification.options.expiration) {
