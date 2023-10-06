@@ -31,7 +31,6 @@ export interface ApnsOptions {
   host?: Host | string
   requestTimeout?: number
   pingInterval?: number
-  connections?: number
 }
 
 export class ApnsClient extends EventEmitter {
@@ -40,6 +39,8 @@ export class ApnsClient extends EventEmitter {
   readonly host: Host | string
   readonly signingKey: Secret
   readonly defaultTopic?: string
+  readonly requestTimeout?: number
+  readonly pingInterval?: number
 
   private _token: SigningToken | null
 
@@ -50,6 +51,8 @@ export class ApnsClient extends EventEmitter {
     this.signingKey = options.signingKey
     this.defaultTopic = options.defaultTopic
     this.host = options.host ?? Host.production
+    this.requestTimeout = options.requestTimeout
+    this.pingInterval = options.pingInterval
     this._token = null
     this.on(Errors.expiredProviderToken, () => this._resetSigningToken())
   }
@@ -77,7 +80,8 @@ export class ApnsClient extends EventEmitter {
         'apns-topic': notification.options.topic ?? this.defaultTopic
       },
       body: JSON.stringify(notification.buildApnsOptions()),
-      keepAlive: 5000
+      timeout: this.requestTimeout,
+      keepAlive: this.pingInterval ?? 5000
     }
 
     if (notification.options.expiration) {
