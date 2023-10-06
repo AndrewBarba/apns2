@@ -78,8 +78,7 @@ describe('apns', () => {
       })
       const silentNotification = new SilentNotification(deviceToken)
       const results = await apns.sendMany([basicNotification, silentNotification])
-      assert(results)
-      results.length.should.equal(2)
+      assert.equal(results.length, 2)
     })
 
     it('should send a lot of notifications', async () => {
@@ -88,8 +87,7 @@ describe('apns', () => {
         notifications.push(new Notification(deviceToken, { alert: 'Hello' }))
       }
       const results = await apns.sendMany(notifications)
-      assert(results)
-      results.length.should.equal(notifications.length)
+      assert.equal(results.length, notifications.length)
     })
 
     it('should fail to send a notification', async () => {
@@ -98,16 +96,14 @@ describe('apns', () => {
         await apns.send(noti)
         throw new Error('Should not have sent notification')
       } catch (err: any) {
-        assert(err)
-        err.reason.should.equal(Errors.badDeviceToken)
+        assert.equal(err.reason, Errors.badDeviceToken)
       }
     })
 
     it('should fail to send a notification and emit an error', () => {
       const promise = new Promise((resolve) => {
         apns.once(Errors.badDeviceToken, (err: any) => {
-          assert(err)
-          err.reason.should.equal(Errors.badDeviceToken)
+          assert.equal(err.reason, Errors.badDeviceToken)
           resolve(null)
         })
       })
@@ -119,8 +115,7 @@ describe('apns', () => {
     it('should fail to send a notification and emit an error', () => {
       const promise = new Promise((resolve) => {
         apns.once(Errors.badDeviceToken, (err: any) => {
-          assert(err)
-          err.reason.should.equal(Errors.badDeviceToken)
+          assert.equal(err.reason, Errors.badDeviceToken)
           resolve(null)
         })
       })
