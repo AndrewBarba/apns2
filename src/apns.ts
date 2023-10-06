@@ -1,6 +1,6 @@
-import { sign, Secret } from 'jsonwebtoken'
 import { EventEmitter } from 'events'
-import { fetch, RequestInit, Response } from 'fetch-http2'
+import { RequestInit, Response, fetch } from 'fetch-http2'
+import { Secret, sign } from 'jsonwebtoken'
 import { Errors } from './errors'
 import { Notification, Priority } from './notifications/notification'
 

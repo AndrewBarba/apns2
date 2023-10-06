@@ -1,5 +1,5 @@
-import { PushType } from './constants/push-type'
 import { Priority } from './constants/priority'
+import { PushType } from './constants/push-type'
 
 export { PushType, Priority }
 
@@ -59,7 +59,7 @@ export class Notification {
 
     // Check for "silent" notification
     if (typeof this.options.contentAvailable === 'boolean') {
-      result.aps[`content-available`] = 1
+      result.aps['content-available'] = 1
     }
 
     // Check for sound
@@ -79,7 +79,7 @@ export class Notification {
 
     // Check for threadId
     if (typeof this.options.threadId === 'string') {
-      result.aps[`thread-id`] = this.options.threadId
+      result.aps['thread-id'] = this.options.threadId
     }
 
     // Add optional message data
