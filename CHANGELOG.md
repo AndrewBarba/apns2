@@ -4,6 +4,12 @@
 
 ---
 
+## [11.3.0](https://github.com/AndrewBarba/apns2/releases/tag/11.3.0)
+
+1. Add `Priority.low`
+2. Fix options `requestTimeout` and `pingInterval`
+3. Convert to [Biome](https://biomejs.dev)
+
 ## [11.2.0](https://github.com/AndrewBarba/apns2/releases/tag/11.2.0)
 
 1. Define new `Host` enum for specifying APNS host
