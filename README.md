@@ -1,4 +1,4 @@
-# APNS2
+# apns2
 
 [![npm version](https://badge.fury.io/js/apns2.svg)](https://badge.fury.io/js/apns2)
 [![Twitter](https://img.shields.io/badge/twitter-@andrew_barba-blue.svg?style=flat)](http://twitter.com/andrew_barba)
