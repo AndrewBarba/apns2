@@ -4,6 +4,11 @@
 
 ---
 
+## [11.4.0](https://github.com/AndrewBarba/apns2/releases/tag/11.4.0)
+
+1. Add `location` push type
+2. Add `pushtotalk` push type
+
 ## [11.3.0](https://github.com/AndrewBarba/apns2/releases/tag/11.3.0)
 
 1. Add `Priority.low`
