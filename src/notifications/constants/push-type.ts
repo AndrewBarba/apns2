@@ -6,5 +6,6 @@ export enum PushType {
   fileprovider = 'fileprovider',
   mdm = 'mdm',
   liveactivity = 'liveactivity',
-  location = 'location'
+  location = 'location',
+  pushtotalk = 'pushtotalk'
 }
