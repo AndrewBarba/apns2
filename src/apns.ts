@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events'
+import { PrivateKey, createSigner } from 'fast-jwt'
 import { RequestInit, Response, fetch } from 'fetch-http2'
-import { Secret, sign } from 'jsonwebtoken'
 import { Errors } from './errors'
 import { Notification, Priority } from './notifications/notification'
 
@@ -25,7 +25,7 @@ export interface SigningToken {
 
 export interface ApnsOptions {
   team: string
-  signingKey: Secret
+  signingKey: string | Buffer | PrivateKey
   keyId: string
   defaultTopic?: string
   host?: Host | string
@@ -37,7 +37,7 @@ export class ApnsClient extends EventEmitter {
   readonly team: string
   readonly keyId: string
   readonly host: Host | string
-  readonly signingKey: Secret
+  readonly signingKey: string | Buffer | PrivateKey
   readonly defaultTopic?: string
   readonly requestTimeout?: number
   readonly pingInterval?: number
@@ -119,7 +119,12 @@ export class ApnsClient extends EventEmitter {
     json.statusCode = res.status
     json.notification = notification
 
-    this.emit(json.reason, json)
+    // Emit specific error
+    if (json.reason) {
+      this.emit(json.reason, json)
+    }
+
+    // Emit generic error
     this.emit(Errors.error, json)
 
     throw json
@@ -135,13 +140,13 @@ export class ApnsClient extends EventEmitter {
       iat: Math.floor(Date.now() / 1000)
     }
 
-    const token = sign(claims, this.signingKey, {
+    const signer = createSigner({
+      key: this.signingKey,
       algorithm: SIGNING_ALGORITHM,
-      header: {
-        alg: SIGNING_ALGORITHM,
-        kid: this.keyId
-      }
+      kid: this.keyId
     })
+
+    const token = signer(claims)
 
     this._token = {
       value: token,
