@@ -108,7 +108,7 @@ export class ApnsClient extends EventEmitter {
       return notification
     }
 
-    let json
+    let json: any
 
     try {
       json = await res.json()
