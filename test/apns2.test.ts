@@ -14,7 +14,7 @@ describe('apns', () => {
         keyId: '7U6GT5Q49J',
         signingKey: process.env.APNS_SIGNING_KEY ?? '',
         defaultTopic: 'com.tablelist.Tablelist',
-        pingInterval: 100
+        keepAlive: 100
       })
     })
 

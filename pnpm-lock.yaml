@@ -9,8 +9,8 @@ dependencies:
     specifier: ^3.3.2
     version: 3.3.2
   fetch-http2:
-    specifier: ^1.3.0
-    version: 1.3.0
+    specifier: ^1.4.0
+    version: 1.4.0
 
 devDependencies:
   '@biomejs/biome':
@@ -690,8 +690,8 @@ packages:
       mnemonist: 0.39.7
     dev: false
 
-  /fetch-http2@1.3.0:
-    resolution: {integrity: sha512-UH37pMSGUOnHeXog91FHwcUC8/DmypYfQmKspF29UOBoS1BpGUU5YX6LjbYjeCZpGWjklfWiOyV/vOg1r7CHWw==}
+  /fetch-http2@1.4.0:
+    resolution: {integrity: sha512-EZJioHAd26PUg+IfAun3TjcJ2+PILm4jeULLuz0Z8SL2K23KoVnZw5sRCTdpXlspV6kEc6W4E+iG1fdbt0RZ0A==}
     engines: {node: '>=16'}
     dev: false
 

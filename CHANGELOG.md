@@ -4,6 +4,11 @@
 
 ---
 
+## [11.5.0](https://github.com/AndrewBarba/apns2/releases/tag/11.5.0)
+
+1. Add `ApnsClient.keepAlive`
+2. Deprecate `ApnsClient.pingInterval`
+
 ## [11.4.0](https://github.com/AndrewBarba/apns2/releases/tag/11.4.0)
 
 1. Add `location` push type
