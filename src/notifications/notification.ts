@@ -17,6 +17,7 @@ export interface NotificationOptions {
   collapseId?: string
   threadId?: string
   aps?: Record<string, unknown>
+  mutableContent?: boolean
 }
 
 export interface ApnsPayload {
@@ -59,7 +60,7 @@ export class Notification {
 
     // Check for "silent" notification
     if (typeof this.options.contentAvailable === 'boolean') {
-      result.aps['content-available'] = 1
+      result.aps['content-available'] = this.options.contentAvailable ? 1 : 0;
     }
 
     // Check for sound
@@ -85,6 +86,11 @@ export class Notification {
     // Add optional message data
     for (const key in this.options.data) {
       result[key] = this.options.data[key]
+    }
+
+    // Check for mutable content
+    if (typeof this.options.mutableContent === 'boolean') {
+      result.aps['mutable-content'] = this.options.mutableContent ? 1 : 0;
     }
 
     return result
