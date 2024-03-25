@@ -12,7 +12,9 @@
   "repository": {
     "url": "https://github.com/AndrewBarba/apns2"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "apn",
     "apns",
@@ -28,20 +30,22 @@
     "watchos"
   ],
   "dependencies": {
-    "fetch-http2": "^1.4.0",
-    "fast-jwt": "^3.3.2"
+    "fast-jwt": "^3.3.3",
+    "fetch-http2": "^1.4.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.5.3",
-    "@tsconfig/node16": "^16.1.1",
-    "@types/node": "^20.11.6",
-    "chai": "^5.0.3",
-    "typescript": "^5.3.3",
-    "vitest": "^1.2.1"
+    "@biomejs/biome": "^1.6.2",
+    "@tsconfig/node16": "^16.1.2",
+    "@types/node": "^20.11.30",
+    "chai": "^5.1.0",
+    "typescript": "^5.4.3",
+    "vitest": "^1.4.0"
   },
   "scripts": {
     "build": "tsc",
     "lint": "biome ci src test",
+    "lint:format": "biome format --write src test",
+    "lint:check": "biome check --apply-unsafe src test",
     "test": "vitest --run --dir test"
   }
 }

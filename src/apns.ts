@@ -1,8 +1,8 @@
-import { EventEmitter } from 'events'
-import { PrivateKey, createSigner } from 'fast-jwt'
-import { RequestInit, Response, fetch } from 'fetch-http2'
+import { EventEmitter } from 'node:events'
+import { type PrivateKey, createSigner } from 'fast-jwt'
+import { type RequestInit, type Response, fetch } from 'fetch-http2'
 import { Errors } from './errors'
-import { Notification, Priority } from './notifications/notification'
+import { type Notification, Priority } from './notifications/notification'
 
 // APNS version
 const API_VERSION = 3

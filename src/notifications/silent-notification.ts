@@ -1,4 +1,4 @@
-import { Notification, NotificationOptions, Priority, PushType } from './notification'
+import { Notification, type NotificationOptions, Priority, PushType } from './notification'
 
 export class SilentNotification extends Notification {
   constructor(

@@ -60,7 +60,7 @@ export class Notification {
 
     // Check for "silent" notification
     if (typeof this.options.contentAvailable === 'boolean') {
-      result.aps['content-available'] = this.options.contentAvailable ? 1 : 0;
+      result.aps['content-available'] = this.options.contentAvailable ? 1 : 0
     }
 
     // Check for sound
@@ -90,7 +90,7 @@ export class Notification {
 
     // Check for mutable content
     if (typeof this.options.mutableContent === 'boolean') {
-      result.aps['mutable-content'] = this.options.mutableContent ? 1 : 0;
+      result.aps['mutable-content'] = this.options.mutableContent ? 1 : 0
     }
 
     return result
