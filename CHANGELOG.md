@@ -4,6 +4,11 @@
 
 ---
 
+## [11.6.0](https://github.com/AndrewBarba/apns2/releases/tag/11.6.0)
+
+1. Fix issue with `contentAvailable`
+2. Add support for `mutableContent`
+
 ## [11.5.0](https://github.com/AndrewBarba/apns2/releases/tag/11.5.0)
 
 1. Add `ApnsClient.keepAlive`
