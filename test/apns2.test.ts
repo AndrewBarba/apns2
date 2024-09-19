@@ -14,13 +14,13 @@ describe('apns', () => {
         keyId: '7U6GT5Q49J',
         signingKey: process.env.APNS_SIGNING_KEY ?? '',
         defaultTopic: 'com.tablelist.Tablelist',
-        keepAlive: 100
+        keepAlive: 100,
       })
     })
 
     it('should send a basic notification', async () => {
       const basicNotification = new Notification(deviceToken, {
-        alert: 'Hello'
+        alert: 'Hello',
       })
       return apns.send(basicNotification)
     })
@@ -28,7 +28,7 @@ describe('apns', () => {
     it('should send a basic notification with options', async () => {
       const basicNotification = new Notification(deviceToken, {
         alert: 'Hello',
-        badge: 1
+        badge: 1,
       })
       return apns.send(basicNotification)
     })
@@ -38,8 +38,8 @@ describe('apns', () => {
         alert: 'Hello',
         badge: 0,
         data: {
-          url: 'venue/icon'
-        }
+          url: 'venue/icon',
+        },
       })
       return apns.send(basicNotification)
     })
@@ -53,9 +53,9 @@ describe('apns', () => {
       const notification = new Notification(deviceToken, {
         aps: {
           alert: {
-            body: 'Hello, Tablelist'
-          }
-        }
+            body: 'Hello, Tablelist',
+          },
+        },
       })
       return apns.send(notification)
     })
@@ -64,17 +64,17 @@ describe('apns', () => {
       const notification = new Notification(deviceToken, {
         aps: {
           alert: {
-            body: 'Hello, Tablelist'
-          }
+            body: 'Hello, Tablelist',
+          },
         },
-        threadId: 'hello'
+        threadId: 'hello',
       })
       return apns.send(notification)
     })
 
     it('should send both notifications', async () => {
       const basicNotification = new Notification(deviceToken, {
-        alert: 'Hello'
+        alert: 'Hello',
       })
       const silentNotification = new SilentNotification(deviceToken)
       const results = await apns.sendMany([basicNotification, silentNotification])

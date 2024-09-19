@@ -30,5 +30,5 @@ export enum Errors {
   tooManyRequests = 'TooManyRequests',
   topicDisallowed = 'TopicDisallowed',
   unknownError = 'UnknownError',
-  unregistered = 'Unregistered'
+  unregistered = 'Unregistered',
 }

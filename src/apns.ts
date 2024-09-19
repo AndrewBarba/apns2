@@ -15,7 +15,7 @@ const RESET_TOKEN_INTERVAL_MS = 55 * 60 * 1000
 
 export enum Host {
   production = 'api.push.apple.com',
-  development = 'api.sandbox.push.apple.com'
+  development = 'api.sandbox.push.apple.com',
 }
 
 export interface SigningToken {
@@ -83,11 +83,11 @@ export class ApnsClient extends EventEmitter {
       headers: {
         authorization: `bearer ${this._getSigningToken()}`,
         'apns-push-type': notification.pushType,
-        'apns-topic': notification.options.topic ?? this.defaultTopic
+        'apns-topic': notification.options.topic ?? this.defaultTopic,
       },
       body: JSON.stringify(notification.buildApnsOptions()),
       timeout: this.requestTimeout,
-      keepAlive: this.keepAlive ?? this.pingInterval ?? 5000
+      keepAlive: this.keepAlive ?? this.pingInterval ?? 5000,
     }
 
     if (notification.priority !== Priority.immediate) {
@@ -145,20 +145,20 @@ export class ApnsClient extends EventEmitter {
 
     const claims = {
       iss: this.team,
-      iat: Math.floor(Date.now() / 1000)
+      iat: Math.floor(Date.now() / 1000),
     }
 
     const signer = createSigner({
       key: this.signingKey,
       algorithm: SIGNING_ALGORITHM,
-      kid: this.keyId
+      kid: this.keyId,
     })
 
     const token = signer(claims)
 
     this._token = {
       value: token,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     }
 
     return token

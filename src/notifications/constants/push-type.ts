@@ -7,5 +7,5 @@ export enum PushType {
   mdm = 'mdm',
   liveactivity = 'liveactivity',
   location = 'location',
-  pushtotalk = 'pushtotalk'
+  pushtotalk = 'pushtotalk',
 }

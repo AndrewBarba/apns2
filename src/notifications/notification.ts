@@ -50,7 +50,7 @@ export class Notification {
 
   buildApnsOptions() {
     const result: ApnsPayload = {
-      aps: this.options.aps ?? {}
+      aps: this.options.aps ?? {},
     }
 
     // Check for alert
