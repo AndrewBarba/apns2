@@ -1,5 +1,0 @@
-{
-  "name": "@barba/apns2",
-  "version": "11.7.0",
-  "exports": "./src/index.ts"
-}
