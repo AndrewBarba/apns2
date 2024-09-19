@@ -70,7 +70,7 @@ export class ApnsClient extends EventEmitter {
 
   sendMany(notifications: Notification[]) {
     const promises = notifications.map((notification) => {
-      return this._send(notification).catch((error: any) => ({ error }))
+      return this._send(notification).catch((error: unknown) => ({ error }))
     })
     return Promise.all(promises)
   }
@@ -78,32 +78,33 @@ export class ApnsClient extends EventEmitter {
   private async _send(notification: Notification) {
     const token = encodeURIComponent(notification.deviceToken)
     const url = `https://${this.host}/${API_VERSION}/device/${token}`
+    const headers: Record<string, string | undefined> = {
+      authorization: `bearer ${this._getSigningToken()}`,
+      "apns-push-type": notification.pushType,
+      "apns-topic": notification.options.topic ?? this.defaultTopic,
+    }
     const options: RequestInit = {
       method: "POST",
-      headers: {
-        authorization: `bearer ${this._getSigningToken()}`,
-        "apns-push-type": notification.pushType,
-        "apns-topic": notification.options.topic ?? this.defaultTopic,
-      },
+      headers: headers,
       body: JSON.stringify(notification.buildApnsOptions()),
       timeout: this.requestTimeout,
       keepAlive: this.keepAlive ?? this.pingInterval ?? 5000,
     }
 
     if (notification.priority !== Priority.immediate) {
-      options.headers!["apns-priority"] = notification.priority.toString()
+      headers["apns-priority"] = notification.priority.toString()
     }
 
     const expiration = notification.options.expiration
     if (typeof expiration !== "undefined") {
-      options.headers!["apns-expiration"] =
+      headers["apns-expiration"] =
         typeof expiration === "number"
           ? expiration.toFixed(0)
           : (expiration.getTime() / 1000).toFixed(0)
     }
 
     if (notification.options.collapseId) {
-      options.headers!["apns-collapse-id"] = notification.options.collapseId
+      headers["apns-collapse-id"] = notification.options.collapseId
     }
 
     const res = await fetch(url, options)
@@ -116,7 +117,11 @@ export class ApnsClient extends EventEmitter {
       return notification
     }
 
-    let json: any
+    let json: {
+      statusCode?: number
+      notification?: Notification
+      reason?: string
+    }
 
     try {
       json = await res.json()

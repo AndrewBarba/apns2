@@ -95,14 +95,14 @@ describe("apns", () => {
       try {
         await apns.send(noti)
         throw new Error("Should not have sent notification")
-      } catch (err: any) {
+      } catch (err) {
         assert.equal(err.reason, Errors.badDeviceToken)
       }
     })
 
     it("should fail to send a notification and emit an error", () => {
       const promise = new Promise((resolve) => {
-        apns.once(Errors.badDeviceToken, (err: any) => {
+        apns.once(Errors.badDeviceToken, (err) => {
           assert.equal(err.reason, Errors.badDeviceToken)
           resolve(null)
         })
@@ -114,7 +114,7 @@ describe("apns", () => {
 
     it("should fail to send a notification and emit an error", () => {
       const promise = new Promise((resolve) => {
-        apns.once(Errors.badDeviceToken, (err: any) => {
+        apns.once(Errors.badDeviceToken, (err) => {
           assert.equal(err.reason, Errors.badDeviceToken)
           resolve(null)
         })

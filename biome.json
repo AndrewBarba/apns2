@@ -10,23 +10,6 @@
     "indentWidth": 2,
     "lineWidth": 100
   },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true,
-      "performance": {
-        "noDelete": "off"
-      },
-      "style": {
-        "noNonNullAssertion": "off",
-        "noParameterAssign": "off"
-      },
-      "suspicious": {
-        "noExplicitAny": "off",
-        "noShadowRestrictedNames": "off"
-      }
-    }
-  },
   "javascript": {
     "formatter": {
       "semicolons": "asNeeded",
