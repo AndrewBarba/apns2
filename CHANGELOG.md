@@ -4,6 +4,10 @@
 
 ---
 
+## [11.7.1](https://github.com/AndrewBarba/apns2/releases/tag/11.7.1)
+
+1. Fix issue with `expiration` option [#88](https://github.com/AndrewBarba/apns2/issues/88)
+
 ## [11.7.0](https://github.com/AndrewBarba/apns2/releases/tag/11.7.0)
 
 1. Update `fast-jwt` to v4
