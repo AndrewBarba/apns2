@@ -94,11 +94,12 @@ export class ApnsClient extends EventEmitter {
       options.headers!['apns-priority'] = notification.priority.toString()
     }
 
-    if (notification.options.expiration) {
+    const expiration = notification.options.expiration
+    if (typeof expiration !== 'undefined') {
       options.headers!['apns-expiration'] =
-        typeof notification.options.expiration === 'number'
-          ? notification.options.expiration.toFixed(0)
-          : (notification.options.expiration.getTime() / 1000).toFixed(0)
+        typeof expiration === 'number'
+          ? expiration.toFixed(0)
+          : (expiration.getTime() / 1000).toFixed(0)
     }
 
     if (notification.options.collapseId) {
