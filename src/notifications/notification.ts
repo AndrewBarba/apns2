@@ -1,5 +1,5 @@
-import { Priority } from './constants/priority'
-import { PushType } from './constants/push-type'
+import { Priority } from "./constants/priority"
+import { PushType } from "./constants/push-type"
 
 export { PushType, Priority }
 
@@ -59,28 +59,28 @@ export class Notification {
     }
 
     // Check for "silent" notification
-    if (typeof this.options.contentAvailable === 'boolean') {
-      result.aps['content-available'] = this.options.contentAvailable ? 1 : 0
+    if (typeof this.options.contentAvailable === "boolean") {
+      result.aps["content-available"] = this.options.contentAvailable ? 1 : 0
     }
 
     // Check for sound
-    if (typeof this.options.sound === 'string' || typeof this.options.sound === 'object') {
+    if (typeof this.options.sound === "string" || typeof this.options.sound === "object") {
       result.aps.sound = this.options.sound
     }
 
     // Check for category
-    if (typeof this.options.category === 'string') {
+    if (typeof this.options.category === "string") {
       result.aps.category = this.options.category
     }
 
     // Check for badge
-    if (typeof this.options.badge === 'number') {
+    if (typeof this.options.badge === "number") {
       result.aps.badge = this.options.badge
     }
 
     // Check for threadId
-    if (typeof this.options.threadId === 'string') {
-      result.aps['thread-id'] = this.options.threadId
+    if (typeof this.options.threadId === "string") {
+      result.aps["thread-id"] = this.options.threadId
     }
 
     // Add optional message data
@@ -89,8 +89,8 @@ export class Notification {
     }
 
     // Check for mutable content
-    if (typeof this.options.mutableContent === 'boolean') {
-      result.aps['mutable-content'] = this.options.mutableContent ? 1 : 0
+    if (typeof this.options.mutableContent === "boolean") {
+      result.aps["mutable-content"] = this.options.mutableContent ? 1 : 0
     }
 
     return result

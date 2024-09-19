@@ -1,21 +1,21 @@
-import { EventEmitter } from 'node:events'
-import { type PrivateKey, createSigner } from 'fast-jwt'
-import { type RequestInit, type Response, fetch } from 'fetch-http2'
-import { Errors } from './errors'
-import { type Notification, Priority } from './notifications/notification'
+import { EventEmitter } from "node:events"
+import { type PrivateKey, createSigner } from "fast-jwt"
+import { type RequestInit, type Response, fetch } from "fetch-http2"
+import { Errors } from "./errors"
+import { type Notification, Priority } from "./notifications/notification"
 
 // APNS version
 const API_VERSION = 3
 
 // Signing algorithm for JSON web token
-const SIGNING_ALGORITHM = 'ES256'
+const SIGNING_ALGORITHM = "ES256"
 
 // Reset our signing token every 55 minutes as reccomended by Apple
 const RESET_TOKEN_INTERVAL_MS = 55 * 60 * 1000
 
 export enum Host {
-  production = 'api.push.apple.com',
-  development = 'api.sandbox.push.apple.com',
+  production = "api.push.apple.com",
+  development = "api.sandbox.push.apple.com",
 }
 
 export interface SigningToken {
@@ -79,11 +79,11 @@ export class ApnsClient extends EventEmitter {
     const token = encodeURIComponent(notification.deviceToken)
     const url = `https://${this.host}/${API_VERSION}/device/${token}`
     const options: RequestInit = {
-      method: 'POST',
+      method: "POST",
       headers: {
         authorization: `bearer ${this._getSigningToken()}`,
-        'apns-push-type': notification.pushType,
-        'apns-topic': notification.options.topic ?? this.defaultTopic,
+        "apns-push-type": notification.pushType,
+        "apns-topic": notification.options.topic ?? this.defaultTopic,
       },
       body: JSON.stringify(notification.buildApnsOptions()),
       timeout: this.requestTimeout,
@@ -91,19 +91,19 @@ export class ApnsClient extends EventEmitter {
     }
 
     if (notification.priority !== Priority.immediate) {
-      options.headers!['apns-priority'] = notification.priority.toString()
+      options.headers!["apns-priority"] = notification.priority.toString()
     }
 
     const expiration = notification.options.expiration
-    if (typeof expiration !== 'undefined') {
-      options.headers!['apns-expiration'] =
-        typeof expiration === 'number'
+    if (typeof expiration !== "undefined") {
+      options.headers!["apns-expiration"] =
+        typeof expiration === "number"
           ? expiration.toFixed(0)
           : (expiration.getTime() / 1000).toFixed(0)
     }
 
     if (notification.options.collapseId) {
-      options.headers!['apns-collapse-id'] = notification.options.collapseId
+      options.headers!["apns-collapse-id"] = notification.options.collapseId
     }
 
     const res = await fetch(url, options)
