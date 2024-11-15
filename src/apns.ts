@@ -1,6 +1,6 @@
 import { EventEmitter } from "node:events"
 import { type PrivateKey, createSigner } from "fast-jwt"
-import { type RequestInit, type Response, fetch } from "fetch-http2"
+import { FetchClient, type RequestInit, type Response } from "fetch-http2"
 import { Errors } from "./errors"
 import { type Notification, Priority } from "./notifications/notification"
 
@@ -44,6 +44,7 @@ export class ApnsClient extends EventEmitter {
   readonly defaultTopic?: string
   readonly requestTimeout?: number
   readonly keepAlive?: boolean | number
+  readonly fetchClient: FetchClient
 
   // @deprecated Use keepAlive instead
   readonly pingInterval?: number
@@ -60,6 +61,7 @@ export class ApnsClient extends EventEmitter {
     this.requestTimeout = options.requestTimeout
     this.keepAlive = options.keepAlive
     this.pingInterval = options.pingInterval
+    this.fetchClient = new FetchClient()
     this._token = null
     this.on(Errors.expiredProviderToken, () => this._resetSigningToken())
   }
@@ -107,7 +109,7 @@ export class ApnsClient extends EventEmitter {
       headers["apns-collapse-id"] = notification.options.collapseId
     }
 
-    const res = await fetch(url, options)
+    const res = await this.fetchClient.fetch(url, options)
 
     return this._handleServerResponse(res, notification)
   }
