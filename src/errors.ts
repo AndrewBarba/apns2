@@ -1,3 +1,5 @@
+import type { Notification } from "./notifications/notification"
+
 export enum Errors {
   badCertificate = "BadCertificate",
   badCertificateEnvironment = "BadCertificateEnvironment",
@@ -31,4 +33,26 @@ export enum Errors {
   topicDisallowed = "TopicDisallowed",
   unknownError = "UnknownError",
   unregistered = "Unregistered",
+}
+
+export interface ApnsResponseError {
+  reason: string
+  timestamp: number
+}
+
+export class ApnsError extends Error {
+  readonly statusCode: number
+  readonly notification: Notification
+  readonly response: ApnsResponseError
+
+  constructor(props: {
+    statusCode: number
+    notification: Notification
+    response: ApnsResponseError
+  }) {
+    super("APNS Error")
+    this.statusCode = props.statusCode
+    this.notification = props.notification
+    this.response = props.response
+  }
 }
