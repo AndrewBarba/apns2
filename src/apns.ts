@@ -113,9 +113,10 @@ export class ApnsClient extends EventEmitter {
       return notification
     }
 
-    const responseError = (await res.body.json()) as ApnsResponseError
-
-    console.log({ responseError })
+    const responseError = (await res.body.json().catch(() => ({
+      reason: Errors.unknownError,
+      timestamp: Date.now(),
+    }))) as ApnsResponseError
 
     const error = new ApnsError({
       statusCode: res.statusCode,

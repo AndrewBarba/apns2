@@ -111,9 +111,9 @@ describe("apns", () => {
       return promise
     })
 
-    it("should fail to send a notification and emit an error", () => {
+    it("should fail to send a notification and emit a generic error", () => {
       const promise = new Promise((resolve) => {
-        apns.once(Errors.badDeviceToken, (err) => {
+        apns.once(Errors.error, (err) => {
           assert.equal(err.reason, Errors.badDeviceToken)
           resolve(null)
         })
