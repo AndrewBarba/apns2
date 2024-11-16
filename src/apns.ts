@@ -115,6 +115,8 @@ export class ApnsClient extends EventEmitter {
 
     const responseError = (await res.body.json()) as ApnsResponseError
 
+    console.log({ responseError })
+
     const error = new ApnsError({
       statusCode: res.statusCode,
       notification: notification,

@@ -55,4 +55,12 @@ export class ApnsError extends Error {
     this.notification = props.notification
     this.response = props.response
   }
+
+  get reason() {
+    return this.response.reason
+  }
+
+  get timestamp() {
+    return this.response.timestamp
+  }
 }
