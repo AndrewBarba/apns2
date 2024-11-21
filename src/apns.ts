@@ -59,7 +59,6 @@ export class ApnsClient extends EventEmitter {
       maxConcurrentStreams: 100,
     })
     this._token = null
-    this.on(Errors.expiredProviderToken, () => this._resetSigningToken())
   }
 
   send(notification: Notification) {
@@ -124,6 +123,11 @@ export class ApnsClient extends EventEmitter {
       response: responseError as ApnsResponseError,
     })
 
+    // Reset signing token if expired
+    if (error.reason === Errors.expiredProviderToken) {
+      this._token = null
+    }
+
     // Emit specific and generic errors
     this.emit(error.reason, error)
     this.emit(Errors.error, error)
@@ -155,9 +159,5 @@ export class ApnsClient extends EventEmitter {
     }
 
     return token
-  }
-
-  private _resetSigningToken() {
-    this._token = null
   }
 }
