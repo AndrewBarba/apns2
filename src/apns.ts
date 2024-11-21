@@ -61,18 +61,14 @@ export class ApnsClient extends EventEmitter {
     this._token = null
   }
 
-  send(notification: Notification) {
-    return this._send(notification)
-  }
-
   sendMany(notifications: Notification[]) {
-    const promises = notifications.map((notification) => {
-      return this._send(notification).catch((error: ApnsError) => ({ error }))
-    })
+    const promises = notifications.map((notification) =>
+      this.send(notification).catch((error: ApnsError) => ({ error })),
+    )
     return Promise.all(promises)
   }
 
-  private async _send(notification: Notification) {
+  async send(notification: Notification) {
     const headers: Record<string, string | undefined> = {
       authorization: `bearer ${this._getSigningToken()}`,
       "apns-push-type": notification.pushType,
