@@ -59,6 +59,7 @@ export class ApnsClient extends EventEmitter {
       maxConcurrentStreams: 100,
     })
     this._token = null
+    this._supressH2Warning()
   }
 
   sendMany(notifications: Notification[]) {
@@ -155,5 +156,14 @@ export class ApnsClient extends EventEmitter {
     }
 
     return token
+  }
+
+  private _supressH2Warning() {
+    process.once("warning", (warning: Error & { code?: string }) => {
+      if (warning.code === "UNDICI-H2") {
+        return
+      }
+      process.emit("warning", warning)
+    })
   }
 }

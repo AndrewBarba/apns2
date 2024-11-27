@@ -36,6 +36,7 @@
     "@tsconfig/node20": "^20.1.4",
     "@types/node": "^22.10.0",
     "chai": "^5.1.2",
+    "dotenv": "^16.4.5",
     "typescript": "^5.7.2",
     "vitest": "^2.1.6"
   },

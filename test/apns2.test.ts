@@ -1,3 +1,4 @@
+import "dotenv/config"
 import { assert } from "chai"
 import { beforeAll, describe, it } from "vitest"
 import { ApnsClient, Errors, Notification, SilentNotification } from "../src"
