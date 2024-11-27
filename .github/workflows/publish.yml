@@ -10,16 +10,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: oven-sh/setup-bun@v2
-
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      - run: bun install --frozen-lockfile
+      - run: npm ci
 
-      - run: bun run build
+      - run: npm run build
 
       - run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}" > .npmrc

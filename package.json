@@ -32,7 +32,7 @@
     "watchos"
   ],
   "dependencies": {
-    "fast-jwt": "^4.0.6",
+    "fast-jwt": "^5.0.0",
     "undici": "^7.0.0"
   },
   "devDependencies": {
