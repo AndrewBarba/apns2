@@ -1,7 +1,6 @@
 {
   "extends": "@tsconfig/node20",
   "compilerOptions": {
-    "baseUrl": ".",
     "declaration": true,
     "outDir": "dist"
   },
