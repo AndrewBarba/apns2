@@ -1,4 +1,4 @@
-import type { Notification } from "./notifications/notification"
+import type { Notification } from "./notifications/notification.js"
 
 export enum Errors {
   badCertificate = "BadCertificate",

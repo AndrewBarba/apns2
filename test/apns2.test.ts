@@ -1,7 +1,7 @@
 import "dotenv/config"
 import { assert } from "chai"
 import { beforeAll, describe, it } from "vitest"
-import { ApnsClient, Errors, Notification, SilentNotification } from "../src"
+import { ApnsClient, Errors, Notification, SilentNotification } from "../src/index.js"
 
 describe("apns", () => {
   const deviceToken = process.env.APNS_PUSH_TOKEN ?? ""

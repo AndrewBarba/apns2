@@ -1,8 +1,8 @@
 import { EventEmitter } from "node:events"
 import { type PrivateKey, createSigner } from "fast-jwt"
 import { type Dispatcher, Pool } from "undici"
-import { ApnsError, type ApnsResponseError, Errors } from "./errors"
-import { type Notification, Priority } from "./notifications/notification"
+import { ApnsError, type ApnsResponseError, Errors } from "./errors.js"
+import { type Notification, Priority } from "./notifications/notification.js"
 
 // APNS version
 const API_VERSION = 3
