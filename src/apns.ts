@@ -1,8 +1,8 @@
 import { EventEmitter } from "node:events"
 import { type PrivateKey, createSigner } from "fast-jwt"
-import { FetchClient, type RequestInit, type Response } from "fetch-http2"
-import { Errors } from "./errors"
-import { type Notification, Priority } from "./notifications/notification"
+import { type Dispatcher, Pool } from "undici"
+import { ApnsError, type ApnsResponseError, Errors } from "./errors.js"
+import { type Notification, Priority } from "./notifications/notification.js"
 
 // APNS version
 const API_VERSION = 3
@@ -30,10 +30,7 @@ export interface ApnsOptions {
   defaultTopic?: string
   host?: Host | string
   requestTimeout?: number
-  keepAlive?: boolean | number
-
-  // @deprecated Use keepAlive instead
-  pingInterval?: number
+  keepAlive?: boolean
 }
 
 export class ApnsClient extends EventEmitter {
@@ -42,12 +39,8 @@ export class ApnsClient extends EventEmitter {
   readonly host: Host | string
   readonly signingKey: string | Buffer | PrivateKey
   readonly defaultTopic?: string
-  readonly requestTimeout?: number
-  readonly keepAlive?: boolean | number
-  readonly fetchClient: FetchClient
-
-  // @deprecated Use keepAlive instead
-  readonly pingInterval?: number
+  readonly keepAlive: boolean
+  readonly client: Pool
 
   private _token: SigningToken | null
 
@@ -58,39 +51,29 @@ export class ApnsClient extends EventEmitter {
     this.signingKey = options.signingKey
     this.defaultTopic = options.defaultTopic
     this.host = options.host ?? Host.production
-    this.requestTimeout = options.requestTimeout
-    this.keepAlive = options.keepAlive
-    this.pingInterval = options.pingInterval
-    this.fetchClient = new FetchClient()
+    this.keepAlive = options.keepAlive ?? true
+    this.client = new Pool(`https://${this.host}:443`, {
+      connections: this.keepAlive ? 32 : 1,
+      pipelining: this.keepAlive ? 1 : 0,
+      allowH2: true,
+      maxConcurrentStreams: 100,
+    })
     this._token = null
-    this.on(Errors.expiredProviderToken, () => this._resetSigningToken())
-  }
-
-  send(notification: Notification) {
-    return this._send(notification)
+    this._supressH2Warning()
   }
 
   sendMany(notifications: Notification[]) {
-    const promises = notifications.map((notification) => {
-      return this._send(notification).catch((error: unknown) => ({ error }))
-    })
+    const promises = notifications.map((notification) =>
+      this.send(notification).catch((error: ApnsError) => ({ error })),
+    )
     return Promise.all(promises)
   }
 
-  private async _send(notification: Notification) {
-    const token = encodeURIComponent(notification.deviceToken)
-    const url = `https://${this.host}/${API_VERSION}/device/${token}`
+  async send(notification: Notification) {
     const headers: Record<string, string | undefined> = {
       authorization: `bearer ${this._getSigningToken()}`,
       "apns-push-type": notification.pushType,
       "apns-topic": notification.options.topic ?? this.defaultTopic,
-    }
-    const options: RequestInit = {
-      method: "POST",
-      headers: headers,
-      body: JSON.stringify(notification.buildApnsOptions()),
-      timeout: this.requestTimeout,
-      keepAlive: this.keepAlive ?? this.pingInterval ?? 5000,
     }
 
     if (notification.priority !== Priority.immediate) {
@@ -109,40 +92,44 @@ export class ApnsClient extends EventEmitter {
       headers["apns-collapse-id"] = notification.options.collapseId
     }
 
-    const res = await this.fetchClient.fetch(url, options)
+    const res = await this.client.request({
+      path: `/${API_VERSION}/device/${encodeURIComponent(notification.deviceToken)}`,
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(notification.buildApnsOptions()),
+      idempotent: true,
+      blocking: false,
+    })
 
     return this._handleServerResponse(res, notification)
   }
 
-  private async _handleServerResponse(res: Response, notification: Notification) {
-    if (res.status === 200) {
+  private async _handleServerResponse(res: Dispatcher.ResponseData, notification: Notification) {
+    if (res.statusCode === 200) {
       return notification
     }
 
-    let json: {
-      statusCode?: number
-      notification?: Notification
-      reason?: string
+    const responseError = await res.body.json().catch(() => ({
+      reason: Errors.unknownError,
+      timestamp: Date.now(),
+    }))
+
+    const error = new ApnsError({
+      statusCode: res.statusCode,
+      notification: notification,
+      response: responseError as ApnsResponseError,
+    })
+
+    // Reset signing token if expired
+    if (error.reason === Errors.expiredProviderToken) {
+      this._token = null
     }
 
-    try {
-      json = await res.json()
-    } catch (err) {
-      json = { reason: Errors.unknownError }
-    }
+    // Emit specific and generic errors
+    this.emit(error.reason, error)
+    this.emit(Errors.error, error)
 
-    json.statusCode = res.status
-    json.notification = notification
-
-    // Emit specific error
-    if (json.reason) {
-      this.emit(json.reason, json)
-    }
-
-    // Emit generic error
-    this.emit(Errors.error, json)
-
-    throw json
+    throw error
   }
 
   private _getSigningToken(): string {
@@ -171,7 +158,12 @@ export class ApnsClient extends EventEmitter {
     return token
   }
 
-  private _resetSigningToken() {
-    this._token = null
+  private _supressH2Warning() {
+    process.once("warning", (warning: Error & { code?: string }) => {
+      if (warning.code === "UNDICI-H2") {
+        return
+      }
+      process.emit("warning", warning)
+    })
   }
 }

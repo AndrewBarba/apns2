@@ -1,5 +1,5 @@
-import { Priority } from "./constants/priority"
-import { PushType } from "./constants/push-type"
+import { Priority } from "./constants/priority.js"
+import { PushType } from "./constants/push-type.js"
 
 export { PushType, Priority }
 

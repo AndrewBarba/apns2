@@ -10,26 +10,21 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18, 20, 22]
+        node-version: [20, 22]
 
     steps:
       - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 9
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: pnpm
 
-      - run: pnpm install --frozen-lockfile
+      - run: npm ci
 
-      - run: pnpm lint
+      - run: npm run lint
 
-      - run: pnpm test
+      - run: npm run test
         env:
           APNS_PUSH_TOKEN: ${{ secrets.APNS_PUSH_TOKEN }}
           APNS_SIGNING_KEY: ${{ secrets.APNS_SIGNING_KEY }}

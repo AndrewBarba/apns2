@@ -1,6 +1,7 @@
+import "dotenv/config"
 import { assert } from "chai"
 import { beforeAll, describe, it } from "vitest"
-import { ApnsClient, Errors, Notification, SilentNotification } from "../src"
+import { ApnsClient, Errors, Notification, SilentNotification } from "../src/index.js"
 
 describe("apns", () => {
   const deviceToken = process.env.APNS_PUSH_TOKEN ?? ""
@@ -14,7 +15,6 @@ describe("apns", () => {
         keyId: "7U6GT5Q49J",
         signingKey: process.env.APNS_SIGNING_KEY ?? "",
         defaultTopic: "com.tablelist.Tablelist",
-        keepAlive: 100,
       })
     })
 
@@ -112,9 +112,9 @@ describe("apns", () => {
       return promise
     })
 
-    it("should fail to send a notification and emit an error", () => {
+    it("should fail to send a notification and emit a generic error", () => {
       const promise = new Promise((resolve) => {
-        apns.once(Errors.badDeviceToken, (err) => {
+        apns.once(Errors.error, (err) => {
           assert.equal(err.reason, Errors.badDeviceToken)
           resolve(null)
         })
