@@ -4,6 +4,10 @@
 
 ---
 
+## [12.1.0](https://github.com/AndrewBarba/apns2/releases/tag/12.1.0)
+
+1. Add back commonjs support
+
 ## [12.0.0](https://github.com/AndrewBarba/apns2/releases/tag/12.0.0)
 
 1. Migrate to Undici v7
