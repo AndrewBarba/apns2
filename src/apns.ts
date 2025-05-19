@@ -14,8 +14,8 @@ const SIGNING_ALGORITHM = "ES256"
 // Reset our signing token every 55 minutes as reccomended by Apple
 const RESET_TOKEN_INTERVAL_MS = 55 * 60 * 1000
 
-// Ping the server every 30 seconds as reccomended by Apple
-const PING_INTERVAL_MS = 30 * 1000
+// Ping the server every 30 minutes as reccomended by Apple
+const PING_INTERVAL_MS = 30 * 60 * 1000
 
 export enum Host {
   production = "api.push.apple.com",
