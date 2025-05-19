@@ -2,6 +2,7 @@ import { EventEmitter } from "node:events"
 import { type PrivateKey, createSigner } from "fast-jwt"
 import { type Dispatcher, Pool } from "undici"
 import { ApnsError, type ApnsResponseError, Errors } from "./errors.js"
+import { undici_getClientHttp2Session, undici_getPoolClients } from "./internals.js"
 import { type Notification, Priority } from "./notifications/notification.js"
 
 // APNS version
@@ -12,6 +13,9 @@ const SIGNING_ALGORITHM = "ES256"
 
 // Reset our signing token every 55 minutes as reccomended by Apple
 const RESET_TOKEN_INTERVAL_MS = 55 * 60 * 1000
+
+// Ping the server every 30 seconds as reccomended by Apple
+const PING_INTERVAL_MS = 30 * 1000
 
 export enum Host {
   production = "api.push.apple.com",
@@ -43,6 +47,7 @@ export class ApnsClient extends EventEmitter {
   readonly client: Pool
 
   private _token: SigningToken | null
+  private _pingInterval: NodeJS.Timeout | null
 
   constructor(options: ApnsOptions) {
     super()
@@ -59,7 +64,9 @@ export class ApnsClient extends EventEmitter {
       maxConcurrentStreams: 100,
     })
     this._token = null
-    this._supressH2Warning()
+    this._pingInterval = this.keepAlive
+      ? setInterval(() => this.ping(), PING_INTERVAL_MS).unref()
+      : null
   }
 
   sendMany(notifications: Notification[]) {
@@ -102,6 +109,23 @@ export class ApnsClient extends EventEmitter {
     })
 
     return this._handleServerResponse(res, notification)
+  }
+
+  async ping() {
+    const promises: Promise<void>[] = []
+    const clients = undici_getPoolClients(this.client)
+    for (const client of clients) {
+      const http2Session = undici_getClientHttp2Session(client)
+      if (!http2Session) {
+        continue
+      }
+      promises.push(
+        new Promise((resolve, reject) =>
+          http2Session.ping((err) => (err ? reject(err) : resolve())),
+        ),
+      )
+    }
+    return Promise.allSettled(promises)
   }
 
   private async _handleServerResponse(res: Dispatcher.ResponseData, notification: Notification) {
@@ -156,14 +180,5 @@ export class ApnsClient extends EventEmitter {
     }
 
     return token
-  }
-
-  private _supressH2Warning() {
-    process.once("warning", (warning: Error & { code?: string }) => {
-      if (warning.code === "UNDICI-H2") {
-        return
-      }
-      process.emit("warning", warning)
-    })
   }
 }
