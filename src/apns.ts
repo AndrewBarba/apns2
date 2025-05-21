@@ -17,10 +17,12 @@ const RESET_TOKEN_INTERVAL_MS = 55 * 60 * 1000
 // Ping the server every 10 minutes as reccomended by Apple
 const PING_INTERVAL_MS = 10 * 60 * 1000
 
-export enum Host {
-  production = "api.push.apple.com",
-  development = "api.sandbox.push.apple.com",
-}
+export const Host = {
+  production: "api.push.apple.com",
+  development: "api.sandbox.push.apple.com",
+} as const
+
+export type Host = (typeof Host)[keyof typeof Host]
 
 export interface SigningToken {
   value: string
