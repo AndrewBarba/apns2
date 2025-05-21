@@ -124,6 +124,22 @@ export class ApnsClient extends EventEmitter {
     return Promise.allSettled(promises)
   }
 
+  async close() {
+    if (this._pingInterval) {
+      clearInterval(this._pingInterval)
+      this._pingInterval = null
+    }
+    await this.client.close()
+  }
+
+  async destroy(err?: Error | null) {
+    if (this._pingInterval) {
+      clearInterval(this._pingInterval)
+      this._pingInterval = null
+    }
+    await this.client.destroy(err ?? null)
+  }
+
   private async _handleServerResponse(res: Dispatcher.ResponseData, notification: Notification) {
     if (res.statusCode === 200) {
       return notification
