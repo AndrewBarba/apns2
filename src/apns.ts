@@ -39,6 +39,12 @@ export interface ApnsOptions {
   keepAlive?: boolean
 }
 
+export interface ApnsSendResponse {
+  notification: Notification
+  apnsId?: string
+  apnsUniqueId?: string // only available in development environment
+}
+
 export class ApnsClient extends EventEmitter {
   readonly team: string
   readonly keyId: string
@@ -75,14 +81,18 @@ export class ApnsClient extends EventEmitter {
     const promises = notifications.map((notification) =>
       this.send(notification).catch((error: ApnsError) => ({ error })),
     )
-    return Promise.all(promises)
+    return Promise.allSettled(promises)
   }
 
-  async send(notification: Notification) {
+  async send(notification: Notification): Promise<ApnsSendResponse> {
     const headers: Record<string, string | undefined> = {
       authorization: `bearer ${this._getSigningToken()}`,
       "apns-push-type": notification.pushType,
       "apns-topic": notification.options.topic ?? this.defaultTopic,
+    }
+
+    if (notification.options.id) {
+      headers["apns-id"] = notification.options.id
     }
 
     if (notification.priority !== Priority.immediate) {
@@ -110,7 +120,13 @@ export class ApnsClient extends EventEmitter {
       blocking: false,
     })
 
-    return this._handleServerResponse(res, notification)
+    await this._handleServerResponse(res, notification)
+
+    return {
+      notification,
+      apnsId: res.headers["apns-id"]?.toString(),
+      apnsUniqueId: res.headers["apns-unique-id"]?.toString(),
+    }
   }
 
   async ping() {
@@ -144,7 +160,7 @@ export class ApnsClient extends EventEmitter {
 
   private async _handleServerResponse(res: Dispatcher.ResponseData, notification: Notification) {
     if (res.statusCode === 200) {
-      return notification
+      return
     }
 
     const responseError = await res.body.json().catch(() => ({

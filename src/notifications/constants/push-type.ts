@@ -1,6 +1,7 @@
 export const PushType = {
   alert: "alert",
   background: "background",
+  controls: "controls",
   voip: "voip",
   complication: "complication",
   fileprovider: "fileprovider",
