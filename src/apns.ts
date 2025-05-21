@@ -2,6 +2,7 @@ import { EventEmitter } from "node:events"
 import { type PrivateKey, createSigner } from "fast-jwt"
 import { type Dispatcher, Pool } from "undici"
 import { ApnsError, type ApnsResponseError, Errors } from "./errors.js"
+import { undici_getClientHttp2Session, undici_getPoolClients } from "./internals.js"
 import { type Notification, Priority } from "./notifications/notification.js"
 
 // APNS version
@@ -13,10 +14,15 @@ const SIGNING_ALGORITHM = "ES256"
 // Reset our signing token every 55 minutes as reccomended by Apple
 const RESET_TOKEN_INTERVAL_MS = 55 * 60 * 1000
 
-export enum Host {
-  production = "api.push.apple.com",
-  development = "api.sandbox.push.apple.com",
-}
+// Ping the server every 10 minutes as reccomended by Apple
+const PING_INTERVAL_MS = 10 * 60 * 1000
+
+export const Host = {
+  production: "api.push.apple.com",
+  development: "api.sandbox.push.apple.com",
+} as const
+
+export type Host = (typeof Host)[keyof typeof Host]
 
 export interface SigningToken {
   value: string
@@ -43,6 +49,7 @@ export class ApnsClient extends EventEmitter {
   readonly client: Pool
 
   private _token: SigningToken | null
+  private _pingInterval: NodeJS.Timeout | null
 
   constructor(options: ApnsOptions) {
     super()
@@ -59,7 +66,9 @@ export class ApnsClient extends EventEmitter {
       maxConcurrentStreams: 100,
     })
     this._token = null
-    this._supressH2Warning()
+    this._pingInterval = this.keepAlive
+      ? setInterval(() => this.ping(), PING_INTERVAL_MS).unref()
+      : null
   }
 
   sendMany(notifications: Notification[]) {
@@ -102,6 +111,35 @@ export class ApnsClient extends EventEmitter {
     })
 
     return this._handleServerResponse(res, notification)
+  }
+
+  async ping() {
+    const sessions = undici_getPoolClients(this.client)
+      .map(undici_getClientHttp2Session)
+      .filter((session) => session !== null)
+      .filter((session) => !session.destroyed && !session.connecting && !session.closed)
+    const promises = sessions.map((session) => {
+      return new Promise<void>((resolve, reject) => {
+        session.ping((err) => (err ? reject(err) : resolve()))
+      })
+    })
+    return Promise.allSettled(promises)
+  }
+
+  async close() {
+    if (this._pingInterval) {
+      clearInterval(this._pingInterval)
+      this._pingInterval = null
+    }
+    await this.client.close()
+  }
+
+  async destroy(err?: Error | null) {
+    if (this._pingInterval) {
+      clearInterval(this._pingInterval)
+      this._pingInterval = null
+    }
+    await this.client.destroy(err ?? null)
   }
 
   private async _handleServerResponse(res: Dispatcher.ResponseData, notification: Notification) {
@@ -156,14 +194,5 @@ export class ApnsClient extends EventEmitter {
     }
 
     return token
-  }
-
-  private _supressH2Warning() {
-    process.once("warning", (warning: Error & { code?: string }) => {
-      if (warning.code === "UNDICI-H2") {
-        return
-      }
-      process.emit("warning", warning)
-    })
   }
 }
