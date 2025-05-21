@@ -113,17 +113,15 @@ export class ApnsClient extends EventEmitter {
 
   async ping() {
     const promises: Promise<void>[] = []
-    const clients = undici_getPoolClients(this.client)
-    for (const client of clients) {
-      const http2Session = undici_getClientHttp2Session(client)
-      if (!http2Session) {
-        continue
-      }
-      promises.push(
-        new Promise((resolve, reject) =>
-          http2Session.ping((err) => (err ? reject(err) : resolve())),
-        ),
-      )
+    const sessions = undici_getPoolClients(this.client)
+      .map(undici_getClientHttp2Session)
+      .filter((session) => session !== null)
+      .filter((session) => !session.destroyed && !session.connecting && !session.closed)
+    for (const session of sessions) {
+      const promise = new Promise<void>((resolve, reject) => {
+        session.ping((err) => (err ? reject(err) : resolve()))
+      })
+      promises.push(promise)
     }
     return Promise.allSettled(promises)
   }
