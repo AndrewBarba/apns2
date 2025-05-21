@@ -4,6 +4,10 @@
 
 ---
 
+## [13.0.0](https://github.com/AndrewBarba/apns2/releases/tag/13.0.0)
+
+1. Change the return shape of `send()` to include the notification as well as details from APNS
+
 ## [12.2.0](https://github.com/AndrewBarba/apns2/releases/tag/12.2.0)
 
 1. Send http2 ping frames for better support of long lived node processes

@@ -1,6 +1,7 @@
 import { EventEmitter } from "node:events"
 import { type PrivateKey, createSigner } from "fast-jwt"
 import { type Dispatcher, Pool } from "undici"
+import type { IncomingHttpHeaders } from "undici/types/header.js"
 import { ApnsError, type ApnsResponseError, Errors } from "./errors.js"
 import { undici_getClientHttp2Session, undici_getPoolClients } from "./internals.js"
 import { type Notification, Priority } from "./notifications/notification.js"
@@ -41,6 +42,8 @@ export interface ApnsOptions {
 
 export interface ApnsSendResponse {
   notification: Notification
+  headers: IncomingHttpHeaders
+  statusCode: number
   apnsId?: string
   apnsUniqueId?: string // only available in development environment
 }
@@ -124,6 +127,8 @@ export class ApnsClient extends EventEmitter {
 
     return {
       notification,
+      headers: res.headers,
+      statusCode: res.statusCode,
       apnsId: res.headers["apns-id"]?.toString(),
       apnsUniqueId: res.headers["apns-unique-id"]?.toString(),
     }
