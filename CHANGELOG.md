@@ -4,6 +4,11 @@
 
 ---
 
+## [12.2.0](https://github.com/AndrewBarba/apns2/releases/tag/12.2.0)
+
+1. Send http2 ping frames for better support of long lived node processes
+2. Remove native typescript enums in favor of regular JS constants
+
 ## [12.1.0](https://github.com/AndrewBarba/apns2/releases/tag/12.1.0)
 
 1. Add back commonjs support
