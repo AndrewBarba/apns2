@@ -44,7 +44,7 @@ export interface ApnsSendResponse {
   notification: Notification
   headers: IncomingHttpHeaders
   statusCode: number
-  apnsId?: string
+  apnsId: string
   apnsUniqueId?: string // only available in development environment
 }
 
@@ -125,11 +125,23 @@ export class ApnsClient extends EventEmitter {
 
     await this._handleServerResponse(res, notification)
 
+    if (!res.headers["apns-id"]) {
+      throw new ApnsError({
+        statusCode: res.statusCode,
+        notification,
+        headers: res.headers,
+        response: {
+          reason: Errors.unknownError,
+          timestamp: Date.now(),
+        },
+      })
+    }
+
     return {
       notification,
       headers: res.headers,
       statusCode: res.statusCode,
-      apnsId: res.headers["apns-id"]?.toString(),
+      apnsId: res.headers["apns-id"].toString(),
       apnsUniqueId: res.headers["apns-unique-id"]?.toString(),
     }
   }
@@ -176,6 +188,7 @@ export class ApnsClient extends EventEmitter {
     const error = new ApnsError({
       statusCode: res.statusCode,
       notification: notification,
+      headers: res.headers,
       response: responseError as ApnsResponseError,
     })
 
