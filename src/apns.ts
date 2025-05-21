@@ -1,6 +1,7 @@
 import { EventEmitter } from "node:events"
 import { type PrivateKey, createSigner } from "fast-jwt"
 import { type Dispatcher, Pool } from "undici"
+import type { IncomingHttpHeaders } from "undici/types/header.js"
 import { ApnsError, type ApnsResponseError, Errors } from "./errors.js"
 import { undici_getClientHttp2Session, undici_getPoolClients } from "./internals.js"
 import { type Notification, Priority } from "./notifications/notification.js"
@@ -39,6 +40,14 @@ export interface ApnsOptions {
   keepAlive?: boolean
 }
 
+export interface ApnsSendResponse {
+  notification: Notification
+  headers: IncomingHttpHeaders
+  statusCode: number
+  apnsId: string
+  apnsUniqueId?: string // only available in development environment
+}
+
 export class ApnsClient extends EventEmitter {
   readonly team: string
   readonly keyId: string
@@ -64,6 +73,7 @@ export class ApnsClient extends EventEmitter {
       pipelining: this.keepAlive ? 1 : 0,
       allowH2: true,
       maxConcurrentStreams: 100,
+      clientTtl: PING_INTERVAL_MS * 3,
     })
     this._token = null
     this._pingInterval = this.keepAlive
@@ -75,14 +85,18 @@ export class ApnsClient extends EventEmitter {
     const promises = notifications.map((notification) =>
       this.send(notification).catch((error: ApnsError) => ({ error })),
     )
-    return Promise.all(promises)
+    return Promise.allSettled(promises)
   }
 
-  async send(notification: Notification) {
+  async send(notification: Notification): Promise<ApnsSendResponse> {
     const headers: Record<string, string | undefined> = {
       authorization: `bearer ${this._getSigningToken()}`,
       "apns-push-type": notification.pushType,
       "apns-topic": notification.options.topic ?? this.defaultTopic,
+    }
+
+    if (notification.options.id) {
+      headers["apns-id"] = notification.options.id
     }
 
     if (notification.priority !== Priority.immediate) {
@@ -110,7 +124,27 @@ export class ApnsClient extends EventEmitter {
       blocking: false,
     })
 
-    return this._handleServerResponse(res, notification)
+    await this._handleServerResponse(res, notification)
+
+    if (!res.headers["apns-id"]) {
+      throw new ApnsError({
+        statusCode: res.statusCode,
+        notification,
+        headers: res.headers,
+        response: {
+          reason: Errors.unknownError,
+          timestamp: Date.now(),
+        },
+      })
+    }
+
+    return {
+      notification,
+      headers: res.headers,
+      statusCode: res.statusCode,
+      apnsId: res.headers["apns-id"].toString(),
+      apnsUniqueId: res.headers["apns-unique-id"]?.toString(),
+    }
   }
 
   async ping() {
@@ -144,7 +178,7 @@ export class ApnsClient extends EventEmitter {
 
   private async _handleServerResponse(res: Dispatcher.ResponseData, notification: Notification) {
     if (res.statusCode === 200) {
-      return notification
+      return
     }
 
     const responseError = await res.body.json().catch(() => ({
@@ -155,6 +189,7 @@ export class ApnsClient extends EventEmitter {
     const error = new ApnsError({
       statusCode: res.statusCode,
       notification: notification,
+      headers: res.headers,
       response: responseError as ApnsResponseError,
     })
 

@@ -4,6 +4,7 @@ import { PushType } from "./constants/push-type.js"
 export { PushType, Priority }
 
 export interface NotificationOptions {
+  id?: string
   type?: PushType
   alert?: string | { title: string; subtitle?: string; body: string }
   badge?: number

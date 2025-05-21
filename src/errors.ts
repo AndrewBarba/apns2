@@ -1,3 +1,4 @@
+import type { IncomingHttpHeaders } from "undici/types/header.js"
 import type { Notification } from "./notifications/notification.js"
 
 export const Errors = {
@@ -46,16 +47,19 @@ export class ApnsError extends Error {
   readonly statusCode: number
   readonly notification: Notification
   readonly response: ApnsResponseError
+  readonly headers: IncomingHttpHeaders
 
   constructor(props: {
     statusCode: number
     notification: Notification
     response: ApnsResponseError
+    headers: IncomingHttpHeaders
   }) {
     super(`APNS Error: ${props.statusCode} - ${props.response.reason}`)
     this.statusCode = props.statusCode
     this.notification = props.notification
     this.response = props.response
+    this.headers = props.headers
   }
 
   get reason() {
