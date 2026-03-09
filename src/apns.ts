@@ -64,6 +64,8 @@ export class ApnsClient extends EventEmitter {
       pipelining: this.keepAlive ? 1 : 0,
       allowH2: true,
       maxConcurrentStreams: 100,
+      bodyTimeout: options.requestTimeout,
+      headersTimeout: options.requestTimeout
     })
     this._token = null
     this._pingInterval = this.keepAlive
