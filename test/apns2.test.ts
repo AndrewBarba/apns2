@@ -98,8 +98,9 @@ describe("apns", () => {
     })
 
     it("should send a lot of notifications mixed with invalid tokens", async () => {
-      // APNs throttles a connection to 1 stream after each rejected
-      // notification; every result must be a delivery or a BadDeviceToken
+      // Every request must get a real APNs response over the multiplexed
+      // connections; transport or protocol errors fail the test. Valid
+      // tokens may hit Apple's per-device rate limit given the test volume
       const notifications: Notification[] = []
       for (let i = 0; i < 250; i++) {
         const token = i % 5 === 0 ? "fakedevicetoken" : deviceToken
@@ -107,12 +108,16 @@ describe("apns", () => {
       }
       const results = await apns.sendMany(notifications)
       assert.equal(results.length, notifications.length)
-      const errors = results.filter((result) => "error" in result)
-      assert.equal(errors.length, 50)
-      for (const { error } of errors) {
-        assert.instanceOf(error, ApnsError)
-        assert.equal(error.reason, Errors.badDeviceToken)
-      }
+      results.forEach((result, i) => {
+        const invalid = notifications[i]?.deviceToken === "fakedevicetoken"
+        if (!("error" in result)) {
+          assert.isFalse(invalid, "invalid token should not be delivered")
+          return
+        }
+        assert.instanceOf(result.error, ApnsError)
+        const expected = invalid ? [Errors.badDeviceToken] : [Errors.tooManyRequests]
+        assert.include(expected, result.error.reason)
+      })
     })
 
     it("should fail to send a notification", async () => {
