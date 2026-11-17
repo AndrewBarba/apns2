@@ -85,9 +85,12 @@ export class ApnsClient extends EventEmitter {
     this._token = null
   }
 
+  // Never rejects: each result is the sent notification or { error }, where
+  // error is an ApnsError for APNs responses, or a transport error (e.g. a
+  // dropped connection) that callers may want to retry
   sendMany(notifications: Notification[]) {
     const promises = notifications.map((notification) =>
-      this.send(notification).catch((error: ApnsError) => ({ error })),
+      this.send(notification).catch((error: ApnsError | Error) => ({ error })),
     )
     return Promise.all(promises)
   }
@@ -150,6 +153,7 @@ export class ApnsClient extends EventEmitter {
 
   private async _handleServerResponse(res: Dispatcher.ResponseData, notification: Notification) {
     if (res.statusCode === 200) {
+      await res.body.dump()
       return notification
     }
 

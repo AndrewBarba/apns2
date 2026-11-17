@@ -10,6 +10,26 @@ if (existsSync(".env")) {
   process.loadEnvFile()
 }
 
+// Every request must get a real APNs response over the multiplexed
+// connections; transport or protocol errors fail the test. Valid tokens may
+// hit Apple's per-device rate limit given the volume these tests send
+function assertBulkResults(
+  notifications: Notification[],
+  results: Awaited<ReturnType<ApnsClient["sendMany"]>>,
+) {
+  assert.equal(results.length, notifications.length)
+  results.forEach((result, i) => {
+    const invalid = notifications[i]?.deviceToken === "fakedevicetoken"
+    if (!("error" in result)) {
+      assert.isFalse(invalid, "invalid token should not be delivered")
+      return
+    }
+    assert.instanceOf(result.error, ApnsError)
+    const expected = invalid ? [Errors.badDeviceToken] : [Errors.tooManyRequests]
+    assert.include(expected, result.error.reason)
+  })
+}
+
 describe("apns", () => {
   const deviceToken = process.env.APNS_PUSH_TOKEN ?? ""
 
@@ -84,41 +104,33 @@ describe("apns", () => {
         alert: "Hello",
       })
       const silentNotification = new SilentNotification(deviceToken)
-      const results = await apns.sendMany([basicNotification, silentNotification])
-      assert.equal(results.length, 2)
+      const notifications = [basicNotification, silentNotification]
+      const results = await apns.sendMany(notifications)
+      assertBulkResults(notifications, results)
     })
 
-    it("should send a lot of notifications", async () => {
+    it("should send a lot of notifications", { timeout: 30_000 }, async () => {
       const notifications: Notification[] = []
       for (let i = 0; i < 500; i++) {
         notifications.push(new Notification(deviceToken, { alert: "Hello" }))
       }
       const results = await apns.sendMany(notifications)
-      assert.equal(results.length, notifications.length)
+      assertBulkResults(notifications, results)
     })
 
-    it("should send a lot of notifications mixed with invalid tokens", async () => {
-      // Every request must get a real APNs response over the multiplexed
-      // connections; transport or protocol errors fail the test. Valid
-      // tokens may hit Apple's per-device rate limit given the test volume
-      const notifications: Notification[] = []
-      for (let i = 0; i < 250; i++) {
-        const token = i % 5 === 0 ? "fakedevicetoken" : deviceToken
-        notifications.push(new Notification(token, { alert: "Hello" }))
-      }
-      const results = await apns.sendMany(notifications)
-      assert.equal(results.length, notifications.length)
-      results.forEach((result, i) => {
-        const invalid = notifications[i]?.deviceToken === "fakedevicetoken"
-        if (!("error" in result)) {
-          assert.isFalse(invalid, "invalid token should not be delivered")
-          return
+    it(
+      "should send a lot of notifications mixed with invalid tokens",
+      { timeout: 30_000 },
+      async () => {
+        const notifications: Notification[] = []
+        for (let i = 0; i < 250; i++) {
+          const token = i % 5 === 0 ? "fakedevicetoken" : deviceToken
+          notifications.push(new Notification(token, { alert: "Hello" }))
         }
-        assert.instanceOf(result.error, ApnsError)
-        const expected = invalid ? [Errors.badDeviceToken] : [Errors.tooManyRequests]
-        assert.include(expected, result.error.reason)
-      })
-    })
+        const results = await apns.sendMany(notifications)
+        assertBulkResults(notifications, results)
+      },
+    )
 
     it("should fail to send a notification", async () => {
       const noti = new Notification("fakedevicetoken", { alert: "Hello" })

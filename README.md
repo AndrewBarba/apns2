@@ -20,7 +20,7 @@ const client = new ApnsClient({
   keyId: `123ABC456`,
   signingKey: readFileSync(new URL('./path/to/auth.p8', import.meta.url)),
   defaultTopic: `com.tablelist.Tablelist`,
-  requestTimeout: 0, // optional, Default: 300000 (5 minutes), 0 disables the timeout
+  requestTimeout: 300000, // optional, Default: 300000 (5 minutes). 0 disables timeouts, including detection of dead connections
   keepAlive: true, // optional, Default: true
 })
 ```
@@ -86,17 +86,25 @@ Note: [Apple recommends](https://developer.apple.com/documentation/usernotificat
 Send multiple notifications concurrently:
 
 ```typescript
-import { Notification } from 'apns2'
+import { ApnsError, Notification } from 'apns2'
 
 const notifications = [
   new Notification(deviceToken1, { alert: 'Hello, World' }),
   new Notification(deviceToken2, { alert: 'Hello, World' })
 ]
 
-try {
-  await client.sendMany(notifications)
-} catch (err) {
-  console.error(err.reason)
+const results = await client.sendMany(notifications)
+
+for (const result of results) {
+  if ('error' in result) {
+    if (result.error instanceof ApnsError) {
+      // Rejected by APNs
+      console.error(result.error.reason)
+    } else {
+      // Transport error, e.g. a dropped connection; you may want to retry
+      console.error(result.error.message)
+    }
+  }
 }
 ```
 

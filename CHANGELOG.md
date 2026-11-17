@@ -10,9 +10,10 @@
 2. Use Undici's native http2 ping interval
 3. Keep idle http2 sessions open for up to 1 hour when `keepAlive` is enabled
 4. Multiplex up to 1000 concurrent streams per http2 connection, limited by the stream count APNs advertises (previously one in-flight request per connection, up to 32 connections). Much higher throughput, especially with `keepAlive: false`
-5. Drop support for Node 20 and 22, require Node 24 or later
-6. Ship separate type declarations for ESM and CommonJS consumers
-7. Build with TypeScript 7
+5. `sendMany` result errors are typed `ApnsError | Error`: transport errors such as a dropped connection are returned per notification and have no `reason`
+6. Drop support for Node 20 and 22, require Node 24 or later
+7. Ship separate type declarations for ESM and CommonJS consumers
+8. Build with TypeScript 7
 
 ## [12.2.0](https://github.com/AndrewBarba/apns2/releases/tag/12.2.0)
 
