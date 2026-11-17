@@ -97,6 +97,24 @@ describe("apns", () => {
       assert.equal(results.length, notifications.length)
     })
 
+    it("should send a lot of notifications mixed with invalid tokens", async () => {
+      // APNs throttles a connection to 1 stream after each rejected
+      // notification; every result must be a delivery or a BadDeviceToken
+      const notifications: Notification[] = []
+      for (let i = 0; i < 250; i++) {
+        const token = i % 5 === 0 ? "fakedevicetoken" : deviceToken
+        notifications.push(new Notification(token, { alert: "Hello" }))
+      }
+      const results = await apns.sendMany(notifications)
+      assert.equal(results.length, notifications.length)
+      const errors = results.filter((result) => "error" in result)
+      assert.equal(errors.length, 50)
+      for (const { error } of errors) {
+        assert.instanceOf(error, ApnsError)
+        assert.equal(error.reason, Errors.badDeviceToken)
+      }
+    })
+
     it("should fail to send a notification", async () => {
       const noti = new Notification("fakedevicetoken", { alert: "Hello" })
       try {

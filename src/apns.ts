@@ -23,6 +23,11 @@ const PING_INTERVAL_MS = 10 * 60 * 1000
 // idle sessions after 4 seconds by default, and pings do not reset that timer
 const KEEP_ALIVE_TIMEOUT_MS = 60 * 60 * 1000
 
+// Upper bound on concurrent streams per http2 connection. APNs advertises its
+// own limit (1 until the first authorized request, then typically 500-1000)
+// and undici uses the lower of the two, so the server's limit is the ceiling
+const MAX_CONCURRENT_STREAMS = 1000
+
 export const Host = {
   production: "api.push.apple.com",
   development: "api.sandbox.push.apple.com",
@@ -72,7 +77,7 @@ export class ApnsClient extends EventEmitter {
       headersTimeout: options.requestTimeout,
       keepAliveTimeout: this.keepAlive ? KEEP_ALIVE_TIMEOUT_MS : undefined,
       h2Options: {
-        maxConcurrentStreams: 100,
+        maxConcurrentStreams: MAX_CONCURRENT_STREAMS,
         // Undici sends http2 PING frames on every session; 0 disables them
         pingInterval: this.keepAlive ? PING_INTERVAL_MS : 0,
       },
