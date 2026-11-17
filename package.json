@@ -7,12 +7,17 @@
   "type": "module",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/cjs/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js",
-      "types": "./dist/index.d.ts"
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
     }
   },
   "engines": {
@@ -22,9 +27,7 @@
     "url": "https://github.com/AndrewBarba/apns2"
   },
   "files": [
-    "dist",
-    "dist/cjs",
-    "dist/esm"
+    "dist"
   ],
   "keywords": [
     "apn",
@@ -55,12 +58,12 @@
     "lint": "oxlint --deny-warnings src test && oxfmt --check src test",
     "lint:format": "oxfmt src test",
     "lint:check": "oxlint --fix --fix-suggestions src test && oxfmt src test",
-    "typecheck": "tsc -p tsconfig.esm.json --noEmit && tsc -p tsconfig.cjs.json --noEmit",
+    "typecheck": "tsc -p tsconfig.test.json && tsc -p tsconfig.cjs.json --noEmit",
     "test": "vitest --run --dir test"
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.6",
-    "@types/node": "^26.6.6",
+    "@types/node": "^24.19.2",
     "chai": "^6.3.0",
     "oxfmt": "^0.78.0",
     "oxlint": "^1.93.0",

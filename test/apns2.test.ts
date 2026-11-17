@@ -3,7 +3,7 @@ import { existsSync } from "node:fs"
 import { assert } from "chai"
 import { beforeAll, describe, it } from "vitest"
 
-import { ApnsClient, Errors, Notification, SilentNotification } from "../src/index.js"
+import { ApnsClient, ApnsError, Errors, Notification, SilentNotification } from "../src/index.js"
 
 // Load local credentials from .env when present; CI passes them as env vars
 if (existsSync(".env")) {
@@ -103,6 +103,7 @@ describe("apns", () => {
         await apns.send(noti)
         throw new Error("Should not have sent notification")
       } catch (err) {
+        assert.instanceOf(err, ApnsError)
         assert.equal(err.reason, Errors.badDeviceToken)
       }
     })

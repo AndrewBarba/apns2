@@ -12,15 +12,16 @@ Node client for connecting to Apple's Push Notification Service using the new HT
 Create an APNS client using a signing key:
 
 ```typescript
+import { readFileSync } from 'node:fs'
 import { ApnsClient } from 'apns2'
 
 const client = new ApnsClient({
   team: `TFLP87PW54`,
   keyId: `123ABC456`,
-  signingKey: fs.readFileSync(`${__dirname}/path/to/auth.p8`),
+  signingKey: readFileSync(new URL('./path/to/auth.p8', import.meta.url)),
   defaultTopic: `com.tablelist.Tablelist`,
-  requestTimeout: 0, // optional, Default: 0 (without timeout)
-  keepAlive: true, // optional, Default: 5000
+  requestTimeout: 0, // optional, Default: 300000 (5 minutes), 0 disables the timeout
+  keepAlive: true, // optional, Default: true
 })
 ```
 

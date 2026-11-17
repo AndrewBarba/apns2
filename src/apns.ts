@@ -19,6 +19,10 @@ const RESET_TOKEN_INTERVAL_MS = 55 * 60 * 1000
 // Ping the server every 10 minutes as reccomended by Apple
 const PING_INTERVAL_MS = 10 * 60 * 1000
 
+// Keep idle http2 sessions open well past the ping interval. Undici closes
+// idle sessions after 4 seconds by default, and pings do not reset that timer
+const KEEP_ALIVE_TIMEOUT_MS = 60 * 60 * 1000
+
 export const Host = {
   production: "api.push.apple.com",
   development: "api.sandbox.push.apple.com",
@@ -66,6 +70,7 @@ export class ApnsClient extends EventEmitter {
       allowH2: true,
       bodyTimeout: options.requestTimeout,
       headersTimeout: options.requestTimeout,
+      keepAliveTimeout: this.keepAlive ? KEEP_ALIVE_TIMEOUT_MS : undefined,
       h2Options: {
         maxConcurrentStreams: 100,
         // Undici sends http2 PING frames on every session; 0 disables them
