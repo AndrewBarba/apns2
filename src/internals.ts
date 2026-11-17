@@ -1,6 +1,6 @@
 import type { Http2Session } from "node:http2"
-import type { Client } from "undici"
-import type { Pool } from "undici"
+
+import type { Client, Pool } from "undici"
 
 export function undici_getPoolClients(pool: Pool): Client[] {
   const symbols = Object.getOwnPropertySymbols(pool)
@@ -8,7 +8,7 @@ export function undici_getPoolClients(pool: Pool): Client[] {
   if (!clientsSymbol) {
     return []
   }
-  // biome-ignore lint/suspicious/noExplicitAny: necessary to access private property
+  // oxlint-disable-next-line typescript/no-explicit-any -- necessary to access private property
   return (pool as any)[clientsSymbol] ?? []
 }
 
@@ -18,6 +18,6 @@ export function undici_getClientHttp2Session(client: Client): Http2Session | nul
   if (!http2SessionSymbol) {
     return null
   }
-  // biome-ignore lint/suspicious/noExplicitAny: necessary to access private property
+  // oxlint-disable-next-line typescript/no-explicit-any -- necessary to access private property
   return (client as any)[http2SessionSymbol] ?? null
 }
