@@ -4,6 +4,13 @@
 
 ---
 
+## [13.0.0](https://github.com/AndrewBarba/apns2/releases/tag/13.0.0)
+
+1. Migrate to Undici v8
+2. Use Undici's native http2 ping interval
+3. Drop support for Node 20 and 22, require Node 24 or later
+4. Build with TypeScript 7
+
 ## [12.2.0](https://github.com/AndrewBarba/apns2/releases/tag/12.2.0)
 
 1. Send http2 ping frames for better support of long lived node processes
