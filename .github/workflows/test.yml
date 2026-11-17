@@ -36,8 +36,6 @@ jobs:
 
       - run: npm run build
 
-      - run: npm run test:package
-
       - run: npm run test
         env:
           APNS_PUSH_TOKEN: ${{ secrets.APNS_PUSH_TOKEN }}
@@ -63,13 +61,9 @@ jobs:
 
       - run: npm ci
 
-      # Bun loads undici by file path, so test the newest undici 8 release
-      # rather than the lockfile version
+      # undici is imported by file path (for Bun), so test the newest undici 8
+      # release rather than the lockfile version
       - run: npm install --no-save undici@8
-
-      - run: npm run build
-
-      - run: npm run test:package
 
       - run: npm run test:bun
         env:

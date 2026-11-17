@@ -1,6 +1,6 @@
 import type { Http2Session } from "node:http2"
 
-import type { Client, Pool } from "undici"
+import type { Client, Pool } from "undici/index.js"
 
 import type { ApnsResponseHeaders } from "./errors.js"
 
