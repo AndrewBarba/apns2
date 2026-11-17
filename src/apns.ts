@@ -1,10 +1,12 @@
 import { EventEmitter } from "node:events"
 
 import { type PrivateKey, createSigner } from "fast-jwt"
-import { type Dispatcher, Pool } from "undici"
+// Import undici by file path: Bun replaces the bare "undici" specifier with a
+// partial built-in whose Pool#request is a no-op, ignoring the installed package
+import { type Dispatcher, Pool } from "undici/index.js"
 
-import { ApnsError, type ApnsResponseError, Errors } from "./errors.js"
-import { undici_getClientHttp2Session, undici_getPoolClients } from "./internals.js"
+import { ApnsError, type ApnsResponseError, type ApnsResponseHeaders, Errors } from "./errors.js"
+import { getHeader, undici_getClientHttp2Session, undici_getPoolClients } from "./internals.js"
 import { type Notification, Priority } from "./notifications/notification.js"
 
 // APNS version
@@ -50,6 +52,25 @@ export interface ApnsOptions {
   keepAlive?: boolean
 }
 
+export interface ApnsSendResponse {
+  notification: Notification
+  statusCode: 200
+  headers: ApnsResponseHeaders
+  // Unique id for the notification, from the apns-id response header
+  apnsId?: string
+  // Only returned by the development environment, useful for debugging
+  apnsUniqueId?: string
+}
+
+export interface ApnsSendFailure {
+  notification: Notification
+  // ApnsError for APNs responses, or a transport error (e.g. a dropped
+  // connection) without a reason, which callers may want to retry
+  error: ApnsError | Error
+}
+
+export type ApnsSendManyResult = ApnsSendResponse | ApnsSendFailure
+
 export class ApnsClient extends EventEmitter {
   readonly team: string
   readonly keyId: string
@@ -85,21 +106,34 @@ export class ApnsClient extends EventEmitter {
     this._token = null
   }
 
-  // Never rejects: each result is the sent notification or { error }, where
-  // error is an ApnsError for APNs responses, or a transport error (e.g. a
-  // dropped connection) that callers may want to retry
-  sendMany(notifications: Notification[]) {
+  // Never rejects: each result is an ApnsSendResponse or an ApnsSendFailure,
+  // in the same order as the notifications
+  sendMany(notifications: Notification[]): Promise<ApnsSendManyResult[]> {
     const promises = notifications.map((notification) =>
-      this.send(notification).catch((error: ApnsError | Error) => ({ error })),
+      this.send(notification).catch((error: ApnsError | Error): ApnsSendFailure => ({
+        notification,
+        error,
+      })),
     )
     return Promise.all(promises)
   }
 
-  async send(notification: Notification) {
+  async send(notification: Notification): Promise<ApnsSendResponse> {
+    if (Array.isArray(notification)) {
+      throw new TypeError("send() expects a single Notification, use sendMany() for arrays")
+    }
+    if (typeof notification?.buildApnsOptions !== "function") {
+      throw new TypeError("send() expects a Notification instance")
+    }
+
     const headers: Record<string, string | undefined> = {
       authorization: `bearer ${this._getSigningToken()}`,
       "apns-push-type": notification.pushType,
       "apns-topic": notification.options.topic ?? this.defaultTopic,
+    }
+
+    if (notification.options.id) {
+      headers["apns-id"] = notification.options.id
     }
 
     if (notification.priority !== Priority.immediate) {
@@ -151,10 +185,19 @@ export class ApnsClient extends EventEmitter {
     await this.client.destroy(err ?? null)
   }
 
-  private async _handleServerResponse(res: Dispatcher.ResponseData, notification: Notification) {
+  private async _handleServerResponse(
+    res: Dispatcher.ResponseData,
+    notification: Notification,
+  ): Promise<ApnsSendResponse> {
     if (res.statusCode === 200) {
       await res.body.dump()
-      return notification
+      return {
+        notification,
+        statusCode: 200,
+        headers: res.headers,
+        apnsId: getHeader(res.headers, "apns-id"),
+        apnsUniqueId: getHeader(res.headers, "apns-unique-id"),
+      }
     }
 
     const responseError = await res.body.json().catch(() => ({
@@ -166,6 +209,7 @@ export class ApnsClient extends EventEmitter {
       statusCode: res.statusCode,
       notification: notification,
       response: responseError as ApnsResponseError,
+      headers: res.headers,
     })
 
     // Reset signing token if expired

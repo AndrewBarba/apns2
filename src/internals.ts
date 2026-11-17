@@ -1,6 +1,8 @@
 import type { Http2Session } from "node:http2"
 
-import type { Client, Pool } from "undici"
+import type { Client, Pool } from "undici/index.js"
+
+import type { ApnsResponseHeaders } from "./errors.js"
 
 export function undici_getPoolClients(pool: Pool): Client[] {
   const symbols = Object.getOwnPropertySymbols(pool)
@@ -20,4 +22,9 @@ export function undici_getClientHttp2Session(client: Client): Http2Session | nul
   }
   // oxlint-disable-next-line typescript/no-explicit-any -- necessary to access private property
   return (client as any)[http2SessionSymbol] ?? null
+}
+
+export function getHeader(headers: ApnsResponseHeaders, name: string): string | undefined {
+  const value = headers[name]
+  return Array.isArray(value) ? value[0] : value
 }

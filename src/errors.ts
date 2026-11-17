@@ -1,3 +1,4 @@
+import { getHeader } from "./internals.js"
 import type { Notification } from "./notifications/notification.js"
 
 export const Errors = {
@@ -37,6 +38,8 @@ export const Errors = {
 
 export type Error = (typeof Errors)[keyof typeof Errors]
 
+export type ApnsResponseHeaders = Record<string, string | string[] | undefined>
+
 export interface ApnsResponseError {
   reason: string
   timestamp: number
@@ -46,16 +49,30 @@ export class ApnsError extends Error {
   readonly statusCode: number
   readonly notification: Notification
   readonly response: ApnsResponseError
+  readonly headers: ApnsResponseHeaders
 
   constructor(props: {
     statusCode: number
     notification: Notification
     response: ApnsResponseError
+    headers?: ApnsResponseHeaders
   }) {
     super(`APNS Error: ${props.statusCode} - ${props.response.reason}`)
+    this.name = "ApnsError"
     this.statusCode = props.statusCode
     this.notification = props.notification
     this.response = props.response
+    this.headers = props.headers ?? {}
+  }
+
+  // The apns-id APNs assigned to (or echoed for) the rejected request
+  get apnsId() {
+    return getHeader(this.headers, "apns-id")
+  }
+
+  // Only returned by the development environment
+  get apnsUniqueId() {
+    return getHeader(this.headers, "apns-unique-id")
   }
 
   get reason() {
