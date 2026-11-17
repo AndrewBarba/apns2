@@ -15,7 +15,6 @@
   "rules": {
     "typescript/no-explicit-any": "error",
     "no-underscore-dangle": "off",
-    "import/no-unassigned-import": "off",
     "vitest/expect-expect": "off"
   },
   "env": {
