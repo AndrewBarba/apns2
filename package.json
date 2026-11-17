@@ -20,6 +20,12 @@
       }
     }
   },
+  "imports": {
+    "#undici": {
+      "bun": "undici/index.js",
+      "default": "undici"
+    }
+  },
   "engines": {
     "node": ">=24"
   },
@@ -53,14 +59,15 @@
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:package-files": "npm run build:package-files:cjs && npm run build:package-files:esm",
-    "build:package-files:cjs": "echo '{\"type\":\"commonjs\"}' > dist/cjs/package.json",
-    "build:package-files:esm": "echo '{\"type\":\"module\"}' > dist/esm/package.json",
-    "lint": "oxlint --deny-warnings src test && oxfmt --check src test",
-    "lint:format": "oxfmt src test",
-    "lint:check": "oxlint --fix --fix-suggestions src test && oxfmt src test",
+    "build:package-files:cjs": "node scripts/package-files.mjs commonjs dist/cjs",
+    "build:package-files:esm": "node scripts/package-files.mjs module dist/esm",
+    "lint": "oxlint --deny-warnings src test scripts && oxfmt --check src test scripts",
+    "lint:format": "oxfmt src test scripts",
+    "lint:check": "oxlint --fix --fix-suggestions src test scripts && oxfmt src test scripts",
     "typecheck": "tsc -p tsconfig.test.json && tsc -p tsconfig.cjs.json --noEmit",
     "test": "vitest --run --dir test",
-    "test:bun": "bun test test/"
+    "test:bun": "bun test test/",
+    "test:package": "bash scripts/test-package.sh"
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.6",

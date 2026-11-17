@@ -195,6 +195,7 @@ client.on(Errors.badDeviceToken, (err) => {
 })
 
 // Errors include the APNs response headers, e.g. err.apnsId
+// err.name is "ApnsError", which also works across duplicate copies of apns2
 
 // Listen for any error
 client.on(Errors.error, (err) => {

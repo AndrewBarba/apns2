@@ -1,9 +1,12 @@
 import { EventEmitter } from "node:events"
 
 import { type PrivateKey, createSigner } from "fast-jwt"
-// Import undici by file path: Bun replaces the bare "undici" specifier with a
-// partial built-in whose Pool#request is a no-op, ignoring the installed package
-import { type Dispatcher, Pool } from "undici/index.js"
+import type { Dispatcher, Pool } from "undici"
+
+// Bun replaces the bare "undici" specifier with a partial built-in whose
+// Pool#request is a no-op, ignoring the installed package. The #undici alias
+// (package.json "imports") loads undici by file path on Bun only
+import { Pool as UndiciPool } from "#undici"
 
 import { ApnsError, type ApnsResponseError, type ApnsResponseHeaders, Errors } from "./errors.js"
 import { getHeader, undici_getClientHttp2Session, undici_getPoolClients } from "./internals.js"
@@ -54,7 +57,7 @@ export interface ApnsOptions {
 
 export interface ApnsSendResponse {
   notification: Notification
-  statusCode: number
+  statusCode: 200
   headers: ApnsResponseHeaders
   // Unique id for the notification, from the apns-id response header
   apnsId?: string
@@ -90,7 +93,7 @@ export class ApnsClient extends EventEmitter {
     this.defaultTopic = options.defaultTopic
     this.host = options.host ?? Host.production
     this.keepAlive = options.keepAlive ?? true
-    this.client = new Pool(`https://${this.host}:443`, {
+    this.client = new UndiciPool(`https://${this.host}:443`, {
       connections: this.keepAlive ? 32 : 1,
       pipelining: this.keepAlive ? 1 : 0,
       allowH2: true,
@@ -193,7 +196,7 @@ export class ApnsClient extends EventEmitter {
       await res.body.dump()
       return {
         notification,
-        statusCode: res.statusCode,
+        statusCode: 200,
         headers: res.headers,
         apnsId: getHeader(res.headers, "apns-id"),
         apnsUniqueId: getHeader(res.headers, "apns-unique-id"),

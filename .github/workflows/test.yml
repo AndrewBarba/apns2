@@ -3,6 +3,9 @@ name: Test
 on:
   workflow_dispatch:
   pull_request:
+  schedule:
+    # Weekly, to catch breaking releases of dependencies such as undici
+    - cron: "0 14 * * 1"
 
 jobs:
   test:
@@ -33,12 +36,16 @@ jobs:
 
       - run: npm run build
 
+      - run: npm run test:package
+
       - run: npm run test
         env:
           APNS_PUSH_TOKEN: ${{ secrets.APNS_PUSH_TOKEN }}
           APNS_SIGNING_KEY: ${{ secrets.APNS_SIGNING_KEY }}
 
   test-bun:
+    # Run after the Node jobs to stay under Apple's per-device rate limit
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
@@ -55,6 +62,14 @@ jobs:
           bun-version: 1.4.x
 
       - run: npm ci
+
+      # Bun loads undici by file path, so test the newest undici 8 release
+      # rather than the lockfile version
+      - run: npm install --no-save undici@8
+
+      - run: npm run build
+
+      - run: npm run test:package
 
       - run: npm run test:bun
         env:

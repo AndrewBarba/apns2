@@ -58,6 +58,7 @@ export class ApnsError extends Error {
     headers?: ApnsResponseHeaders
   }) {
     super(`APNS Error: ${props.statusCode} - ${props.response.reason}`)
+    this.name = "ApnsError"
     this.statusCode = props.statusCode
     this.notification = props.notification
     this.response = props.response
