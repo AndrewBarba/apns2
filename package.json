@@ -16,12 +16,16 @@
     }
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   },
   "repository": {
     "url": "https://github.com/AndrewBarba/apns2"
   },
-  "files": ["dist", "dist/cjs", "dist/esm"],
+  "files": [
+    "dist",
+    "dist/cjs",
+    "dist/esm"
+  ],
   "keywords": [
     "apn",
     "apns",
@@ -37,17 +41,8 @@
     "watchos"
   ],
   "dependencies": {
-    "fast-jwt": "^6.0.1",
-    "undici": "^7.9.0"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "@tsconfig/node20": "^20.1.5",
-    "@types/node": "^22.15.19",
-    "chai": "^5.2.0",
-    "dotenv": "^16.5.0",
-    "typescript": "^5.8.3",
-    "vitest": "^3.1.4"
+    "fast-jwt": "^6.3.6",
+    "undici": "^8.12.4"
   },
   "scripts": {
     "clean": "rm -rf dist",
@@ -57,9 +52,20 @@
     "build:package-files": "npm run build:package-files:cjs && npm run build:package-files:esm",
     "build:package-files:cjs": "echo '{\"type\":\"commonjs\"}' > dist/cjs/package.json",
     "build:package-files:esm": "echo '{\"type\":\"module\"}' > dist/esm/package.json",
-    "lint": "biome ci src test",
-    "lint:format": "biome format --write src test",
-    "lint:check": "biome check --write --unsafe src test",
+    "lint": "oxlint --deny-warnings src test && oxfmt --check src test",
+    "lint:format": "oxfmt src test",
+    "lint:check": "oxlint --fix --fix-suggestions src test && oxfmt src test",
+    "typecheck": "tsc -p tsconfig.esm.json --noEmit && tsc -p tsconfig.cjs.json --noEmit",
     "test": "vitest --run --dir test"
+  },
+  "devDependencies": {
+    "@tsconfig/node24": "^24.0.6",
+    "@types/node": "^26.6.6",
+    "chai": "^6.3.0",
+    "dotenv": "^18.0.10",
+    "oxfmt": "^0.78.0",
+    "oxlint": "^1.93.0",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
   }
 }

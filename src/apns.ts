@@ -1,6 +1,8 @@
 import { EventEmitter } from "node:events"
+
 import { type PrivateKey, createSigner } from "fast-jwt"
 import { type Dispatcher, Pool } from "undici"
+
 import { ApnsError, type ApnsResponseError, Errors } from "./errors.js"
 import { undici_getClientHttp2Session, undici_getPoolClients } from "./internals.js"
 import { type Notification, Priority } from "./notifications/notification.js"
@@ -49,7 +51,6 @@ export class ApnsClient extends EventEmitter {
   readonly client: Pool
 
   private _token: SigningToken | null
-  private _pingInterval: NodeJS.Timeout | null
 
   constructor(options: ApnsOptions) {
     super()
@@ -63,14 +64,15 @@ export class ApnsClient extends EventEmitter {
       connections: this.keepAlive ? 32 : 1,
       pipelining: this.keepAlive ? 1 : 0,
       allowH2: true,
-      maxConcurrentStreams: 100,
       bodyTimeout: options.requestTimeout,
-      headersTimeout: options.requestTimeout
+      headersTimeout: options.requestTimeout,
+      h2Options: {
+        maxConcurrentStreams: 100,
+        // Undici sends http2 PING frames on every session; 0 disables them
+        pingInterval: this.keepAlive ? PING_INTERVAL_MS : 0,
+      },
     })
     this._token = null
-    this._pingInterval = this.keepAlive
-      ? setInterval(() => this.ping(), PING_INTERVAL_MS).unref()
-      : null
   }
 
   sendMany(notifications: Notification[]) {
@@ -129,18 +131,10 @@ export class ApnsClient extends EventEmitter {
   }
 
   async close() {
-    if (this._pingInterval) {
-      clearInterval(this._pingInterval)
-      this._pingInterval = null
-    }
     await this.client.close()
   }
 
   async destroy(err?: Error | null) {
-    if (this._pingInterval) {
-      clearInterval(this._pingInterval)
-      this._pingInterval = null
-    }
     await this.client.destroy(err ?? null)
   }
 
