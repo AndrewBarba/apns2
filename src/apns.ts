@@ -1,6 +1,8 @@
 import { EventEmitter } from "node:events"
+
 import { type PrivateKey, createSigner } from "fast-jwt"
 import { type Dispatcher, Pool } from "undici"
+
 import { ApnsError, type ApnsResponseError, Errors } from "./errors.js"
 import { undici_getClientHttp2Session, undici_getPoolClients } from "./internals.js"
 import { type Notification, Priority } from "./notifications/notification.js"
@@ -16,6 +18,15 @@ const RESET_TOKEN_INTERVAL_MS = 55 * 60 * 1000
 
 // Ping the server every 10 minutes as reccomended by Apple
 const PING_INTERVAL_MS = 10 * 60 * 1000
+
+// Keep idle http2 sessions open well past the ping interval. Undici closes
+// idle sessions after 4 seconds by default, and pings do not reset that timer
+const KEEP_ALIVE_TIMEOUT_MS = 60 * 60 * 1000
+
+// Upper bound on concurrent streams per http2 connection. APNs advertises its
+// own limit (1 until the first authorized request, then typically 500-1000)
+// and undici uses the lower of the two, so the server's limit is the ceiling
+const MAX_CONCURRENT_STREAMS = 1000
 
 export const Host = {
   production: "api.push.apple.com",
@@ -49,7 +60,6 @@ export class ApnsClient extends EventEmitter {
   readonly client: Pool
 
   private _token: SigningToken | null
-  private _pingInterval: NodeJS.Timeout | null
 
   constructor(options: ApnsOptions) {
     super()
@@ -63,19 +73,24 @@ export class ApnsClient extends EventEmitter {
       connections: this.keepAlive ? 32 : 1,
       pipelining: this.keepAlive ? 1 : 0,
       allowH2: true,
-      maxConcurrentStreams: 100,
       bodyTimeout: options.requestTimeout,
-      headersTimeout: options.requestTimeout
+      headersTimeout: options.requestTimeout,
+      keepAliveTimeout: this.keepAlive ? KEEP_ALIVE_TIMEOUT_MS : undefined,
+      h2Options: {
+        maxConcurrentStreams: MAX_CONCURRENT_STREAMS,
+        // Undici sends http2 PING frames on every session; 0 disables them
+        pingInterval: this.keepAlive ? PING_INTERVAL_MS : 0,
+      },
     })
     this._token = null
-    this._pingInterval = this.keepAlive
-      ? setInterval(() => this.ping(), PING_INTERVAL_MS).unref()
-      : null
   }
 
+  // Never rejects: each result is the sent notification or { error }, where
+  // error is an ApnsError for APNs responses, or a transport error (e.g. a
+  // dropped connection) that callers may want to retry
   sendMany(notifications: Notification[]) {
     const promises = notifications.map((notification) =>
-      this.send(notification).catch((error: ApnsError) => ({ error })),
+      this.send(notification).catch((error: ApnsError | Error) => ({ error })),
     )
     return Promise.all(promises)
   }
@@ -129,23 +144,16 @@ export class ApnsClient extends EventEmitter {
   }
 
   async close() {
-    if (this._pingInterval) {
-      clearInterval(this._pingInterval)
-      this._pingInterval = null
-    }
     await this.client.close()
   }
 
   async destroy(err?: Error | null) {
-    if (this._pingInterval) {
-      clearInterval(this._pingInterval)
-      this._pingInterval = null
-    }
     await this.client.destroy(err ?? null)
   }
 
   private async _handleServerResponse(res: Dispatcher.ResponseData, notification: Notification) {
     if (res.statusCode === 200) {
+      await res.body.dump()
       return notification
     }
 

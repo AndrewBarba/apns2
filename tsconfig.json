@@ -1,9 +1,10 @@
 {
-  "extends": "@tsconfig/node20",
+  "extends": "@tsconfig/node24",
   "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "declaration": true,
-    "declarationDir": "./dist",
-    "outDir": "./dist",
+    "outDir": "./dist/esm",
     "rootDir": "./src"
   },
   "include": ["src"]

@@ -12,15 +12,16 @@ Node client for connecting to Apple's Push Notification Service using the new HT
 Create an APNS client using a signing key:
 
 ```typescript
+import { readFileSync } from 'node:fs'
 import { ApnsClient } from 'apns2'
 
 const client = new ApnsClient({
   team: `TFLP87PW54`,
   keyId: `123ABC456`,
-  signingKey: fs.readFileSync(`${__dirname}/path/to/auth.p8`),
+  signingKey: readFileSync(new URL('./path/to/auth.p8', import.meta.url)),
   defaultTopic: `com.tablelist.Tablelist`,
-  requestTimeout: 0, // optional, Default: 0 (without timeout)
-  keepAlive: true, // optional, Default: 5000
+  requestTimeout: 300000, // optional, Default: 300000 (5 minutes). 0 disables timeouts, including detection of dead connections
+  keepAlive: true, // optional, Default: true
 })
 ```
 
@@ -85,17 +86,25 @@ Note: [Apple recommends](https://developer.apple.com/documentation/usernotificat
 Send multiple notifications concurrently:
 
 ```typescript
-import { Notification } from 'apns2'
+import { ApnsError, Notification } from 'apns2'
 
 const notifications = [
   new Notification(deviceToken1, { alert: 'Hello, World' }),
   new Notification(deviceToken2, { alert: 'Hello, World' })
 ]
 
-try {
-  await client.sendMany(notifications)
-} catch (err) {
-  console.error(err.reason)
+const results = await client.sendMany(notifications)
+
+for (const result of results) {
+  if ('error' in result) {
+    if (result.error instanceof ApnsError) {
+      // Rejected by APNs
+      console.error(result.error.reason)
+    } else {
+      // Transport error, e.g. a dropped connection; you may want to retry
+      console.error(result.error.message)
+    }
+  }
 }
 ```
 
@@ -162,4 +171,4 @@ const client = new ApnsClient({
 
 ## Requirements
 
-`apns2` requires Node.js v16 or later
+`apns2` requires Node.js v24 or later
