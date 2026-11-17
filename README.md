@@ -37,11 +37,24 @@ import { Notification } from 'apns2'
 const bn = new Notification(deviceToken, { alert: 'Hello, World' })
 
 try {
-  await client.send(bn)
+  const response = await client.send(bn)
+  console.log(response.apnsId)
 } catch (err) {
   console.error(err.reason)
 }
 ```
+
+`send()` resolves with an `ApnsSendResponse`:
+
+| Property | Description |
+|---|---|
+| `notification` | The notification that was sent |
+| `statusCode` | HTTP status code from APNs (`200`) |
+| `headers` | Response headers from APNs |
+| `apnsId` | The `apns-id` APNs assigned to the notification, or the one you set with the `id` option |
+| `apnsUniqueId` | The `apns-unique-id` for debugging with Apple's tools. Only returned by the development environment |
+
+Device tokens must be hex strings. If you have the raw bytes in a `Buffer`, pass `token.toString('hex')`.
 
 Send a basic notification with message and options:
 
@@ -99,14 +112,18 @@ for (const result of results) {
   if ('error' in result) {
     if (result.error instanceof ApnsError) {
       // Rejected by APNs
-      console.error(result.error.reason)
+      console.error(result.notification.deviceToken, result.error.reason)
     } else {
       // Transport error, e.g. a dropped connection; you may want to retry
-      console.error(result.error.message)
+      console.error(result.notification.deviceToken, result.error.message)
     }
+  } else {
+    console.log(result.apnsId)
   }
 }
 ```
+
+`sendMany()` never rejects. It resolves with one result per notification, in the same order: either an `ApnsSendResponse` or `{ notification, error }`.
 
 #### Advanced
 
@@ -126,6 +143,39 @@ try {
 }
 ```
 
+#### Live Activities
+
+Live Activity updates use the `liveactivity` push type, and the topic must be your bundle ID with `.push-type.liveactivity` appended:
+
+```typescript
+import { Notification, Priority, PushType } from 'apns2'
+
+const notification = new Notification(liveActivityPushToken, {
+  type: PushType.liveactivity,
+  topic: 'com.example.app.push-type.liveactivity',
+  priority: Priority.immediate,
+  aps: {
+    timestamp: Math.floor(Date.now() / 1000),
+    event: 'update',
+    'content-state': { progress: 0.5 },
+  },
+})
+
+await client.send(notification)
+```
+
+The same pattern applies to the other push types (`PushType.controls`, `PushType.widgets`, and so on). Each has its own topic suffix; see Apple's [push type documentation](https://developer.apple.com/documentation/usernotifications/sending-notification-requests-to-apns#Know-when-to-use-push-types).
+
+#### Notification IDs
+
+Set the `apns-id` header with the `id` option. It must be a canonical UUID. If you leave it out, APNs generates one:
+
+```typescript
+import { randomUUID } from 'node:crypto'
+
+const notification = new Notification(deviceToken, { alert: 'Hello', id: randomUUID() })
+```
+
 Available options can be found at [APNS Payload Options](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/generating_a_remote_notification#2943363)
 
 ## Error Handling
@@ -143,6 +193,8 @@ client.on(Errors.badDeviceToken, (err) => {
   // Perhaps delete token from your database
   console.error(err.reason, err.statusCode, err.notification.deviceToken)
 })
+
+// Errors include the APNs response headers, e.g. err.apnsId
 
 // Listen for any error
 client.on(Errors.error, (err) => {
@@ -171,4 +223,4 @@ const client = new ApnsClient({
 
 ## Requirements
 
-`apns2` requires Node.js v24 or later
+`apns2` requires Node.js v24 or later. It also runs on [Bun](https://bun.sh)

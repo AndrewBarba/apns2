@@ -1,13 +1,28 @@
+import { randomUUID } from "node:crypto"
 import { existsSync } from "node:fs"
 
 import { assert } from "chai"
 import { beforeAll, describe, it } from "vitest"
 
-import { ApnsClient, ApnsError, Errors, Notification, SilentNotification } from "../src/index.js"
+import {
+  ApnsClient,
+  type ApnsSendResponse,
+  ApnsError,
+  Errors,
+  Notification,
+  PushType,
+  SilentNotification,
+} from "../src/index.js"
 
 // Load local credentials from .env when present; CI passes them as env vars
 if (existsSync(".env")) {
   process.loadEnvFile()
+}
+
+function assertSent(response: ApnsSendResponse, notification: Notification) {
+  assert.strictEqual(response.notification, notification)
+  assert.equal(response.statusCode, 200)
+  assert.isString(response.apnsId)
 }
 
 // Every request must get a real APNs response over the multiplexed
@@ -20,8 +35,10 @@ function assertBulkResults(
   assert.equal(results.length, notifications.length)
   results.forEach((result, i) => {
     const invalid = notifications[i]?.deviceToken === "fakedevicetoken"
+    assert.strictEqual(result.notification, notifications[i])
     if (!("error" in result)) {
       assert.isFalse(invalid, "invalid token should not be delivered")
+      assertSent(result, notifications[i] as Notification)
       return
     }
     assert.instanceOf(result.error, ApnsError)
@@ -32,6 +49,35 @@ function assertBulkResults(
 
 describe("apns", () => {
   const deviceToken = process.env.APNS_PUSH_TOKEN ?? ""
+
+  describe("validation", () => {
+    it("should reject a non-string device token", () => {
+      assert.throws(
+        () => new Notification(Buffer.from("abc") as unknown as string),
+        TypeError,
+        /hex/,
+      )
+      assert.throws(() => new Notification(""), TypeError)
+    })
+
+    it("should reject arrays and non-notifications in send()", async () => {
+      const apns = new ApnsClient({ team: "team", keyId: "key", signingKey: "key" })
+      const notification = new Notification("token")
+      await apns.send([notification] as unknown as Notification).then(
+        () => assert.fail("expected send() to reject"),
+        (err) => assert.match(err.message, /sendMany/),
+      )
+      await apns.send({} as Notification).then(
+        () => assert.fail("expected send() to reject"),
+        (err) => assert.instanceOf(err, TypeError),
+      )
+      await apns.close()
+    })
+
+    it("should support all APNs push types", () => {
+      assert.includeMembers(Object.values(PushType), ["accessory", "controls", "widgets"])
+    })
+  })
 
   describe("signing token", () => {
     let apns: ApnsClient
@@ -49,7 +95,7 @@ describe("apns", () => {
       const basicNotification = new Notification(deviceToken, {
         alert: "Hello",
       })
-      return apns.send(basicNotification)
+      assertSent(await apns.send(basicNotification), basicNotification)
     })
 
     it("should send a basic notification with options", async () => {
@@ -57,7 +103,7 @@ describe("apns", () => {
         alert: "Hello",
         badge: 1,
       })
-      return apns.send(basicNotification)
+      assertSent(await apns.send(basicNotification), basicNotification)
     })
 
     it("should send a basic notification with additional data", async () => {
@@ -68,12 +114,12 @@ describe("apns", () => {
           url: "venue/icon",
         },
       })
-      return apns.send(basicNotification)
+      assertSent(await apns.send(basicNotification), basicNotification)
     })
 
     it("should send a silent notification", async () => {
       const silentNotification = new SilentNotification(deviceToken)
-      return apns.send(silentNotification)
+      assertSent(await apns.send(silentNotification), silentNotification)
     })
 
     it("should send a notification", async () => {
@@ -84,7 +130,7 @@ describe("apns", () => {
           },
         },
       })
-      return apns.send(notification)
+      assertSent(await apns.send(notification), notification)
     })
 
     it("should send a notification with a thread-id", async () => {
@@ -96,7 +142,15 @@ describe("apns", () => {
         },
         threadId: "hello",
       })
-      return apns.send(notification)
+      assertSent(await apns.send(notification), notification)
+    })
+
+    it("should send a notification with an apns-id", async () => {
+      const id = randomUUID()
+      const notification = new Notification(deviceToken, { alert: "Hello", id })
+      const response = await apns.send(notification)
+      assertSent(response, notification)
+      assert.equal(response.apnsId?.toLowerCase(), id)
     })
 
     it("should send both notifications", async () => {
@@ -140,6 +194,8 @@ describe("apns", () => {
       } catch (err) {
         assert.instanceOf(err, ApnsError)
         assert.equal(err.reason, Errors.badDeviceToken)
+        assert.strictEqual(err.notification, noti)
+        assert.isString(err.apnsId)
       }
     })
 

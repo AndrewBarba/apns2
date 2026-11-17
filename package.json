@@ -1,6 +1,6 @@
 {
   "name": "apns2",
-  "version": "13.0.0",
+  "version": "14.0.0",
   "description": "Node client for connecting to Apple's Push Notification Service using the new HTTP/2 protocol with JSON web tokens.",
   "author": "Andrew Barba <barba@hey.com>",
   "license": "MIT",
@@ -59,7 +59,8 @@
     "lint:format": "oxfmt src test",
     "lint:check": "oxlint --fix --fix-suggestions src test && oxfmt src test",
     "typecheck": "tsc -p tsconfig.test.json && tsc -p tsconfig.cjs.json --noEmit",
-    "test": "vitest --run --dir test"
+    "test": "vitest --run --dir test",
+    "test:bun": "bun test test/"
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.6",

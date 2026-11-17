@@ -4,7 +4,21 @@
 
 ---
 
+## [14.0.0](https://github.com/AndrewBarba/apns2/releases/tag/14.0.0)
+
+1. `send()` resolves with an `ApnsSendResponse` (`notification`, `statusCode`, `headers`, `apnsId`, `apnsUniqueId`) instead of the notification
+2. `sendMany()` failures include the `notification`: results are `ApnsSendResponse | { notification, error }`
+3. `ApnsError` includes the APNs response `headers`, plus `apnsId` and `apnsUniqueId`
+4. Add the `id` notification option to set the `apns-id` header
+5. Add the `accessory`, `controls`, and `widgets` push types
+6. Support Bun (fixes [#96](https://github.com/AndrewBarba/apns2/issues/96))
+7. Throw a `TypeError` for invalid device tokens (e.g. a `Buffer`) and when `send()` is given an array or non-notification
+
+Also includes everything listed under 13.0.0, which was never published to npm.
+
 ## [13.0.0](https://github.com/AndrewBarba/apns2/releases/tag/13.0.0)
+
+Released on GitHub only; these changes first shipped to npm in 14.0.0.
 
 1. Migrate to Undici v8 (`ApnsClient.client` is now an Undici v8 `Pool`)
 2. Use Undici's native http2 ping interval

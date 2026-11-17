@@ -4,6 +4,7 @@ import { PushType } from "./constants/push-type.js"
 export { PushType, Priority }
 
 export interface NotificationOptions {
+  // Sent as the apns-id header, a canonical UUID. APNs generates one when omitted
   id?: string
   type?: PushType
   alert?: string | { title: string; subtitle?: string; body: string }
@@ -37,6 +38,10 @@ export class Notification {
   readonly options: NotificationOptions
 
   constructor(deviceToken: string, options?: NotificationOptions) {
+    if (typeof deviceToken !== "string" || deviceToken.length === 0) {
+      const hint = Buffer.isBuffer(deviceToken) ? ', e.g. token.toString("hex")' : ""
+      throw new TypeError(`Notification deviceToken must be a non-empty hex string${hint}`)
+    }
     this.deviceToken = deviceToken
     this.options = options ?? {}
   }

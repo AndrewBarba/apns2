@@ -37,3 +37,26 @@ jobs:
         env:
           APNS_PUSH_TOKEN: ${{ secrets.APNS_PUSH_TOKEN }}
           APNS_SIGNING_KEY: ${{ secrets.APNS_SIGNING_KEY }}
+
+  test-bun:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Use Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+
+      - name: Use Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.x
+
+      - run: npm ci
+
+      - run: npm run test:bun
+        env:
+          APNS_PUSH_TOKEN: ${{ secrets.APNS_PUSH_TOKEN }}
+          APNS_SIGNING_KEY: ${{ secrets.APNS_SIGNING_KEY }}
