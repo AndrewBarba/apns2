@@ -9,7 +9,7 @@
 1. Migrate to Undici v8 (`ApnsClient.client` is now an Undici v8 `Pool`)
 2. Use Undici's native http2 ping interval
 3. Keep idle http2 sessions open for up to 1 hour when `keepAlive` is enabled
-4. Multiplex up to 100 concurrent streams per http2 connection instead of opening a new connection per in-flight request
+4. Multiplex up to 100 concurrent streams per http2 connection (previously one in-flight request per connection, up to 32 connections)
 5. Drop support for Node 20 and 22, require Node 24 or later
 6. Ship separate type declarations for ESM and CommonJS consumers
 7. Build with TypeScript 7
